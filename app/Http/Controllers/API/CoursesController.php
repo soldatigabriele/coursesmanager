@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,8 +15,8 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $ok = 'ok';
-        return $ok;
+        $courses = Course::all();
+        return $courses;
     }
 
     /**
@@ -26,7 +27,8 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $course = Course::create($request->all());
+        return $course;
     }
 
     /**
@@ -35,9 +37,9 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Course $course)
     {
-        //
+        return $course;
     }
 
     /**
@@ -47,9 +49,10 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Course $course)
     {
-        //
+        $course->fill($request->all());
+        return $course;
     }
 
     /**
@@ -58,8 +61,9 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Course $course)
     {
-        //
+        $course->delete();
+        return $course;
     }
 }

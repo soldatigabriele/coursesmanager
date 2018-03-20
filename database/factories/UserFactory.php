@@ -14,10 +14,22 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+	
+
+	// $faker = Faker::create('it_IT');
+	$data = [];
+	$data['city'] = $faker->city;
+	$data['job'] = $faker->jobTitle;
+	$data['transport'] = 'car';
+	$data['region'] = $faker->state;
+	$data['city'] = $faker->city;
+	$data['fiscal_code'] = $faker->taxId;
+    
     return [
-        'name' => $faker->name,
+        'name' => $faker->firstName,
+        'surname' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'phone' => '3'.rand(111111111, 999999999),
+        'data' => json_encode($data),
     ];
 });
