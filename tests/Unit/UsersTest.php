@@ -16,6 +16,9 @@ class UsersTest extends TestCase
         factory('App\Course', 10)->create();
         factory('App\User', 10)->create();
         $this->faker = Factory::create('it_IT');
+        $this->manager = factory('App\Manager')->create();
+        $this->token = 'Bearer '.$this->manager->api_token;
+
     }
 
     /**
@@ -27,7 +30,7 @@ class UsersTest extends TestCase
     {
         $string = str_random(30);
         $user = factory('App\User')->create(['name'=>$string]);
-        $response = $this->get('api/users', []);
+        $response = $this->get('api/users', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
 
     }
@@ -41,7 +44,7 @@ class UsersTest extends TestCase
     {
         $string = str_random(30);
         $user = factory('App\User')->create(['name'=>$string]);
-        $response = $this->get('api/users/'.$user->id, []);
+        $response = $this->get('api/users/'.$user->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['name'=>$string]);
     }
  
@@ -66,7 +69,7 @@ class UsersTest extends TestCase
             'phone' => '3'.rand(111111111, 999999999),
             'data' => json_encode($data),
         ];
-    	$response = $this->post('api/users', $user_data);
+    	$response = $this->post('api/users', $user_data, ['HTTP_Authorization' => $this->token]);
         $id = (json_decode($response->getContent()))->id;
         $response->assertJsonFragment([$name]);
         $this->assertDatabaseHas('users', ['id'=>$id, 'name' => $name]);
@@ -84,7 +87,7 @@ class UsersTest extends TestCase
         $user = factory('App\User')->create(['name' => $name,]);
         $new_name = strtoupper(str_random(5));
         $data = ['name' => $new_name];
-        $response = $this->put('api/users/'.$user->id, $data);
+        $response = $this->put('api/users/'.$user->id, $data, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$new_name]);
     }
 
@@ -96,7 +99,7 @@ class UsersTest extends TestCase
     public function test_delete()
     {
         $user = factory('App\User')->create();
-        $response = $this->delete('api/users/'.$user->id);
+        $response = $this->delete('api/users/'.$user->id, [], ['HTTP_Authorization' => $this->token]);
         $this->assertSoftDeleted('users', ['id'=>$user->id]);
     }
 }

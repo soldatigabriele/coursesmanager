@@ -13,13 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware'=>'ApiAuth'], function(){
+	
+	Route::get('/user', function (Request $request) {
+	    return 'authorizzato';}
+	);
+
+	Route::apiResources(['courses' => 'CoursesController']);
+	Route::apiResources(['users' => 'UsersController']);
+
+	Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
+	Route::any('subscribe', 'SubscriptionsController@subscribe');
+	Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');
 });
-
-Route::apiResources(['courses' => 'CoursesController']);
-Route::apiResources(['users' => 'UsersController']);
-
-Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
-Route::any('subscribe', 'SubscriptionsController@subscribe');
-Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');

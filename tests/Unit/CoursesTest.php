@@ -15,6 +15,9 @@ class CoursesTest extends TestCase
         Parent::setUp();
         factory('App\Course', 10)->create();
         factory('App\User', 10)->create();
+        $this->manager = factory('App\Manager')->create();
+        $this->token = 'Bearer '.$this->manager->api_token;
+
     }
 
     /**
@@ -26,7 +29,7 @@ class CoursesTest extends TestCase
     {
         $string = str_random(30);
         $course = factory('App\Course')->create(['description'=>$string]);
-        $response = $this->get('api/courses', []);
+        $response = $this->get('api/courses', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
 
     }
@@ -40,7 +43,7 @@ class CoursesTest extends TestCase
     {
         $string = str_random(30);
         $course = factory('App\Course')->create(['description'=>$string]);
-        $response = $this->get('api/courses/'.$course->id, []);
+        $response = $this->get('api/courses/'.$course->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['description'=>$string]);
     }
  
@@ -56,7 +59,7 @@ class CoursesTest extends TestCase
         'description' => str_random(30),
         'date' => date('d/m/Y').' al '.date('d/m/Y'),
         'limit' => rand(1, 20) ];
-    	$response = $this->post('api/courses', $data);
+    	$response = $this->post('api/courses', $data, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$long_id]);
     }
 
@@ -72,7 +75,7 @@ class CoursesTest extends TestCase
         $course = factory('App\Course')->create(['long_id' => $long_id,]);
         $new_long_id = strtoupper(str_random(5));
         $data = ['long_id' => $new_long_id];
-        $response = $this->put('api/courses/'.$course->id, $data);
+        $response = $this->put('api/courses/'.$course->id, $data, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$new_long_id]);
     }
 
@@ -84,7 +87,7 @@ class CoursesTest extends TestCase
     public function test_delete()
     {
         $course = factory('App\Course')->create();
-        $response = $this->delete('api/courses/'.$course->id);
+        $response = $this->delete('api/courses/'.$course->id, [], ['HTTP_Authorization' => $this->token]);
         $this->assertSoftDeleted('courses', ['id'=>$course->id]);
     }
 }
