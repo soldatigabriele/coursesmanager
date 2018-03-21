@@ -20,4 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::get('courses', 'CoursesController@index');
 Route::apiResources(['courses' => 'CoursesController']);
 Route::apiResources(['users' => 'UsersController']);
-Route::post('subscribe/{course}', 'SubscriptionsController@subscribe');
+
+// Route::post('subscribe', function(){return 'ok';});
+// Route::apiResources(['subscriptions' => 'SubscriptionsController']);
+Route::post('subscriptions', 'API/SubscriptionsController@subscribe');
+Route::get('subscriptions', 'SubscriptionsController@index');

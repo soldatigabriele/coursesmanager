@@ -28,8 +28,12 @@ class CourseSubscriptionTest extends TestCase
         $user = factory('App\User')->create();
         $course = factory('App\Course')->create();
 
-        $response = $this->post('api/subscribe/'.$course->id, []);
-        $response->assertDatabaseHas('course_user', ['user_id'=>$user->id, 'course_id' => $course->id]);
+        // $response = $this->call('POST', 'api/subscriptions');
+        $response = $this->call('GET', 'api/subscriptions');
+        dd($response->getContent());
+        // $response = $this->post('api/subscriptions', ['course_id' => $course->id, 'user_id' => $user->id]);
+        dd($response->getContent());
+        $this->assertDatabaseHas('course_user', ['user_id'=>$user->id, 'course_id' => $course->id]);
 
     }
 
