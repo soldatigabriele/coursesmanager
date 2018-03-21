@@ -17,6 +17,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $guarded = ['id'];
-
+    
+    public function courses()
+    {
+    	return $this->belongsToMany('App\Course');
+    }
 
 }

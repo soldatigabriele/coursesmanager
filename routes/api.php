@@ -17,11 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('courses', 'CoursesController@index');
 Route::apiResources(['courses' => 'CoursesController']);
 Route::apiResources(['users' => 'UsersController']);
 
-// Route::post('subscribe', function(){return 'ok';});
-// Route::apiResources(['subscriptions' => 'SubscriptionsController']);
-Route::post('subscriptions', 'API/SubscriptionsController@subscribe');
-Route::get('subscriptions', 'SubscriptionsController@index');
+Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
+Route::any('subscribe', 'SubscriptionsController@subscribe');
+Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');
