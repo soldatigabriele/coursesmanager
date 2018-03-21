@@ -18,7 +18,6 @@ $factory->define(App\User::class, function (Faker $faker) {
 
 	// $faker = Faker::create('it_IT');
 	$data = [];
-	$data['city'] = $faker->city;
 	$data['job'] = $faker->jobTitle;
 	$data['transport'] = 'car';
 	$data['region'] = $faker->state;

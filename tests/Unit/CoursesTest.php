@@ -45,7 +45,7 @@ class CoursesTest extends TestCase
     }
  
     /**
-     * Post request Courses
+     * Post request
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class CoursesTest extends TestCase
 
 
     /**
-     * edit request Courses
+     * edit request
      *
      * @return void
      */
@@ -77,7 +77,7 @@ class CoursesTest extends TestCase
     }
 
     /**
-     * Delete Courses
+     * Delete
      *
      * @return void
      */
