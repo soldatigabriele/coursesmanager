@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Course;
+use App\Manager;
+use App\Helpers\Manager as Man;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,10 +15,14 @@ class CoursesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $r)
     {
-        $courses = Course::all();
-        return $courses;
+        $manager_id  = Man::Id($r);
+        $courses = Course::where('manager_id', $manager_id)->get();
+        if($courses->count()){
+            return $courses;
+        }
+        return response()->json(['error' => 'No course found']);
     }
 
     /**
@@ -27,7 +33,14 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        $course = Course::create($request->all());
+        $manager_id = Man::Id($request);
+        $course = new Course;
+        $course->long_id = $request->long_id;
+        $course->date = $request->date;
+        $course->limit = $request->limit;
+        $course->description = $request->description;
+        $course->manager_id = $manager_id;
+        $course->save();
         return $course;
     }
 
@@ -37,9 +50,13 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Course $course, Request $request)
     {
-        return $course;
+        ($request->bearerToken());
+        if($course->manager_id == Man::Id($request)){
+            return $course;
+        }
+        return response()->json(['error' => 'You cannot see this resource']);
     }
 
     /**

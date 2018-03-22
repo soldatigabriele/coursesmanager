@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Course;
+use App\Manager;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -27,9 +29,22 @@ class CoursesTest extends TestCase
     public function test_index()
     {
         $string = str_random(30);
-        $course = factory('App\Course')->create(['description'=>$string]);
+        $course = factory('App\Course')->create(['description'=>$string, 'manager_id'=>$this->manager->id]);
         $response = $this->get('api/courses', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
+    }
+
+    /**
+     * Index request no course with manager id 
+     *
+     * @return void
+     */
+    public function test_index_no_manager()
+    {
+        $string = str_random(30);
+        $course = factory('App\Course')->create(['description'=>$string]);
+        $response = $this->get('api/courses', ['HTTP_Authorization' => $this->token]);
+        $response->assertJsonFragment(['error'=>'No course found']);
     }
 
      /**
@@ -40,9 +55,23 @@ class CoursesTest extends TestCase
     public function test_show()
     {
         $string = str_random(30);
-        $course = factory('App\Course')->create(['description'=>$string]);
+        $course = factory('App\Course')->create(['description'=>$string, 'manager_id' => $this->manager->id]);
         $response = $this->get('api/courses/'.$course->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['description'=>$string]);
+    }
+ 
+
+     /**
+     * Show request refused
+     *
+     * @return void
+     */
+    public function test_show_refused_wrong_manager()
+    {
+        $string = str_random(30);
+        $course = factory('App\Course')->create(['description'=>$string, 'manager_id' => 9999 ]);
+        $response = $this->get('api/courses/'.$course->id, ['HTTP_Authorization' => $this->token]);
+        $response->assertJsonFragment(['error' => 'You cannot see this resource']);
     }
  
     /**
@@ -57,7 +86,10 @@ class CoursesTest extends TestCase
         'description' => str_random(30),
         'date' => date('d/m/Y').' al '.date('d/m/Y'),
         'limit' => rand(1, 20) ];
-    	$response = $this->post('api/courses', $data, ['HTTP_Authorization' => $this->token]);
+        $response = $this->post('api/courses', $data, ['HTTP_Authorization' => $this->token]);
+        $course = Course::find(json_decode($response->getContent())->id);
+        // check course has manager id
+        $this->assertEquals($course->manager_id, $this->manager->id);
         $response->assertJsonFragment([$long_id]);
     }
 
