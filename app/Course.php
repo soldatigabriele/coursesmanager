@@ -13,11 +13,11 @@ class Course extends Model
     
     public function users()
     {
-    	return $this->belongsToMany('App\Users');
+    	return $this->belongsToMany('App\Partecipant');
     }
 
     public function manager()
     {
-    	return $this->belongsTo('App\Manager');
+    	return $this->belongsTo('App\User');
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\User;
+use App\Partecipant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class UsersController extends Controller
+class PartecipantsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $user = User::all();
-        return $user;
+        $partecipant = Partecipant::all();
+        return $partecipant;
     }
 
     /**
@@ -27,8 +27,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->all());
-        return $user;
+        $partecipant = Partecipant::create($request->all());
+        return $partecipant;
     }
 
     /**
@@ -37,9 +37,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Partecipant $partecipant)
     {
-        return $user;
+        return $partecipant;
     }
 
     /**
@@ -49,10 +49,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Partecipant $partecipant)
     {
-        $user->fill($request->all());
-        return $user;
+        $partecipant->fill($request->all());
+        return $partecipant;
     }
 
     /**
@@ -61,9 +61,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Partecipant $partecipant)
     {
-        $user->delete();
-        return $user;
+        $partecipant->delete();
+        return $partecipant;
     }
 }

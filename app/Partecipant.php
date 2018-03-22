@@ -5,14 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Manager extends Model
+class Partecipant extends Model
 {
     use SoftDeletes;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = ['name', 'surname', 'email', 'phone', 'data'];
 
     public function courses()
     {
-    	return $this->hasMany('App\Courses');
+
+    	return $this->belongsToMany('App\Course');
     }
+
 }

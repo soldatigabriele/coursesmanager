@@ -15,12 +15,12 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware'=>'ApiAuth'], function(){
 	
-	Route::get('/user', function (Request $request) {
+	Route::get('/partecipant', function (Request $request) {
 	    return 'authorizzato';}
 	);
 
 	Route::apiResources(['courses' => 'CoursesController']);
-	Route::apiResources(['users' => 'UsersController']);
+	Route::apiResources(['partecipants' => 'PartecipantsController']);
 
 	Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
 	Route::any('subscribe', 'SubscriptionsController@subscribe');

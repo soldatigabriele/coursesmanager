@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Manager;
+use App\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -43,8 +43,8 @@ class ApiAuth
             throw new BadRequestHttpException('Tokens not provided');
         }
 
-        $manager = Manager::where('api_token', $request->bearerToken())->first();
-        if (!$manager) {
+        $user = User::where('api_token', $request->bearerToken())->first();
+        if (!$user) {
             throw new UnauthorizedHttpException('Invalid credentials');
         }
         

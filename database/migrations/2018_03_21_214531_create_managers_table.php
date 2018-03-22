@@ -11,25 +11,25 @@ class CreateManagersTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('managers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('api_token', 80)->unique();
-            $table->boolean('active')->default(true);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-    }
+    // public function up()
+    // {
+    //     Schema::create('managers', function (Blueprint $table) {
+    //         $table->increments('id');
+    //         $table->string('name')->unique();
+    //         $table->string('api_token', 80)->unique();
+    //         $table->boolean('active')->default(true);
+    //         $table->timestamps();
+    //         $table->softDeletes();
+    //     });
+    // }
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('managers');
-    }
+    // public function down()
+    // {
+    //     Schema::dropIfExists('managers');
+    // }
 }

@@ -6,7 +6,7 @@ use Faker\Factory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UsersTest extends TestCase
+class PartecipantsTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -15,10 +15,10 @@ class UsersTest extends TestCase
     {
         Parent::setUp();
         factory('App\Course', 10)->create();
-        factory('App\User', 10)->create();
+        factory('App\Partecipant', 10)->create();
         $this->faker = Factory::create('it_IT');
-        $this->manager = factory('App\Manager')->create();
-        $this->token = 'Bearer '.$this->manager->api_token;
+        $this->user = factory('App\User')->create();
+        $this->token = 'Bearer '.$this->user->api_token;
     }
 
     /**
@@ -29,8 +29,8 @@ class UsersTest extends TestCase
     public function test_index()
     {
         $string = str_random(30);
-        $user = factory('App\User')->create(['name'=>$string]);
-        $response = $this->get('api/users', ['HTTP_Authorization' => $this->token]);
+        $partecipant = factory('App\Partecipant')->create(['name'=>$string]);
+        $response = $this->get('api/partecipants', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
     }
 
@@ -42,8 +42,8 @@ class UsersTest extends TestCase
     public function test_show()
     {
         $string = str_random(30);
-        $user = factory('App\User')->create(['name'=>$string]);
-        $response = $this->get('api/users/'.$user->id, ['HTTP_Authorization' => $this->token]);
+        $partecipant = factory('App\Partecipant')->create(['name'=>$string]);
+        $response = $this->get('api/partecipants/'.$partecipant->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['name'=>$string]);
     }
  
@@ -61,17 +61,17 @@ class UsersTest extends TestCase
         $data['city'] = $this->faker->city;
         $data['fiscal_code'] = $this->faker->taxId;
         $data['data'] = json_encode($data);
-        $user_data = [
+        $partecipant_data = [
             'name' => $name,
             'surname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => '3'.rand(111111111, 999999999),
             'data' => json_encode($data),
         ];
-    	$response = $this->post('api/users', $user_data, ['HTTP_Authorization' => $this->token]);
+    	$response = $this->post('api/partecipants', $partecipant_data, ['HTTP_Authorization' => $this->token]);
         $id = (json_decode($response->getContent()))->id;
         $response->assertJsonFragment([$name]);
-        $this->assertDatabaseHas('users', ['id'=>$id, 'name' => $name]);
+        $this->assertDatabaseHas('partecipants', ['id'=>$id, 'name' => $name]);
     }
 
 
@@ -83,10 +83,10 @@ class UsersTest extends TestCase
     public function test_edit()
     {
         $name = strtoupper(str_random(5));
-        $user = factory('App\User')->create(['name' => $name,]);
+        $partecipant = factory('App\Partecipant')->create(['name' => $name]);
         $new_name = strtoupper(str_random(5));
         $data = ['name' => $new_name];
-        $response = $this->put('api/users/'.$user->id, $data, ['HTTP_Authorization' => $this->token]);
+        $response = $this->put('api/partecipants/'.$partecipant->id, $data, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$new_name]);
     }
 
@@ -97,8 +97,8 @@ class UsersTest extends TestCase
      */
     public function test_delete()
     {
-        $user = factory('App\User')->create();
-        $response = $this->delete('api/users/'.$user->id, [], ['HTTP_Authorization' => $this->token]);
-        $this->assertSoftDeleted('users', ['id'=>$user->id]);
+        $partecipant = factory('App\Partecipant')->create();
+        $response = $this->delete('api/partecipants/'.$partecipant->id, [], ['HTTP_Authorization' => $this->token]);
+        $this->assertSoftDeleted('partecipants', ['id'=>$partecipant->id]);
     }
 }

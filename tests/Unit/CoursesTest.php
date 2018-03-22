@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Course;
-use App\Manager;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,9 +16,9 @@ class CoursesTest extends TestCase
     {
         Parent::setUp();
         factory('App\Course', 10)->create();
-        factory('App\User', 10)->create();
-        $this->manager = factory('App\Manager')->create();
-        $this->token = 'Bearer '.$this->manager->api_token;
+        factory('App\Partecipant', 10)->create();
+        $this->user = factory('App\User')->create();
+        $this->token = 'Bearer '.$this->user->api_token;
     }
 
     /**
@@ -28,18 +28,25 @@ class CoursesTest extends TestCase
      */
     public function test_index()
     {
-        $string = str_random(30);
-        $course = factory('App\Course')->create(['description'=>$string, 'manager_id'=>$this->manager->id]);
+        $descriptions = [];
+        for ($i=0; $i < 10; $i++) { 
+            $string = str_random(30);
+            $descriptions[] = $string;
+            $course = factory('App\Course')->create(['description'=>$string, 'user_id'=>$this->user->id]);
+        }
         $response = $this->get('api/courses', ['HTTP_Authorization' => $this->token]);
-        $response->assertJsonFragment([$string]);
+        foreach($descriptions as $d){
+            $response->assertJsonFragment([$d]);
+        }
     }
 
+
     /**
-     * Index request no course with manager id 
+     * Index request no course with user id 
      *
      * @return void
      */
-    public function test_index_no_manager()
+    public function test_index_no_user()
     {
         $string = str_random(30);
         $course = factory('App\Course')->create(['description'=>$string]);
@@ -55,7 +62,7 @@ class CoursesTest extends TestCase
     public function test_show()
     {
         $string = str_random(30);
-        $course = factory('App\Course')->create(['description'=>$string, 'manager_id' => $this->manager->id]);
+        $course = factory('App\Course')->create(['description'=>$string, 'user_id' => $this->user->id]);
         $response = $this->get('api/courses/'.$course->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['description'=>$string]);
     }
@@ -66,10 +73,10 @@ class CoursesTest extends TestCase
      *
      * @return void
      */
-    public function test_show_refused_wrong_manager()
+    public function test_show_refused_wrong_user()
     {
         $string = str_random(30);
-        $course = factory('App\Course')->create(['description'=>$string, 'manager_id' => 9999 ]);
+        $course = factory('App\Course')->create(['description'=>$string, 'user_id' => 9999 ]);
         $response = $this->get('api/courses/'.$course->id, ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment(['error' => 'You cannot see this resource']);
     }
@@ -88,8 +95,8 @@ class CoursesTest extends TestCase
         'limit' => rand(1, 20) ];
         $response = $this->post('api/courses', $data, ['HTTP_Authorization' => $this->token]);
         $course = Course::find(json_decode($response->getContent())->id);
-        // check course has manager id
-        $this->assertEquals($course->manager_id, $this->manager->id);
+        // check course has user id
+        $this->assertEquals($course->user_id, $this->user->id);
         $response->assertJsonFragment([$long_id]);
     }
 

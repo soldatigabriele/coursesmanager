@@ -8,13 +8,31 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable;
+    use SoftDeletes;
 
-    protected $fillable = ['name', 'surname', 'email', 'phone', 'data'];
-    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'api_token', 'active'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+
+
     public function courses()
     {
-    	return $this->belongsToMany('App\Course');
+        return $this->hasMany('App\Courses');
     }
-
 }
