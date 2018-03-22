@@ -9,7 +9,7 @@ class Course extends Model
 {
     use softDeletes;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['long_id', 'date', 'limit', 'description'];
     
     public function users()
     {
