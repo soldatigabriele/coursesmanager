@@ -11,14 +11,14 @@ class UsersTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp(){
+    protected function setUp()
+    {
         Parent::setUp();
         factory('App\Course', 10)->create();
         factory('App\User', 10)->create();
         $this->faker = Factory::create('it_IT');
         $this->manager = factory('App\Manager')->create();
         $this->token = 'Bearer '.$this->manager->api_token;
-
     }
 
     /**
@@ -32,7 +32,6 @@ class UsersTest extends TestCase
         $user = factory('App\User')->create(['name'=>$string]);
         $response = $this->get('api/users', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
-
     }
 
      /**

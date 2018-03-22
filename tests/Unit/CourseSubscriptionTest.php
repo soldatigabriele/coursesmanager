@@ -6,15 +6,17 @@ use Faker\Factory;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class CourseSubscriptionTest extends TestCase
 {
 
-    use RefreshDatabase;
+    use RefreshDatabase, WithoutMiddleware;
 
     protected $user, $course, $token;
 
-    protected function setUp(){
+    protected function setUp()
+    {
         Parent::setUp();
         factory('App\Course', 10)->create();
         $this->course = factory('App\Course')->create();
@@ -22,10 +24,7 @@ class CourseSubscriptionTest extends TestCase
         $this->user = factory('App\User')->create();
         $this->manager = factory('App\Manager')->create();
         $this->token = 'Bearer '.$this->manager->api_token;
-
         $this->faker = Factory::create('it_IT');
-
-
     }
 
     /**
@@ -35,8 +34,7 @@ class CourseSubscriptionTest extends TestCase
      */
     public function test_user_can_subscribe_to_a_course()
     {
-
-        $response = $this->post('api/subscribe', ['course_id' => $this->course->id, 'user_id' => $this->user->id], ['HTTP_Authorization' => $this->token]);
+        $response = $this->post('api/subscribe', ['course_id' => $this->course->id, 'user_id' => $this->user->id]);
         $this->assertDatabaseHas('course_user', ['user_id'=>$this->user->id, 'course_id' => $this->course->id]);
     }
 
@@ -54,7 +52,7 @@ class CourseSubscriptionTest extends TestCase
             $user->courses()->attach($course->id);
             $long_ids[] = $course->long_id;
         }
-        $response = $this->get('api/getsubscriptions/'. $user->id, ['HTTP_Authorization' => $this->token]);
+        $response = $this->get('api/getsubscriptions/'. $user->id);
         foreach($long_ids as $long_id){
             $response->assertJsonFragment([ $long_id ]);
         }
@@ -68,7 +66,7 @@ class CourseSubscriptionTest extends TestCase
     public function test_user_can_subscribe_to_multiple_courses()
     {
         for ($i=1; $i < 11; $i++) { 
-            $response = $this->post('api/subscribe', ['course_id' => $i, 'user_id' => $this->user->id], ['HTTP_Authorization' => $this->token]);
+            $response = $this->post('api/subscribe', ['course_id' => $i, 'user_id' => $this->user->id]);
             $this->assertDatabaseHas('course_user', [
                 'user_id' => $this->user->id, 
                 'course_id' => $i
@@ -83,12 +81,10 @@ class CourseSubscriptionTest extends TestCase
      */
     public function test_user_cannot_subscribe_to_not_existing_courses()
     {
-        $response = $this->post('api/subscribe', ['course_id' => 999, 'user_id' => $this->user->id], ['HTTP_Authorization' => $this->token]);
+        $response = $this->post('api/subscribe', ['course_id' => 999, 'user_id' => $this->user->id]);
         $this->assertDatabaseMissing('course_user', [
             'user_id' => $this->user->id, 
             'course_id' => 999
         ]);
-
     }
-
 }

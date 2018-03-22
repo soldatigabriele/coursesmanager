@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,12 +10,11 @@ class AuthorizationTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp(){
-
+    protected function setUp()
+    {
         Parent::setUp();
         $this->manager = factory('App\Manager')->create();
         $this->token = 'Bearer '.$this->manager->api_token;
-
     }
 
     /**
@@ -52,5 +51,4 @@ class AuthorizationTest extends TestCase
         $response = $this->get('api/courses', ['HTTP_Authorization' => 'Bearer '.str_random(30)]);
         $response->assertJsonFragment(['error'=>'invalid_token']);
     }
- 
 }

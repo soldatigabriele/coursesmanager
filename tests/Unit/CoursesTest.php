@@ -10,14 +10,13 @@ class CoursesTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp(){
-
+    protected function setUp()
+    {
         Parent::setUp();
         factory('App\Course', 10)->create();
         factory('App\User', 10)->create();
         $this->manager = factory('App\Manager')->create();
         $this->token = 'Bearer '.$this->manager->api_token;
-
     }
 
     /**
@@ -31,7 +30,6 @@ class CoursesTest extends TestCase
         $course = factory('App\Course')->create(['description'=>$string]);
         $response = $this->get('api/courses', ['HTTP_Authorization' => $this->token]);
         $response->assertJsonFragment([$string]);
-
     }
 
      /**
