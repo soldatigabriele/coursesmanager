@@ -10,4 +10,9 @@ class Manager extends Model
     use SoftDeletes;
     
     protected $guarded = ['id'];
+
+    public function courses()
+    {
+    	return $this->hasMany('App\Courses');
+    }
 }

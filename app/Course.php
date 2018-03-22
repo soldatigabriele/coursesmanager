@@ -15,4 +15,9 @@ class Course extends Model
     {
     	return $this->belongsToMany('App\Users');
     }
+
+    public function manager()
+    {
+    	return $this->belongsTo('App\Manager');
+    }
 }
