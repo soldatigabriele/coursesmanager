@@ -19,11 +19,19 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
 	// $faker = Faker::create('it_IT');
 	$data = [];
 	$data['job'] = $faker->jobTitle;
+	$trans = ['auto', 'treno', 'bici'];
+	$data['transport'] = $trans[mt_rand(0, count($trans) - 1)];
+	$source = ['facebook', 'sito', 'amici'];
+	$data['source'] = $source[mt_rand(0, count($source) - 1)];
+	$shares = ['si', 'no'];
+	$data['shares'] = $shares[mt_rand(0, count($shares) - 1)];
 	$data['transport'] = 'car';
 	$data['region'] = $faker->state;
 	$data['city'] = $faker->city;
 	$data['fiscal_code'] = $faker->taxId;
-    
+	$food = ['veget', 'vegano', 'onnivoro'];
+	$data['food'] = $food[mt_rand(0, count($food) - 1)];
+
     return [
         'name' => $faker->firstName,
         'surname' => $faker->lastName,

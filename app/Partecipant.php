@@ -13,8 +13,13 @@ class Partecipant extends Model
 
     public function courses()
     {
-
     	return $this->belongsToMany('App\Course');
     }
+
+    public function getData()
+    {
+    	return json_decode($this->data);
+    }
+
 
 }

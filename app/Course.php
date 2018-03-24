@@ -11,13 +11,23 @@ class Course extends Model
 
     protected $fillable = ['long_id', 'date', 'limit', 'description'];
     
-    public function users()
+    public function partecipants()
     {
     	return $this->belongsToMany('App\Partecipant');
     }
 
-    public function manager()
+    public function subs()
+    {
+        return $this->partecipants()->count();
+    }
+
+    public function user()
     {
     	return $this->belongsTo('App\User');
+    }
+
+    public function getVegetarians()
+    {
+        // $this->partecipants()->where('')->groupBy()->get();
     }
 }

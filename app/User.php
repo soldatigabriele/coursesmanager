@@ -33,6 +33,6 @@ class User extends Authenticatable
 
     public function courses()
     {
-        return $this->hasMany('App\Courses');
+        return $this->hasMany('App\Course');
     }
 }

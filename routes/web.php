@@ -1,7 +1,31 @@
 <?php
 
-Route::get('/', 'HomeController@index')->name('home');
-
 Auth::routes();
 
-Route::resource('courses', 'CoursesController');
+Route::resource('courses', 'CoursesController', ['names' => [
+    'index' => 'course-index',
+    'create' => 'course-create',
+    'show' => 'course-show',
+    'destroy' => 'course-destroy',
+    'store' => 'course-store',
+    'edit' => 'course-edit',
+    'update' => 'course-update',
+]]);
+Route::resource('partecipants', 'PartecipantsController', ['names' => [
+    'index' => 'partecipant-index',
+    'create' => 'partecipant-create',
+    'show' => 'partecipant-show',
+    'destroy' => 'partecipant-destroy',
+    'store' => 'partecipant-store',
+    'edit' => 'partecipant-edit',
+    'update' => 'partecipant-update',
+]]);
+
+Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
+Route::post('subscribe', 'SubscriptionsController@subscribe');
+Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');
+
+// Homepage
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
+
+

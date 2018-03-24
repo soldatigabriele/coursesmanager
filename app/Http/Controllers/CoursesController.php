@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Course;
 use App\User;
+use App\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CoursesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,13 +24,8 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $user_id  = Auth::user()->id;
-        dd($user_id);
-        $courses = Course::where('user_id', $user_id)->get();
-        if($courses->count()){
-            return $courses;
-        }
-        return response()->json(['error' => 'No course found']);
+        $courses = Course::where('user_id', Auth::user()->id)->orderByDesc('created_at')->paginate(10);
+        return view('courses.index')->with(['courses' => $courses]);
     }
 
     /**
@@ -34,15 +36,32 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = Man::Id($request);
+// TODO validate input
+        $user_id = Auth::user()->id;
         $course = new Course;
-        $course->long_id = $request->long_id;
         $course->date = $request->date;
         $course->limit = $request->limit;
         $course->description = $request->description;
         $course->user_id = $user_id;
         $course->save();
-        return $course;
+        $course->long_id = $course->fresh()->id.'-'.$request->long_id;
+        $course->save();
+
+        $message = 'Corso creato correttamente: '.$course->description.' - '.$course->date.' - '.$course->long_id;
+
+        return redirect('/')->with('status', $message);
+    }
+
+    /**
+     * Show the create page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        // return the course creation form 
+        return view('courses.create');
     }
 
     /**
@@ -53,7 +72,6 @@ class CoursesController extends Controller
      */
     public function show(Course $course, Request $request)
     {
-        ($request->bearerToken());
         if($course->user_id == Man::Id($request)){
             return $course;
         }
