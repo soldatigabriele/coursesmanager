@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
 {
@@ -37,6 +38,25 @@ class CoursesController extends Controller
     public function store(Request $request)
     {
 // TODO validate input
+
+        $messages = [
+            'long_id.required' => 'Inserire un codice corso valido',
+            'date.required' => 'Inserire una data',
+            'description.required' => 'Inserire il nome corso',
+        ];
+         $rules = [
+            'date' => 'required',
+            'description' => 'required',
+            'long_id' => 'required',
+        ];
+    
+        $validation = Validator::make($request->all(), $rules, $messages);
+        if ($validation->fails()) {
+            return redirect(route('course-create'))
+                        ->withErrors($validation)
+                        ->withInput();
+        }
+     
         $user_id = Auth::user()->id;
         $course = new Course;
         $course->date = $request->date;
@@ -50,6 +70,9 @@ class CoursesController extends Controller
         $message = 'Corso creato correttamente: '.$course->description.' - '.$course->date.' - '.$course->long_id;
 
         return redirect('/')->with('status', $message);
+
+        
+
     }
 
     /**

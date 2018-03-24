@@ -23,16 +23,26 @@
                 <div class="card-header">INSERIMENTO NUOVO CORSO</div>
                 <div class="card-body">
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                   <form action="{{ route('course-store') }}" method="post" id="formprova" name="a">
                     {{ csrf_field() }}
                       <table>
                         <tr>
                            <td><label> Nome Corso </label></td>
-                           <td><input class="form-control" type="text" name="description"/></td>
+                           <td><input class="form-control" type="text" name="description" value="{{ old('description') }}"/></td>
                        </tr>
                        <tr>
                            <td><label> Data corso </label></td>
-                           <td><input class="form-control" type="text" name="date"/></td>
+                           <td><input class="form-control" type="text" name="date" value="{{ old('date') }}" /></td>
                        </tr>
                        <tr>
                            <td><label> Numero max iscritti (indicativo, pu&ograve essere superato)</label></td>
@@ -47,7 +57,7 @@
                      </tr>
                      <tr> 
                        <td>CODICE CORSO: (max 5 caratteri)</td>
-                       <td><input id="long_id" class="cod form-control" type="text" name="long_id" maxlength="10"/></td>
+                       <td><input id="long_id" class="cod form-control" type="text" name="long_id" maxlength="10" value="{{ old('long_id')}}" /></td>
                    </tr>
                </table>
 
