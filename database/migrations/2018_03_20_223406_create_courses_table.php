@@ -15,7 +15,7 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('long_id')->default(random_int(1, 100).'-'.str_random(6));
+            $table->string('long_id')->default(str_random(6));
             $table->integer('user_id');
             $table->string('description');
             $table->string('date');

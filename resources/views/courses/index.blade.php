@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" style="background: ; padding:0px">
+                <div class="card-body">
                     <div class="col-md-12 tabella">
                         @foreach($courses as $course)
                         <div class="row subtitle">
@@ -68,8 +68,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="col-md-12 tabella">
-                            <!-- <div class="NOTcollapse" id="partecipants-{{ $course->id }}" style="background: white; padding:5px"> -->
+                            <div class="collapse table" id="partecipants-{{ $course->id }}">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
 
                                     <tr class="subtitle tabelle">
@@ -98,13 +97,13 @@
                                             Trasporto
                                         </td>
                                         <td>
-                                            Vegetariano
+                                            Cibo
                                         </td>
                                         <td>
-                                            Source
+                                            Saputo da
                                         </td>
                                         <td>
-                                            Shares
+                                            Condivide
                                         </td>
                                     </tr>
                                     @php $i = 1; @endphp
@@ -148,8 +147,8 @@
                                     @endforeach
                                 </table>
                             </div>
-                            <span class="subtitle">Lista Mail:</span>
-                            <div class="col-md-12 emails">
+                            <span class="subtitle">Lista Mail {{ $course->long_id }}:</span>
+                            <div class="col-md-12 emails">  
                             @foreach($course->partecipants as $p)
                             
                                 {{ $p->email }}, 
@@ -158,7 +157,9 @@
                             </div>
                         </div>
                         <br>
+                        <hr>
                         @endforeach
+
                     </div>
                 </div>
                 {!! $courses->render() !!}
