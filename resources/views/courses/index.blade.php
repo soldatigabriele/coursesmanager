@@ -9,6 +9,15 @@
         text-align: left;
         border-bottom: 1px solid #eee;
     }
+    .emails{
+        border:1px solid #eee;
+    }
+    .tabella{
+        padding-top: 20px;
+    }
+    .tabelle{
+        padding-top: 20px;
+    }
 </style>
 @endsection
 
@@ -18,7 +27,7 @@
         <div class="col-md-12">
             <a role="button" href="/" class="btn btn-outline-secondary">Indietro</a>
             <div class="clearfix"></div><br>
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="row subtitle">
@@ -38,8 +47,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="col-md-12">
+                <div class="card-body" style="background: ; padding:0px">
+                    <div class="col-md-12 tabella">
                         @foreach($courses as $course)
                         <div class="row subtitle">
                             <div class="col-md-2">
@@ -59,85 +68,96 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="collapse" id="partecipants-{{ $course->id }}">
-                            <div class="row subtitle">
-                                <div class="col-md-1">
-                                    #
-                                </div>
-                                <div class="col-md-1">
-                                    Nome
-                                </div>
-                                <div class="col-md-1">
-                                    Cognome
-                                </div>
-                                <div class="col-md-2">
-                                    Email
-                                </div>
-                                <div class="col-md-1">
-                                    Telefono
-                                </div>
-                                <div class="col-md-1">
-                                    Regione
-                                </div>
-                                <div class="col-md-1">
-                                    Città
-                                </div>
-                                <div class="col-md-1">
-                                    Trasporto
-                                </div>
-                                <div class="col-md-1">
-                                    Vegetariano
-                                </div>
-                                <div class="col-md-1">
-                                    Source
-                                </div>
-                                <div class="col-md-1">
-                                    Shares
-                                </div>
-                            </div>
-                            @php $i = 1; @endphp
-                            @foreach($course->partecipants as $p)
-                                <div class="row righe">
-                                    <div class="col-md-1">
-                                        {{$i}} 
-                                        @php $i++; @endphp
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->name }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->surname }}
-                                    </div>
-                                    <div class="col-md-2">
-                                        {{ $p->email }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->phone }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->region }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->city }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->transport }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->food }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->source }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{ $p->getData()->shares }}
-                                    </div>
-                                </div>
+                            <div class="col-md-12 tabella">
+                            <!-- <div class="NOTcollapse" id="partecipants-{{ $course->id }}" style="background: white; padding:5px"> -->
+                                <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
 
+                                    <tr class="subtitle tabelle">
+                                        <td>
+                                            #
+                                        </td>
+                                        <td>
+                                            Nome
+                                        </td>
+                                        <td>
+                                            Cognome
+                                        </td>
+                                        <td>
+                                            Email
+                                        </td>
+                                        <td>
+                                            Telefono
+                                        </td>
+                                        <td>
+                                            Regione
+                                        </td>
+                                        <td>
+                                            Città
+                                        </td>
+                                        <td>
+                                            Trasporto
+                                        </td>
+                                        <td>
+                                            Vegetariano
+                                        </td>
+                                        <td>
+                                            Source
+                                        </td>
+                                        <td>
+                                            Shares
+                                        </td>
+                                    </tr>
+                                    @php $i = 1; @endphp
+                                    @foreach($course->partecipants as $p)
+                                    <tr>
+                                        <td>
+                                            {{$i}} 
+                                            @php $i++; @endphp
+                                        </td>
+                                        <td>
+                                            {{ $p->name }}
+                                        </td>
+                                        <td>
+                                            {{ $p->surname }}
+                                        </td>
+                                        <td>
+                                            {{ $p->email }}
+                                        </td>
+                                        <td>
+                                            {{ $p->phone }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->region }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->city }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->transport }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->food }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->source }}
+                                        </td>
+                                        <td>
+                                            {{ $p->getData()->shares }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                            <span class="subtitle">Lista Mail:</span>
+                            <div class="col-md-12 emails">
+                            @foreach($course->partecipants as $p)
+                            
+                                {{ $p->email }}, 
+                        
                             @endforeach
                             </div>
                         </div>
-                        <hr>
+                        <br>
                         @endforeach
                     </div>
                 </div>
