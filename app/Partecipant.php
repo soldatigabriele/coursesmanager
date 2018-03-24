@@ -21,5 +21,4 @@ class Partecipant extends Model
     	return json_decode($this->data);
     }
 
-
 }

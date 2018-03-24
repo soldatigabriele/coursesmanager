@@ -26,7 +26,7 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::where('user_id', Auth::user()->id)->orderByDesc('created_at')->paginate(10);
-        return view('courses.index')->with(['courses' => $courses]);
+        return view('courses.index')->with(['courses' => $courses, 'header'=>['test', 'test2', 'test3']]);
     }
 
     /**

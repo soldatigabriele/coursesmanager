@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="col-md-12 tabella">
+                    <div class="col-md-12">
                         @foreach($courses as $course)
                         <div class="row subtitle">
                             <div class="col-md-2">
@@ -67,44 +67,19 @@
                                 <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-outline-success">Mostra</button>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 tabella">
                             <div class="collapse table" id="partecipants-{{ $course->id }}">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
-
                                     <tr class="subtitle tabelle">
                                         <td>
                                             #
                                         </td>
+                                        @foreach($course->headers() as $key)
+
                                         <td>
-                                            Nome
+                                            {{ ucfirst($key) }}
                                         </td>
-                                        <td>
-                                            Cognome
-                                        </td>
-                                        <td>
-                                            Email
-                                        </td>
-                                        <td>
-                                            Telefono
-                                        </td>
-                                        <td>
-                                            Regione
-                                        </td>
-                                        <td>
-                                            Città
-                                        </td>
-                                        <td>
-                                            Trasporto
-                                        </td>
-                                        <td>
-                                            Cibo
-                                        </td>
-                                        <td>
-                                            Saputo da
-                                        </td>
-                                        <td>
-                                            Condivide
-                                        </td>
+                                        @endforeach
                                     </tr>
                                     @php $i = 1; @endphp
                                     @foreach($course->partecipants as $p)
@@ -125,24 +100,12 @@
                                         <td>
                                             {{ $p->phone }}
                                         </td>
+                                        @foreach($p->getData() as $key => $value)
+
                                         <td>
-                                            {{ $p->getData()->region }}
+                                            {{ ($value) }}
                                         </td>
-                                        <td>
-                                            {{ $p->getData()->city }}
-                                        </td>
-                                        <td>
-                                            {{ $p->getData()->transport }}
-                                        </td>
-                                        <td>
-                                            {{ $p->getData()->food }}
-                                        </td>
-                                        <td>
-                                            {{ $p->getData()->source }}
-                                        </td>
-                                        <td>
-                                            {{ $p->getData()->shares }}
-                                        </td>
+                                        @endforeach                                        
                                     </tr>
                                     @endforeach
                                 </table>

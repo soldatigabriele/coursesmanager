@@ -30,4 +30,16 @@ class Course extends Model
     {
         // $this->partecipants()->where('')->groupBy()->get();
     }
+
+    public function headers()
+    {
+        $headers =['nome', 'cognome', 'email', 'telefono'];
+
+        $courseHasPartecipant = $this->partecipants()->first();
+        if($courseHasPartecipant){
+            $headers = array_merge($headers, array_keys( (array)$this->partecipants()->first()->getData() ));
+        }
+
+        return $headers;
+    }
 }
