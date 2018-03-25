@@ -14,7 +14,7 @@ class Partecipant extends Model
 
     public function courses()
     {
-    	return $this->belongsToMany('App\Course');
+    	return $this->belongsToMany('App\Course')->withTimestamps();
     }
 
     public function getData()
