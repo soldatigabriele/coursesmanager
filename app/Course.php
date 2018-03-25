@@ -32,9 +32,14 @@ class Course extends Model
         // $this->partecipants()->where('')->groupBy()->get();
     }
 
+    public function getDistinctEmails($value)
+    {
+        return ($this->partecipants->unique($value)->values()->all());
+    }
+
     public function headers()
     {
-        $headers =['nome', 'cognome', 'email', 'telefono'];
+        $headers =['nome', 'cognome', 'email', 'telefono', 'regione'];
 
         $courseHasPartecipant = $this->partecipants()->first();
         if($courseHasPartecipant){

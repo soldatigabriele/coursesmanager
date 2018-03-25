@@ -117,6 +117,9 @@
                                         <td>
                                             {{ $p->phone }}
                                         </td>
+                                        <td>
+                                            {{ $p->region['name'] }}
+                                        </td>
                                         @foreach($p->getData() as $key => $value)
 
                                         <td>
@@ -128,9 +131,9 @@
                                 </table>
                             </div>
                             <div class="col-md-12 emails">  
-                            @foreach($course->partecipants as $p)
+                            @foreach($course->getDistinctEmails('email') as $p)
                             
-                                {{ $p->email }}, 
+                                {{ $p->email }},
                         
                             @endforeach
                             </div>

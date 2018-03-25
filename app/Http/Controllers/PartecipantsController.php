@@ -23,8 +23,8 @@ class PartecipantsController extends Controller
      */
     public function index()
     {
-        $partecipant = Partecipant::all();
-        return $partecipant;
+        $partecipant = Partecipant::paginate(10);
+        return view('partecipants.index')->with(['partecipants'=> $partecipant, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
     }
 
 
@@ -104,12 +104,12 @@ class PartecipantsController extends Controller
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
 
-            (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data));
+            (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data), $request);
             return redirect()->back()
                         ->withErrors($validation)
                         ->withInput();
         }
-        (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()));
+        (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
         $data = $request->all();
         $p = new Partecipant();
         $p->name = $request->name;
@@ -136,7 +136,7 @@ class PartecipantsController extends Controller
         // send and log the message
         Telegram::alert($p, Course::find($request->course_id));
 
-        // (new Logger)->log('2', 'Telegram Response', $response);
+        (new Logger)->log('2', 'Telegram Response', $response, $request);
 
         return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }

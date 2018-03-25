@@ -18,6 +18,7 @@ class CreateApplicationLogsTable extends Migration
             $table->string('status');
             $table->string('description');
             $table->json('value');
+            $table->json('meta');
             $table->timestamps();
         });
     }

@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         factory('App\Course', random_int(4, 20))->create(['user_id' => 1])->each(function($u){
             $u->partecipants()->saveMany(factory('App\Partecipant', random_int(0, 10))->create());
         });
+        factory('App\Newsletter', 100)->create();
     }
 }

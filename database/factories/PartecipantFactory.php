@@ -25,7 +25,6 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
 	$data['source'] = $source[mt_rand(0, count($source) - 1)];
 	$shares = ['si', 'no'];
 	$data['shares'] = $shares[mt_rand(0, count($shares) - 1)];
-	$data['region'] = $faker->state;
 	$data['city'] = $faker->city;
 	$data['fiscal_code'] = $faker->taxId;
 	$food = ['veget', 'vegano', 'onnivoro'];
@@ -35,6 +34,7 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
         'slug' => str_random(20),
         'name' => $faker->firstName,
         'surname' => $faker->lastName,
+        'region_id' => App\Region::inRandomOrder()->first()->id,
         'email' => $faker->unique()->safeEmail,
         'phone' => '3'.rand(111111111, 999999999),
         'data' => json_encode($data),

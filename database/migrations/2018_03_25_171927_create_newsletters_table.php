@@ -18,8 +18,9 @@ class CreateNewslettersTable extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('email');
-            $table->string('region');
+            $table->integer('region_id');
             $table->string('active');
+            $table->json('meta');
             $table->timestamps();
             $table->softDeletes();
         });

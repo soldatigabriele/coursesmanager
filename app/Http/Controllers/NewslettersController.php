@@ -9,6 +9,7 @@ use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Rules\Course as CourseRule;
 use App\Rules\Region as RegionRule;
 use App\Http\Controllers\Controller;
@@ -24,8 +25,9 @@ class NewslettersController extends Controller
      */
     public function index()
     {
-        $newsletter = Newsletter::all();
-        return view('newsletters.index')->with(['newsletter' => $newsletter]);
+        $newsletter = DB::table('newsletters')->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('newsletters.index')->with(['newsletters' => $newsletter, 'regions' => Region::all(), 'emails' => Newsletter::select('email')->distinct()->get()]);
     }
 
 

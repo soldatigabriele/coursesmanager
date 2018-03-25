@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Course;
+use App\Helpers\Logger;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,6 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-// TODO validate input
 
         $messages = [
             'long_id.required' => 'Inserire un codice corso valido',
@@ -52,10 +52,15 @@ class CoursesController extends Controller
     
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
+            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
+            (new Logger)->log('0', 'Course Creation Error', json_encode($data), $request);
             return redirect(route('course-create'))
                         ->withErrors($validation)
                         ->withInput();
         }
+
+        (new Logger)->log('1', 'Course Creation Success', json_encode($request->all()), $request);
+
 
         $user_id = Auth::user()->id;
         $course = new Course;

@@ -20,6 +20,7 @@ class CreatePartecipantsTable extends Migration
             $table->string('surname');
             $table->string('email');
             $table->string('phone');
+            $table->integer('region_id');
             $table->json('data');
             $table->json('meta');
             $table->timestamps();

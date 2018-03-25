@@ -9,5 +9,12 @@ class Newsletter extends Model
 {
 	use SoftDeletes;
 	
-    protected $fillable = ['name', 'surname', 'email', 'region'];
+    protected $fillable = ['name', 'surname', 'email', 'region_id'];
+
+
+    public function region()
+    {
+        return $this->belongsTo('App\Region');
+    }
+
 }

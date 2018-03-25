@@ -9,7 +9,7 @@ class Partecipant extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'surname', 'slug', 'email', 'phone', 'data'];
+    protected $fillable = ['name', 'surname', 'slug', 'email', 'phone', 'data', 'region_id'];
 
     public function courses()
     {
@@ -20,5 +20,11 @@ class Partecipant extends Model
     {
     	return json_decode($this->data);
     }
+
+    public function region()
+    {
+        return $this->belongsTo('App\Region');
+    }
+
 
 }
