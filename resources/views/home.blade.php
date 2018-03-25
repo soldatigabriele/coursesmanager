@@ -112,7 +112,7 @@
     }
     function changeClass(){
         $(this).attr('class', 'btn btn-outline-success copyButton');
-        $(this).html('Link copiato');
+        $(this).html('Copiato');
     }
 </script>
 @endsection
