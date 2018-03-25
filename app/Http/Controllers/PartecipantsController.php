@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Region;
 use App\Partecipant;
-use App\Rules\Region as RegionRule;
-use App\Rules\Course as CourseRule;
+use App\Helpers\Logger;
+use App\Helpers\Telegram;
 use Illuminate\Http\Request;
+use App\Rules\Course as CourseRule;
+use App\Rules\Region as RegionRule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,6 +40,32 @@ class PartecipantsController extends Controller
         return view('forms.create')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
     }
 
+
+    /**
+     * Show the scheda 1 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda1()
+    {
+        // return the course creation form 
+        return view('forms.scheda1')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+    }
+
+
+    /**
+     * Show the scheda 2 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda2()
+    {
+        // return the course creation form 
+        return view('forms.scheda2')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,6 +74,7 @@ class PartecipantsController extends Controller
      */
     public function store(Request $request)
     {
+
         $messages = [
             'name.required' => 'Inserire un nome valido',
             'surname.required' => 'Inserire una cognome valido',
@@ -74,10 +103,14 @@ class PartecipantsController extends Controller
         $validation = Validator::make($request->all(), $rules, $messages);
         
         if ($validation->fails()) {
-            return redirect(route('partecipant-create'))
+            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
+
+            (new Logger)->log('Validation error', 'Partecipant Subscription', json_encode($data));
+            return redirect()->back()
                         ->withErrors($validation)
                         ->withInput();
         }
+        (new Logger)->log('Application Success', 'Partecipant Subscription', json_encode($request->all()));
         $data = $request->all();
         $p = new Partecipant();
         $p->name = $request->name;
@@ -98,9 +131,14 @@ class PartecipantsController extends Controller
 
         $p->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $p->save();
+        $p = $p->fresh();
+        $p->courses()->sync($request->course_id);
 
-        $p->fresh()->courses()->sync($request->course_id);
-        return redirect()->route('partecipant-show', ['slug' => $p->fresh()->slug])->with('status', 'Iscrizione avvenuta con successo!');
+        // send and log the message
+        // $response = Telegram::alert($p, Course::find($request->course_id));
+        // (new Logger)->log($response);
+
+        return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
 
     /**

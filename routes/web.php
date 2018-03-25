@@ -12,7 +12,6 @@ Route::resource('courses', 'CoursesController', ['names' => [
     'update' => 'course-update',
 ]]);
 
-
 Route::resource('partecipants', 'PartecipantsController', [
     'names' => [
         'index' => 'partecipant-index',
@@ -23,7 +22,10 @@ Route::resource('partecipants', 'PartecipantsController', [
         'update' => 'partecipant-update',
     ], 
 ]);
-Route::get('confirmation/{slug}', 'PartecipantsController@show')->name('partecipant-show');
+Route::get('partecipants/{slug}', 'PartecipantsController@show')->name('partecipant-show');
+
+Route::get('corsi/scheda1', 'PartecipantsController@scheda1')->name('scheda-1');
+Route::get('corsi/scheda2', 'PartecipantsController@scheda2')->name('scheda-2');
 
 Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
 Route::post('subscribe', 'SubscriptionsController@subscribe');
