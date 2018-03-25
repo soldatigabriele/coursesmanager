@@ -56,7 +56,7 @@ class CoursesController extends Controller
                         ->withErrors($validation)
                         ->withInput();
         }
-     
+
         $user_id = Auth::user()->id;
         $course = new Course;
         $course->date = $request->date;

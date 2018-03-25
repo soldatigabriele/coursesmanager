@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
+use App\Region;
 use App\Partecipant;
+use App\Rules\Region as RegionRule;
+use App\Rules\Course as CourseRule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PartecipantsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -19,6 +25,19 @@ class PartecipantsController extends Controller
         return $partecipant;
     }
 
+
+    /**
+     * Show the create page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        // return the course creation form 
+        return view('forms.create')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -27,8 +46,61 @@ class PartecipantsController extends Controller
      */
     public function store(Request $request)
     {
-        $partecipant = Partecipant::create($request->all());
-        return $partecipant;
+        $messages = [
+            'name.required' => 'Inserire un nome valido',
+            'surname.required' => 'Inserire una cognome valido',
+            'phone.required' => 'Inserire un numero di telefono valido',
+            'job.required' => 'Inserire una professione valida',
+            'city.required' => 'Inserire la propria provenienza',
+            'email.required' => 'Inserire un indirizzo email',
+            'email.email' => 'Inserire un indirizzo email valido',
+            '.required' => 'Inserireemail valido',
+            'g-recaptcha-response.required' => 'Cliccare il box: "Non sono un robot"',
+        ];
+         $rules = [
+            'name' => 'required|string',
+            'surname' => 'required|string',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'job' => 'required',
+            'city' => 'required',
+            'region' => new RegionRule,
+            'course_id' => new CourseRule,
+        ];
+         if(env('REQUIRE_CAPTCHA') === 'yes' ){
+            $rules['g-recaptcha-response'] = 'required|captcha';
+         }
+
+        $validation = Validator::make($request->all(), $rules, $messages);
+        
+        if ($validation->fails()) {
+            return redirect(route('partecipant-create'))
+                        ->withErrors($validation)
+                        ->withInput();
+        }
+        $data = $request->all();
+        $p = new Partecipant();
+        $p->name = $request->name;
+        $p->slug = str_random(30);
+        $p->surname = $request->surname;
+        $p->email = $request->email;
+        $p->phone = $request->phone;
+
+        array_forget($data, 'g-recaptcha-response');
+        array_forget($data, 'name');
+        array_forget($data, '_token');
+        array_forget($data, 'subscribe');
+        array_forget($data, 'surname');
+        array_forget($data, 'email');
+        array_forget($data, 'phone');
+        array_forget($data, 'course_id');
+        $p->data = json_encode($data);
+
+        $p->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
+        $p->save();
+
+        $p->fresh()->courses()->sync($request->course_id);
+        return redirect()->route('partecipant-show', ['slug' => $p->fresh()->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
 
     /**
@@ -37,9 +109,11 @@ class PartecipantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Partecipant $partecipant)
+    public function show($slug)
     {
-        return $partecipant;
+        $p = Partecipant::where('slug', $slug)->first();
+        $courses = $p->courses;
+        return view('partecipants.show')->with(['partecipant' => $p]);
     }
 
     /**

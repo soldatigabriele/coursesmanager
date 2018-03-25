@@ -32,10 +32,12 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
 	$data['food'] = $food[mt_rand(0, count($food) - 1)];
 
     return [
+        'slug' => str_random(20),
         'name' => $faker->firstName,
         'surname' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
         'phone' => '3'.rand(111111111, 999999999),
         'data' => json_encode($data),
+        'meta' => json_encode(['ip'=>'127.0.0.1']),
     ];
 });

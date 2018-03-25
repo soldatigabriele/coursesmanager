@@ -9,7 +9,7 @@ class Partecipant extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'surname', 'email', 'phone', 'data'];
+    protected $fillable = ['name', 'surname', 'slug', 'email', 'phone', 'data'];
 
     public function courses()
     {

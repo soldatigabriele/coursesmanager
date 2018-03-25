@@ -35,11 +35,11 @@
                 </div>
                 @if ($message = Session::get('deleted'))
                 <div class="col-md-6">
-                <div id="flash-message" class="success-message">
-                        <strong>{{ $message }}</strong>
+                    <div id="flash-message" class="success-message">
+                            <strong>{{ $message }}</strong>
+                    </div>
                 </div>
-                </div>
-            @endif
+                @endif
             </div>
             <div class="clearfix"></div><br>
 

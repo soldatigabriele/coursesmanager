@@ -11,15 +11,19 @@ Route::resource('courses', 'CoursesController', ['names' => [
     'edit' => 'course-edit',
     'update' => 'course-update',
 ]]);
-Route::resource('partecipants', 'PartecipantsController', ['names' => [
-    'index' => 'partecipant-index',
-    'create' => 'partecipant-create',
-    'show' => 'partecipant-show',
-    'destroy' => 'partecipant-destroy',
-    'store' => 'partecipant-store',
-    'edit' => 'partecipant-edit',
-    'update' => 'partecipant-update',
-]]);
+
+
+Route::resource('partecipants', 'PartecipantsController', [
+    'names' => [
+        'index' => 'partecipant-index',
+        'create' => 'partecipant-create',
+        'destroy' => 'partecipant-destroy',
+        'store' => 'partecipant-store',
+        'edit' => 'partecipant-edit',
+        'update' => 'partecipant-update',
+    ], 
+]);
+Route::get('confirmation/{slug}', 'PartecipantsController@show')->name('partecipant-show');
 
 Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
 Route::post('subscribe', 'SubscriptionsController@subscribe');
