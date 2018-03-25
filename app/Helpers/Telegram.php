@@ -11,6 +11,7 @@ class Telegram{
 	    $client = new \GuzzleHttp\Client();
 
 	    $chat_id = '31019486';
+	    $chat_id = '572616982';
 	    $text = 
 	    	$partecipant->name.' '.$partecipant->surname.' - '.$partecipant->email.' '.$partecipant->phone.' si è iscritto al corso '.$course->long_id.' del '.$course->date;
 
