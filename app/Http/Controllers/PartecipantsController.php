@@ -135,6 +135,7 @@ class PartecipantsController extends Controller
 
         // send and log the message
         $response = Telegram::alert($p, Course::find($request->course_id));
+        dd($response);
         (new Logger)->log('2', 'Telegram Response', $response);
 
         return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
