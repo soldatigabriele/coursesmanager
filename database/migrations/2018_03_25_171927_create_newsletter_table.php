@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicationLogsTable extends Migration
+class CreateNewsletterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateApplicationLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('application_logs', function (Blueprint $table) {
+        Schema::create('newsletter', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('status');
-            $table->string('description');
-            $table->json('value');
+            $table->string('name');
+            $table->string('surname');
+            $table->string('email');
+            $table->string('region');
+            $table->string('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +32,6 @@ class CreateApplicationLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('application_logs');
+        Schema::dropIfExists('newsletter');
     }
 }

@@ -24,6 +24,15 @@ Route::resource('partecipants', 'PartecipantsController', [
 ]);
 Route::get('partecipants/{slug}', 'PartecipantsController@show')->name('partecipant-show');
 
+
+Route::resource('newsletters', 'NewslettersController', [
+    'names' => [
+        'index' => 'newsletter-index',
+        'create' => 'newsletter-create',
+        'store' => 'newsletter-store',
+    ], 
+]);
+
 Route::get('corsi/scheda1', 'PartecipantsController@scheda1')->name('scheda-1');
 Route::get('corsi/scheda2', 'PartecipantsController@scheda2')->name('scheda-2');
 

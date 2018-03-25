@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Region;
+use App\Newsletter;
 use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
@@ -13,7 +14,7 @@ use App\Rules\Region as RegionRule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class PartecipantsController extends Controller
+class NewslettersController extends Controller
 {
 
     /**
@@ -23,8 +24,8 @@ class PartecipantsController extends Controller
      */
     public function index()
     {
-        $partecipant = Partecipant::all();
-        return $partecipant;
+        $newsletter = Newsletter::all();
+        return view('newsletters.index')->with(['newsletter' => $newsletter]);
     }
 
 
@@ -36,34 +37,8 @@ class PartecipantsController extends Controller
      */
     public function create()
     {
-        // return the course creation form 
-        return view('forms.create')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
-    }
+        return view('newsletters.create')->with(['regions'=> Region::all()]);
 
-
-    /**
-     * Show the scheda 1 form.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function scheda1()
-    {
-        // return the course creation form 
-        return view('forms.scheda1')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
-    }
-
-
-    /**
-     * Show the scheda 2 form.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function scheda2()
-    {
-        // return the course creation form 
-        return view('forms.scheda2')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
     }
 
     /**
@@ -78,9 +53,6 @@ class PartecipantsController extends Controller
         $messages = [
             'name.required' => 'Inserire un nome valido',
             'surname.required' => 'Inserire una cognome valido',
-            'phone.required' => 'Inserire un numero di telefono valido',
-            'job.required' => 'Inserire una professione valida',
-            'city.required' => 'Inserire la propria provenienza',
             'email.required' => 'Inserire un indirizzo email',
             'email.email' => 'Inserire un indirizzo email valido',
             'g-recaptcha-response.required' => 'Cliccare il box: "Non sono un robot"',
@@ -88,28 +60,23 @@ class PartecipantsController extends Controller
          $rules = [
             'name' => 'required|string',
             'surname' => 'required|string',
-            'phone' => 'required',
             'email' => 'required|email',
-            'job' => 'required',
-            'city' => 'required',
-            'region' => new RegionRule,
-            'course_id' => new CourseRule,
         ];
-         if(env('REQUIRE_CAPTCHA') === 'yes' ){
+        if(env('REQUIRE_CAPTCHA') === 'yes' ){
             $rules['g-recaptcha-response'] = 'required|captcha';
-         }
+        }
 
         $validation = Validator::make($request->all(), $rules, $messages);
         
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
 
-            (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data));
+            (new Logger)->log('0', 'Newsletter Subscription Error', json_encode($data));
             return redirect()->back()
                         ->withErrors($validation)
                         ->withInput();
         }
-        (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()));
+        (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()));
         $data = $request->all();
         $p = new Partecipant();
         $p->name = $request->name;
@@ -134,8 +101,8 @@ class PartecipantsController extends Controller
         $p->courses()->sync($request->course_id);
 
         // send and log the message
-        $response = Telegram::alert($p, Course::find($request->course_id));
-        (new Logger)->log('2', 'Telegram Response', $response);
+        // $response = Telegram::alert($p, Course::find($request->course_id));
+        // (new Logger)->log($response);
 
         return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
@@ -146,24 +113,9 @@ class PartecipantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show(Newsletter $n)
     {
-        $p = Partecipant::where('slug', $slug)->first();
-        $courses = $p->courses;
-        return view('partecipants.show')->with(['partecipant' => $p]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Partecipant $partecipant)
-    {
-        $partecipant->fill($request->all());
-        return $partecipant;
+        return view('newsletter.show')->with(['newsletter' => $n]);
     }
 
     /**
@@ -172,9 +124,10 @@ class PartecipantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Partecipant $partecipant)
+    public function destroy(Newsletter $n)
     {
-        $partecipant->delete();
-        return $partecipant;
+        $n->active = 0;
+        $n->delete();
+        return $n;
     }
 }

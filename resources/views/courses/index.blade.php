@@ -56,7 +56,7 @@
                             Periodo
                         </div>
                         <div class="col-md-2">
-                            Limite Iscritti
+                            Iscritti
                         </div>
                         <div class="col-md-2">
                         </div>

@@ -13,12 +13,12 @@ class Logger{
 	*
 	* @params json $json_data
 	*/
-	public function log($status, $type, $json_data)
+	public function log($status, $description, $json_data)
 	{
 		$log = new ApplicationLog;
+		$log->status = $status;
+		$log->description= $description;
 		$log->value= $json_data;
-		$log->status= $status;
-		$log->type = $type;
 		$log->save();
 		return $this;
 	}

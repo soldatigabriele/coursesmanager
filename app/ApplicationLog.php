@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class ApplicationLog extends Model
 {
 
-	protected $fillable = ['value'];
+	protected $fillable = ['value', 'description', 'status'];
 }
