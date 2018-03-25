@@ -121,6 +121,7 @@ class PartecipantsController extends Controller
         $p->name = $request->name;
         $p->slug = str_random(30);
         $p->surname = $request->surname;
+        $p->region_id = $request->region;
         $p->email = $request->email;
         $p->phone = $request->phone;
 
@@ -140,7 +141,7 @@ class PartecipantsController extends Controller
         $p->courses()->sync($request->course_id);
 
         // send and log the message
-        Telegram::alert($p, Course::find($request->course_id));
+        $response = Telegram::alert($p, Course::find($request->course_id));
 
         (new Logger)->log('2', 'Telegram Response', $response, $request);
 

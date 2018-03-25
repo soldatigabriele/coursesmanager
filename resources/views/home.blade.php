@@ -111,7 +111,7 @@
         $temp.remove();
     }
     function changeClass(){
-        $(this).attr('class', 'btn btn-outline-primary copyButton');
+        $(this).attr('class', 'btn btn-outline-success copyButton');
         $(this).html('Link copiato');
     }
 </script>

@@ -16,7 +16,7 @@ class Telegram{
 	    // papa
 	    // $chat_id = '572616982';
 	    $chat_id = Auth::user()->telegram_chat_id;
-	    dd($chat_id);
+	    // dd($chat_id);
 
 	    $text = 
 	    	$partecipant->name.' '.$partecipant->surname.' - '.$partecipant->email.' '.$partecipant->phone.' si è iscritto al corso '.$course->long_id.' del '.$course->date;
@@ -24,7 +24,7 @@ class Telegram{
 	    $url = env('TELEGRAM_URI').env('TELEGRAM_TOKEN').'/sendMessage?chat_id='.$chat_id.'&text='.urlencode($text);
 
 	    $response = $client->request('GET', $url, ['Accept' => 'application/json']);
-	    $json = json_decode($response->getBody());
-        return $json;
+	    $json = $response->getBody();
+	    return $json;
 	}
 }
