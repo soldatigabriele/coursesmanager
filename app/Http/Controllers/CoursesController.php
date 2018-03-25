@@ -95,10 +95,10 @@ class CoursesController extends Controller
      */
     public function show(Course $course, Request $request)
     {
-        if($course->user_id == Man::Id($request)){
-            return $course;
-        }
-        return response()->json(['error' => 'You cannot see this resource']);
+        // if($course->user_id == Man::Id($request)){
+        //     return $course;
+        // }
+        // return response()->json(['error' => 'You cannot see this resource']);
     }
 
     /**
@@ -123,6 +123,6 @@ class CoursesController extends Controller
     public function destroy(Course $course)
     {
         $course->delete();
-        return $course;
+        return back()->with('deleted', 'Corso '.$course->long_id.' eliminato correttamente');
     }
 }
