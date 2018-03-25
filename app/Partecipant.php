@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,6 +26,5 @@ class Partecipant extends Model
     {
         return $this->belongsTo('App\Region');
     }
-
 
 }

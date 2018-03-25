@@ -58,33 +58,35 @@
                                     Codice Corso
                                 </td>
                             </tr>
-                            @foreach($partecipants->sortByDesc('created_at') as $n)
-                            <tr>
-                                <td >
-                                    {{$n->id}}
-                                </td>
-                                <td >
-                                    {{$n->surname}} {{$n->name}}
-                                </td>
-                                <td >
-                                    {{ $regions[$n->region_id-1]['name'] }}
-                                </td>
-                                <td >
-                                    {{$n->email}}
-                                </td>
-                                <td >
-                                    {{ $n->courses->first()->date }}
-                                </td>
-                                <td >
-                                    {{ $n->courses->first()->description }}
-                                </td>
-                                <td >
-                                    {{ $n->courses->first()->long_id }}
-                                </td>
-                            </tr>
+                            @foreach($partecipants as $n)
+                                <tr>
+                                    <td >
+                                        {{$n->id}}
+                                    </td>
+                                    <td >
+                                        {{$n->surname}} {{$n->name}}
+                                    </td>
+                                    <td >
+                                        {{ $regions[$n->region_id-1]['name'] }}
+                                    </td>
+                                    <td >
+                                        {{$n->email}}
+                                    </td>
+                                    <td >
+                                        {{ $n->courses->first()->date }}
+                                    </td>
+                                    <td >
+                                        {{ $n->courses->first()->description }}
+                                    </td>
+                                    <td >
+                                        {{ $n->courses->first()->long_id }}
+                                    </td>
+                                </tr>
                             @endforeach
                             </table>
-                    {!! $partecipants->render() !!}
+                {!! $partecipants->render() !!}
+
+
                 </div>
             </div>
             <br>

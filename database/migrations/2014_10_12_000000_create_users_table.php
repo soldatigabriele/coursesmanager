@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('api_token', 80)->unique();
+            $table->string('telegram_chat_id');
             $table->boolean('active')->default(true);
             $table->rememberToken();
             $table->timestamps();

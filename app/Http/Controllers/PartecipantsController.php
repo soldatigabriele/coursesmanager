@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Course;
 use App\Region;
 use App\Partecipant;
@@ -23,10 +24,15 @@ class PartecipantsController extends Controller
      */
     public function index()
     {
-        $partecipant = Partecipant::paginate(10);
-        return view('partecipants.index')->with(['partecipants'=> $partecipant, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
-    }
 
+        $partecipants = Partecipant::select('partecipants.*')
+        ->join('course_partecipant', 'course_partecipant.partecipant_id', '=', 'partecipants.id')
+        ->join('courses', 'courses.id', '=', 'course_partecipant.course_id')
+        ->where('courses.user_id', Auth::user()->id)
+        ->paginate(10);
+
+        return view('partecipants.index')->with(['partecipants'=> $partecipants, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
+    }
 
     /**
      * Show the create page.

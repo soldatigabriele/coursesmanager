@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 
+use Auth;
 use App\Course;
 use App\Partecipant;
 
@@ -10,8 +11,13 @@ class Telegram{
 	{
 	    $client = new \GuzzleHttp\Client();
 
-	    $chat_id = '31019486';
-	    $chat_id = '572616982';
+	    // mia
+	    // $chat_id = '31019486';
+	    // papa
+	    // $chat_id = '572616982';
+	    $chat_id = Auth::user()->telegram_chat_id;
+	    dd($chat_id);
+
 	    $text = 
 	    	$partecipant->name.' '.$partecipant->surname.' - '.$partecipant->email.' '.$partecipant->phone.' si è iscritto al corso '.$course->long_id.' del '.$course->date;
 
