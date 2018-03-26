@@ -100,6 +100,7 @@ class CoursesController extends Controller
      */
     public function show(Course $course, Request $request)
     {
+        return $course;
         // if($course->user_id == Man::Id($request)){
         //     return $course;
         // }

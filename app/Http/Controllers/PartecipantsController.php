@@ -3,19 +3,32 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use App\Course;
 use App\Region;
 use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
+use App\Helpers\FromToken;
 use Illuminate\Http\Request;
+use App\Helpers\CollectionHelpers;
 use App\Rules\Course as CourseRule;
 use App\Rules\Region as RegionRule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Collection;
 
 class PartecipantsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', [
+            'except' => [
+                'show', 'scheda1', 'scheda2'
+            ]
+        ]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,13 +38,16 @@ class PartecipantsController extends Controller
     public function index()
     {
 
-        $partecipants = Partecipant::select('partecipants.*')
-        ->join('course_partecipant', 'course_partecipant.partecipant_id', '=', 'partecipants.id')
-        ->join('courses', 'courses.id', '=', 'course_partecipant.course_id')
-        ->where('courses.user_id', Auth::user()->id)
-        ->paginate(10);
+        // $myPartecipants = Partecipant::select('partecipants.*')
+        // ->join('course_partecipant', 'course_partecipant.partecipant_id', '=', 'partecipants.id')
+        // ->join('courses', 'courses.id', '=', 'course_partecipant.course_id')
+        // ->where('courses.user_id', Auth::user()->id)
+        // ->paginate(10);
 
-        return view('partecipants.index')->with(['partecipants'=> $partecipants, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
+        $myPartecipants = User::partecipants(); 
+        $myPartecipants = (new CollectionHelpers())->paginate($myPartecipants);
+
+        return view('partecipants.index')->with(['partecipants'=> $myPartecipants, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
     }
 
     /**
@@ -80,7 +96,6 @@ class PartecipantsController extends Controller
      */
     public function store(Request $request)
     {
-
         $messages = [
             'name.required' => 'Inserire un nome valido',
             'surname.required' => 'Inserire una cognome valido',
@@ -88,6 +103,7 @@ class PartecipantsController extends Controller
             'job.required' => 'Inserire una professione valida',
             'city.required' => 'Inserire la propria provenienza',
             'email.required' => 'Inserire un indirizzo email',
+            'email_again.same' => 'Le email non coincidono',
             'email.email' => 'Inserire un indirizzo email valido',
             'g-recaptcha-response.required' => 'Cliccare il box: "Non sono un robot"',
         ];
@@ -96,17 +112,16 @@ class PartecipantsController extends Controller
             'surname' => 'required|string',
             'phone' => 'required',
             'email' => 'required|email',
+            'email_again' => 'same:email',
             'job' => 'required',
             'city' => 'required',
-            'region' => new RegionRule,
+            'region_id' => new RegionRule,
             'course_id' => new CourseRule,
         ];
          if(env('REQUIRE_CAPTCHA') === 'yes' ){
             $rules['g-recaptcha-response'] = 'required|captcha';
          }
-
         $validation = Validator::make($request->all(), $rules, $messages);
-        
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
 
@@ -121,7 +136,7 @@ class PartecipantsController extends Controller
         $p->name = $request->name;
         $p->slug = str_random(30);
         $p->surname = $request->surname;
-        $p->region_id = $request->region;
+        $p->region_id = $request->region_id;
         $p->email = $request->email;
         $p->phone = $request->phone;
 
@@ -131,6 +146,7 @@ class PartecipantsController extends Controller
         array_forget($data, 'subscribe');
         array_forget($data, 'surname');
         array_forget($data, 'email');
+        array_forget($data, 'email_again');
         array_forget($data, 'phone');
         array_forget($data, 'course_id');
         $p->data = json_encode($data);
@@ -140,10 +156,12 @@ class PartecipantsController extends Controller
         $p = $p->fresh();
         $p->courses()->sync($request->course_id);
 
-        // send and log the message
-        $response = Telegram::alert($p, Course::find($request->course_id));
+        if(env('APP_ENV') !== 'testing' ){
+            // send and log the message
+            $response = Telegram::alert($p, Course::find($request->course_id));
 
-        (new Logger)->log('2', 'Telegram Response', $response, $request);
+            (new Logger)->log('2', 'Telegram Response', $response, $request);
+        }
 
         return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
@@ -157,8 +175,11 @@ class PartecipantsController extends Controller
     public function show($slug)
     {
         $p = Partecipant::where('slug', $slug)->first();
-        $courses = $p->courses;
-        return view('partecipants.show')->with(['partecipant' => $p]);
+        if($p){
+            $courses = $p->courses;
+            return view('partecipants.show')->with(['partecipant' => $p]);
+        }
+        return 'no user found';
     }
 
     /**
@@ -171,6 +192,7 @@ class PartecipantsController extends Controller
     public function update(Request $request, Partecipant $partecipant)
     {
         $partecipant->fill($request->all());
+        $partecipant->save();
         return $partecipant;
     }
 

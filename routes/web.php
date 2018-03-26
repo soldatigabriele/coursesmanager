@@ -22,6 +22,7 @@ Route::resource('partecipants', 'PartecipantsController', [
         'update' => 'partecipant-update',
     ], 
 ]);
+
 Route::get('partecipants/{slug}', 'PartecipantsController@show')->name('partecipant-show');
 
 
@@ -30,6 +31,7 @@ Route::resource('newsletters', 'NewslettersController', [
         'index' => 'newsletter-index',
         'create' => 'newsletter-create',
         'store' => 'newsletter-store',
+        'show' => 'newsletter-show',
     ], 
 ]);
 

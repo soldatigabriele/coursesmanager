@@ -33,14 +33,21 @@
                   <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6">
                       <div class="form-group">
-                        <label>Arrivo da:</label>
-                        <input type="text" name="city" id="city" class="form-control input-lg" placeholder="" value="{{ old('city') }}">
+                        <label>Professione:</label>
+                        <input type="text" class="form-control" name="job" value="{{ old('job') }}">
                       </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6">
                       <div class="form-group">
+                        <label>Arrivo da:</label>
+                        <input type="text" name="city" id="city" class="form-control input-lg" placeholder="" value="{{ old('city') }}">
+                      </div>
+                    </div>
+                      
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+                      <div class="form-group">
                         <label>Regione:</label>
-                        <select class="form-control" name="region">
+                        <select class="form-control" name="region_id">
                           <option value="empty"> - </option>
                           @foreach($regions as $region)
                             <option value="{{ $region->id }}" @if(old('region') == $region->id)selected @endif>{{ $region->name}}</option>
@@ -48,8 +55,6 @@
                         </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6">
                       <div class="form-group">
                         <label>Con: (auto/mezzi pubblici)</label>
@@ -83,18 +88,22 @@
                       </div>
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
+                          <label>Ripeti email:</label>
+                          <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}">
+                        </div>
+                      </div>
+
+
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="form-group">
                           <label>Recapito telefonico:</label>
                           <input type="text" class="form-control decimals" name="phone" value="{{ old('phone') }}">
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12 col-sm-12 col-md-6">
-                        <div class="form-group">
-                          <label>Professione:</label>
-                          <input type="text" class="form-control" name="job" value="{{ old('job') }}">
-                        </div>
-                      </div>
+
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
                           <label>Corso:</label>
@@ -106,7 +115,9 @@
                           </select>
                         </div>
                       </div>
+                    
                     </div>
+
                     <div class="col-md-12">
                       <div class="col-xs-10 col-sm-10 col-md-10">
                         <label>Sono d'accordo a condividere con gli altri corsisti telefono ed email per organizzare i trasporti ?</label>

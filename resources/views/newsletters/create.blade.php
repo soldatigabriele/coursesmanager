@@ -69,7 +69,7 @@
                       <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
                           <label>Ripeti Email:</label>
-                          <input type="text" class="form-control" name="email_again" value="{{ old('email_again') }}">
+                          <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}">
                         </div>
                       </div>
                     </div>
@@ -77,35 +77,32 @@
                     <div class="col-xs-12 col-sm-12 col-md-12">
                       <div class="form-group">
                         <label>Regione:</label>
-                        <select class="form-control" name="region">
+                        <select class="form-control" name="region_id">
                           <option value="empty"> - </option>
                           @foreach($regions as $region)
-                            <option value="{{ $region->id }}" @if(old('region') == $region->id)selected @endif>{{ $region->name}}</option>
+                            <option value="{{ $region->id }}" @if(old('region_id') == $region->id)selected @endif>{{ $region->name}}</option>
                           @endforeach
                         </select>
                       </div>
                     </div>
                   </div>
-                    
-                    <div class="row">
-                      <div class="col-xs-8 col-sm-9 col-md-9">
-                        {!! app('captcha')->display() !!}
-                      </div>
-                      <div class="col-xs-8 col-sm-9 col-md-9">
-                       Cliccando su <strong class="label label-primary">Iscrivimi alla Newsletter</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
-                     </div>
-                   </div>
-
-                   <hr class="colorgraph">
-                   <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-                      <input name="subscribe" class="btn btn-lg btn-success" type="submit" value="Iscrivimi alla Newsletter"/>
-                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-9">
+                  {!! app('captcha')->display() !!}
+                </div>
+                <br>
+                <div class="col-xs-8 col-sm-9 col-md-12">
+                 Cliccando su <strong class="label label-primary">Iscrivimi alla Newsletter</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
+                </div>
+                 <hr class="colorgraph">
+                 <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                    <input name="subscribe" class="btn btn-lg btn-success" type="submit" value="Iscrivimi alla Newsletter Laboa.org"/>
                   </div>
-              </div>
+                </div>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -116,24 +113,15 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+
 $(document).ready(function(){
-
-$(".decimals").keydown(function (event) {
-      if (event.shiftKey === true) {
-          event.preventDefault();
-      }
-
-      if ((event.keyCode >= 48 && event.keyCode <= 57) ||
-          (event.keyCode >= 96 && event.keyCode <= 105) ||
-          event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
-          event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
-      } else {
-          event.preventDefault();
-      }
-
-  });
+   $('#email_again').on("cut copy paste",function(e) {
+      e.preventDefault();
+   });
 });
+
+
 
 </script>
 

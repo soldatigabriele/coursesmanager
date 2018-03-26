@@ -15,7 +15,6 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Partecipant::class, function (Faker $faker) {
 	
-
 	// $faker = Faker::create('it_IT');
 	$data = [];
 	$data['job'] = $faker->jobTitle;
@@ -38,6 +37,6 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'phone' => '3'.rand(111111111, 999999999),
         'data' => json_encode($data),
-        'meta' => json_encode(['ip'=>'127.0.0.1']),
+        'meta' => json_encode(['ip'=>$faker->ipv4]),
     ];
 });

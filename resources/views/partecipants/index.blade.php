@@ -84,7 +84,7 @@
                                 </tr>
                             @endforeach
                             </table>
-                {!! $partecipants->render() !!}
+                        {{ $partecipants->links() }}
 
 
                 </div>
@@ -105,6 +105,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('scripts')

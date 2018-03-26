@@ -40,7 +40,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-6">
                       <div class="form-group">
                         <label>Regione:</label>
-                        <select class="form-control" name="region">
+                        <select class="form-control" name="region_id">
                           <option value="empty"> - </option>
                           @foreach($regions as $region)
                             <option value="{{ $region->id }}" @if(old('region') == $region->id)selected @endif>{{ $region->name}}</option>
@@ -75,6 +75,7 @@
                     </div>
 
                     <div class="row">
+
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
                           <label>Email:</label>
@@ -83,12 +84,19 @@
                       </div>
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
+                          <label>Ripeti email:</label>
+                          <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div class="form-group">
                           <label>Recapito telefonico:</label>
                           <input type="text" class="form-control decimals" name="phone" value="{{ old('phone') }}">
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
                           <label>Professione:</label>
@@ -106,9 +114,7 @@
                           </select>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6">
+                      <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
                           <label>Preferenze cibo</label>
                           <select name="food" class="form-control" >
@@ -171,6 +177,9 @@ $(".decimals").keydown(function (event) {
       }
 
   });
+   $('#email_again').on("cut copy paste",function(e) {
+      e.preventDefault();
+   });
 });
 
 </script>

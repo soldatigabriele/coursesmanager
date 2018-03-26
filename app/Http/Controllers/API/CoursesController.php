@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\User;
 use App\Course;
-use App\Helpers\Auth;
+use App\Helpers\FromToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,7 +17,7 @@ class CoursesController extends Controller
      */
     public function index(Request $r)
     {
-        $user_id  = Auth::user($r)->id;
+        $user_id  = FromToken::getUser($r)->id;
         $courses = Course::where('user_id', $user_id)->get();
         if($courses->count()){
             return $courses;
@@ -33,7 +33,7 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = Auth::user($request)->id;
+        $user_id = FromToken::getUser($request)->id;
         $course = new Course;
         $course->long_id = $request->long_id;
         $course->date = $request->date;
@@ -53,7 +53,7 @@ class CoursesController extends Controller
     public function show(Course $course, Request $request)
     {
         ($request->bearerToken());
-        if($course->user_id == Auth::user($request)->id){
+        if($course->user_id == FromToken::getUser($request)->id){
             return $course;
         }
         return response()->json(['error' => 'You cannot see this resource']);

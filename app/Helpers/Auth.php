@@ -1,10 +1,12 @@
 <?php
 namespace App\Helpers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
-class Auth{
-	public static function user(Request $request)
+class FromToken{
+	public static function getUser(Request $request)
 	{
         $user = \App\User::where('api_token', $request->bearerToken())->first();
         if($user){

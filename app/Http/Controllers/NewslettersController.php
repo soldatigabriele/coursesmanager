@@ -10,6 +10,7 @@ use App\Helpers\Logger;
 use App\Helpers\Telegram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\Region as RuleRegion;
 use App\Rules\Course as CourseRule;
 use App\Rules\Region as RegionRule;
 use App\Http\Controllers\Controller;
@@ -17,6 +18,15 @@ use Illuminate\Support\Facades\Validator;
 
 class NewslettersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', [
+            'except' => [
+                'create', 'store', 'show'
+            ]
+        ]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -57,12 +67,16 @@ class NewslettersController extends Controller
             'surname.required' => 'Inserire una cognome valido',
             'email.required' => 'Inserire un indirizzo email',
             'email.email' => 'Inserire un indirizzo email valido',
+            'email_again.same' => 'Le email non coincidono',
+            'region_id.required' => 'Inserire una regione valida',
             'g-recaptcha-response.required' => 'Cliccare il box: "Non sono un robot"',
         ];
          $rules = [
             'name' => 'required|string',
             'surname' => 'required|string',
+            'region_id' => new RuleRegion,
             'email' => 'required|email',
+            'email_again' => 'same:email',
         ];
         if(env('REQUIRE_CAPTCHA') === 'yes' ){
             $rules['g-recaptcha-response'] = 'required|captcha';
@@ -78,35 +92,26 @@ class NewslettersController extends Controller
                         ->withErrors($validation)
                         ->withInput();
         }
+
         (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()));
+        
         $data = $request->all();
-        $p = new Partecipant();
-        $p->name = $request->name;
-        $p->slug = str_random(30);
-        $p->surname = $request->surname;
-        $p->email = $request->email;
-        $p->phone = $request->phone;
+        $newsletter = new Newsletter();
+        $newsletter->name = $request->name;
+        $newsletter->surname = $request->surname;
+        $newsletter->region_id = $request->region_id;
+        $newsletter->email = $request->email;
+        $newsletter->active = 1;
+        $newsletter->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
+        $newsletter->save();
 
-        array_forget($data, 'g-recaptcha-response');
-        array_forget($data, 'name');
-        array_forget($data, '_token');
-        array_forget($data, 'subscribe');
-        array_forget($data, 'surname');
-        array_forget($data, 'email');
-        array_forget($data, 'phone');
-        array_forget($data, 'course_id');
-        $p->data = json_encode($data);
+        // if(env('APP_ENV') !== 'testing' ){
+        //     // send and log the message
+        //     $response = Telegram::alert($p, Course::find($request->course_id));
+        //     (new Logger)->log('2', 'Telegram Response', $response, $request);
+        // }
 
-        $p->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
-        $p->save();
-        $p = $p->fresh();
-        $p->courses()->sync($request->course_id);
-
-        // send and log the message
-        // $response = Telegram::alert($p, Course::find($request->course_id));
-        // (new Logger)->log($response);
-
-        return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
+        return redirect()->route('newsletter-show', $newsletter)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
     }
 
     /**
@@ -115,9 +120,10 @@ class NewslettersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Newsletter $n)
+    public function show($newsletter)
     {
-        return view('newsletter.show')->with(['newsletter' => $n]);
+        $n = Newsletter::find($newsletter);
+        return view('newsletters.show')->with(['newsletter' => $n]);
     }
 
     /**
