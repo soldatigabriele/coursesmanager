@@ -32,7 +32,7 @@ Route::resource('newsletters', 'NewslettersController', [
         'create' => 'newsletter-create',
         'store' => 'newsletter-store',
         'show' => 'newsletter-show',
-    ], 
+    ],
 ]);
 
 Route::get('corsi/scheda1', 'PartecipantsController@scheda1')->name('scheda-1');

@@ -68,26 +68,38 @@
                         <hr>
                         <h4>Schede Iscrizione</h4>
                         <div class="row">
-                            <div class="md-2 vai-scheda" >
+                            <div class="md-2 xs-2 sm-2 vai-scheda" >
                                 <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
                             </div>
-                            <div class="link md-6">
+                            <div class="link xs-6 sm-6 md-6 offset-md-1">
                                 <span id="copyTarget1">{{ route('scheda-1') }}</span> 
                             </div>
-                            <div class="md-2 offset-md-1">
-                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia Link</button>
+                            <div class="xs-2 md-2 sm-2 offset-md-1">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
                             </div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="md-2 vai-scheda" >
+                            <div class="md-2 xs-2 sm-2 vai-scheda" >
                                 <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
                             </div>
-                            <div class="link md-6">
-                                <span id="copyTarget2">{{ route('scheda-2') }}</span> 
+                            <div class="link xs-6 sm-6 md-6 offset-md-1">
+                                <span id="copyTarget1">{{ route('scheda-2') }}</span> 
                             </div>
-                            <div class="md-2 offset-md-1">
-                                <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia Link</button>
+                            <div class="xs-2 md-2 sm-2 offset-md-1">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="md-2 xs-2 sm-2 vai-scheda">
+                                <a role="button" href="{{ route('newsletter-create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
+                            </div>
+                            <div class="link md-6 xs-6 sm-6">
+                                <span id="copyTarget2">{{ route('newsletter-create') }}</span> 
+                            </div>
+                            <div class="md-2 xs-2 sm-2 offset-md-1">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
                             </div>
                         </div>
                         <br>
@@ -103,7 +115,7 @@
 <script>
     function copyToClipboard(element) {
         $('.copyButton').attr('class', 'btn btn-outline-secondary copyButton');
-        $('.copyButton').html('Copia Link');
+        $('.copyButton').html('Copia');
         var $temp = $("<input>");
         $("body").append($temp);
         $temp.val($(element).text()).select();
