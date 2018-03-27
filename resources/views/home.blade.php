@@ -52,7 +52,7 @@
                                     <h5>Lista Mail</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-warning">Lista Mail</a>
+                                    <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-info">Lista Mail</a>
                                 </div>
                             </div>
                             <br>
@@ -61,7 +61,7 @@
                                     <h5>Newsletter</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-warning">Newsletter</a>
+                                    <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-dark">Newsletter</a>
                                 </div>
                             </div>
                         <br>
