@@ -11,6 +11,17 @@
     .vai-scheda{
         padding: 0px 10px 0px 15px;
     }
+    .main-buttons>a{
+        min-width: 160px;
+        float:right;
+    }
+    .schede-buttons>a{
+        min-width: 180px;
+    }
+    .table-buttons>a{
+        width: 100%;
+        margin-left: 0%;
+    }
 </style>
 @endsection
 
@@ -29,47 +40,50 @@
                 <div class="card-header"><h4>Pannello di controllo</h4></div>
                 <div class="card-body">
                     <div class="container">
-                        
-                        <div class="row">
+                        <div class="col-md-12">
+                            
+                        <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Crea un nuovo corso</h5>
                             </div>
-                            <div class="col-md-4 offset-md-1">
-                                <a role="button" href="courses/create" class="btn btn-outline-danger">Crea un nuovo Corso</a>
+                            <div class="col-md-4 main-buttons">
+                                <a role="button" href="courses/create" class="btn btn-outline-danger">Crea Corso</a>
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Controlla le Tabelle esistenti</h5>
                             </div>
-                            <div class="col-md-4 offset-md-1">
+                            <div class="col-md-4 main-buttons">
                                 <a role="button" href="courses" class="btn btn-outline-success">Tabelle</a>
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Lista Mail</h5>
                             </div>
-                            <div class="col-md-4 offset-md-1">
+                            <div class="col-md-4 main-buttons">
                                 <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-outline-info">Lista Mail</a>
                             </div>
                         </div>
                         <br>
-                        <div class="row">
+                        <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Newsletter</h5>
                             </div>
-                            <div class="col-md-4 offset-md-1">
+                            <div class="col-md-4 main-buttons">
                                 <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-outline-dark">Newsletter</a>
                             </div>
                         </div>
+                        </div>
+
                     <br>
                     <hr>
                     <h4>Schede Iscrizione</h4>
-                    <div class="row ">
-                        <div class="col-3" >
+                    <div class="row justify-content-between">
+                        <div class="col-3 schede-buttons" >
                             <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
                         </div>
                         <div class="col-6 link">
@@ -80,8 +94,8 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row ">
-                        <div class="col-3" >
+                    <div class="row justify-content-between">
+                        <div class="col-3 schede-buttons" >
                             <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
                         </div>
                         <div class="col-6 link">
@@ -92,8 +106,8 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row ">
-                        <div class="col-3">
+                    <div class="row justify-content-between">
+                        <div class="col-3 schede-buttons">
                             <a role="button" href="{{ route('newsletter-create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
                         </div>
                         <div class="col-6 link">
@@ -120,9 +134,6 @@
                                         Nome
                                     </th>
                                     <th>
-                                        Cognome
-                                    </th>
-                                    <th>
                                         Email
                                     </th>
                                     <th>
@@ -141,10 +152,7 @@
                             @foreach($partecipants as $p)
                                 <tr>
                                     <td>
-                                        {{ $p->name }}
-                                    </td>
-                                    <td>
-                                        {{ $p->surname }}
+                                        {{ $p->surname }} {{ $p->name }}
                                     </td>
                                     <td>
                                         {{ $p->email }}
@@ -152,7 +160,7 @@
                                     <td>
                                         {{ $p->phone }}
                                     </td>
-                                    <td>
+                                    <td class="table-buttons">
                                         <a role="button" href="{{ route('course-index', ['course_id' =>$p->courses()->latest()->first()->id, 'partecipant_id' => $p->id] ) }}" class="btn btn-outline-dark btn-sm">{{ $p->courses()->latest()->first()->long_id }}</a>
                                     </td>
                                     <td>

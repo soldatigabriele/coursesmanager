@@ -24,6 +24,11 @@
         padding: 6px; 
         border-radius: 6px;
     }
+    .table-borders{
+        border-bottom: 1px solid black ;
+
+        padding-top: 20px;
+    }
 </style>
 @endsection
 
@@ -65,7 +70,9 @@
                 <div class="card-body">
                     <div class="col-md-12">
                         @foreach($courses as $course)
-                        <div class="row subtitle" id="scroll-course-{{ $course->id }}">
+                        <div class="table-borders">
+                            
+                        <div class="row subtitle" id="course-{{ $course->id }}">
                             <div class="col-md-2">
                                 {{ $course->long_id }}
                             </div>
@@ -85,13 +92,11 @@
                                 <button type="submit" data-course-long_id="{{ $course->long_id }}" data-course-date="{{ $course->date }}" data-course-description="{{ $course->description }}" data-course-id="{{$course->id}}" class="btn btn-outline-danger delete-button">Elimina</button>
                             </div>
                         </div>
-                        <hr>
                         @php 
                             $collapse = ( app('request')->input('course_id') == $course->id )? null : 'collapse';
                         @endphp
-                        <hr>
                         <div class="col-md-12 tabella">
-                            <div class="{{ $collapse }} table" id="partecipants-{{ $course->id }}">
+                            <div class="{{ $collapse }} table">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
                                     <tr class="subtitle tabelle">
                                         <td>
@@ -108,7 +113,7 @@
                                     @php 
                                         $highlight_partecipant = ( app('request')->input('partecipant_id') == $p->id )? 'table-success' : '';
                                     @endphp
-                                    <tr class="{{ $highlight_partecipant }}">
+                                    <tr class="{{ $highlight_partecipant }}" id="partecipant-{{ $p->id }}">
                                         <td>
                                             {{$i}} 
                                             @php $i++; @endphp
@@ -138,7 +143,8 @@
                                     @endforeach
                                 </table>
                             </div>
-                            <div class="col-md-12 emails">  
+                            <div class="col-md-12 breadcrumb">  
+                            <!-- <div class="col-md-12 emails">   -->
                             @foreach($course->getDistinctEmails('email') as $p)
                             
                                 {{ $p->email }},
@@ -147,7 +153,9 @@
                             </div>
                         </div>
                         <br>
-                        <hr>       
+                        <!-- <hr>     -->
+                        </div>
+
                         @endforeach
 
                     </div>
@@ -213,13 +221,16 @@ $(document).ready(function(){
       }
     });
     let course_id = $.getUrlVar('course_id');
+    // let partecipant_id = $.getUrlVar('partecipant_id');
 
     function scrollToAnchor(aid){
-        var aTag = $("[id='"+ aid +"']");
-        $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+        var aTag = $("#course-"+ aid );
+        console.log(aTag)
+
+        $('html,body').animate({scrollTop: aTag.offset().top},'fast');
     }
 
-    scrollToAnchor('partecipants-17');
+    scrollToAnchor(course_id);
 
     $( "#flash-message" ).delay(4000).fadeOut( "slow");
     
