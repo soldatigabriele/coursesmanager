@@ -65,7 +65,7 @@
                 <div class="card-body">
                     <div class="col-md-12">
                         @foreach($courses as $course)
-                        <div class="row subtitle">
+                        <div class="row subtitle" id="scroll-course-{{ $course->id }}">
                             <div class="col-md-2">
                                 {{ $course->long_id }}
                             </div>
@@ -81,12 +81,18 @@
                             <div class="col-md-1">
                                 <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-outline-success">Mostra</button>
                             </div>
+                            {{ $course->id }}
                             <div class="col-md-1">
                                 <button type="submit" data-course-long_id="{{ $course->long_id }}" data-course-date="{{ $course->date }}" data-course-description="{{ $course->description }}" data-course-id="{{$course->id}}" class="btn btn-outline-danger delete-button">Elimina</button>
                             </div>
                         </div>
+                        <hr>
+                        @php 
+                            $collapse = ( app('request')->input('course_id') == $course->id )? null : 'collapse';
+                        @endphp
+                        <hr>
                         <div class="col-md-12 tabella">
-                            <div class="collapse table" id="partecipants-{{ $course->id }}">
+                            <div class="{{ $collapse }} table" id="partecipants-{{ $course->id }}">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
                                     <tr class="subtitle tabelle">
                                         <td>
@@ -100,7 +106,10 @@
                                     </tr>
                                     @php $i = 1; @endphp
                                     @foreach($course->partecipants as $p)
-                                    <tr>
+                                    @php 
+                                        $highlight_partecipant = ( app('request')->input('partecipant_id') == $p->id )? 'table-success' : '';
+                                    @endphp
+                                    <tr class="{{ $highlight_partecipant }}">
                                         <td>
                                             {{$i}} 
                                             @php $i++; @endphp
@@ -187,6 +196,32 @@
   <script>
 
 $(document).ready(function(){
+
+    $.extend({
+      getUrlVars: function(){
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+        }
+        return vars;
+      },
+      getUrlVar: function(name){
+        return $.getUrlVars()[name];
+      }
+    });
+    let course_id = $.getUrlVar('course_id');
+
+    function scrollToAnchor(aid){
+        var aTag = $("[id='"+ aid +"']");
+        $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+    }
+
+    scrollToAnchor('partecipants-17');
+
     $( "#flash-message" ).delay(4000).fadeOut( "slow");
     
     let originalUrl = $('#form-delete').attr('action');
@@ -199,7 +234,6 @@ $(document).ready(function(){
         $('#myModal').modal('show');
         event.preventDefault();
     });
-
 });
 
   </script>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use App\Partecipant;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,7 +15,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+    	$latest_partecipants = Auth::user()->partecipants()->sortByDesc('created_at')->take(5);
+
+        return view('home')->with(['partecipants' => $latest_partecipants]);
     }
 
     

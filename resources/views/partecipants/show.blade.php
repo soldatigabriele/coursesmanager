@@ -64,7 +64,11 @@
           </div>
           <div class="clearfix"></div><br>
           <hr>
-            <a role="button" href="http://www.laboa.org" class="btn btn-success">Torna a Laboa.org</a>
+            @auth
+              <a role="button" href="{{ route('home') }}" class="btn btn-secondary">Indietro</a>
+            @else
+              <a role="button" href="http://www.laboa.org" class="btn btn-success">Torna a Laboa.org</a>
+            @endif
         </div>
       </div>
     </div>

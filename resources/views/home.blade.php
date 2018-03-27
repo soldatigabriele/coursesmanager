@@ -6,6 +6,7 @@
         border: 1px solid #efefef;
         padding: 3px 10px 3px 20px;
         border-radius: 7px;
+        width: 100%;
     }
     .vai-scheda{
         padding: 0px 10px 0px 15px;
@@ -16,7 +17,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
 
             @if (session('status'))
                 <div class="alert alert-success">
@@ -26,83 +27,144 @@
 
             <div class="card">
                 <div class="card-header"><h4>Pannello di controllo</h4></div>
-                    <div class="card-body">
-                        <div class="container">
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Crea un nuovo corso</h5>
-                                </div>
-                                <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="courses/create" class="btn btn-danger">Crea un nuovo Corso</a>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Controlla le Tabelle esistenti</h5>
-                                </div>
-                                <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="courses" class="btn btn-success">Tabelle</a>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Lista Mail</h5>
-                                </div>
-                                <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-info">Lista Mail</a>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Newsletter</h5>
-                                </div>
-                                <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-dark">Newsletter</a>
-                                </div>
-                            </div>
-                        <br>
-                        <hr>
-                        <h4>Schede Iscrizione</h4>
+                <div class="card-body">
+                    <div class="container">
+                        
                         <div class="row">
-                            <div class="md-2 xs-2 sm-2 vai-scheda" >
-                                <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
+                            <div class="col-md-6">
+                                <h5>Crea un nuovo corso</h5>
                             </div>
-                            <div class="link xs-6 sm-6 md-6 offset-md-1">
-                                <span id="copyTarget1">{{ route('scheda-1') }}</span> 
-                            </div>
-                            <div class="xs-2 md-2 sm-2 offset-md-1">
-                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            <div class="col-md-4 offset-md-1">
+                                <a role="button" href="courses/create" class="btn btn-outline-danger">Crea un nuovo Corso</a>
                             </div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="md-2 xs-2 sm-2 vai-scheda" >
-                                <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
+                            <div class="col-md-6">
+                                <h5>Controlla le Tabelle esistenti</h5>
                             </div>
-                            <div class="link xs-6 sm-6 md-6 offset-md-1">
-                                <span id="copyTarget1">{{ route('scheda-2') }}</span> 
-                            </div>
-                            <div class="xs-2 md-2 sm-2 offset-md-1">
-                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            <div class="col-md-4 offset-md-1">
+                                <a role="button" href="courses" class="btn btn-outline-success">Tabelle</a>
                             </div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="md-2 xs-2 sm-2 vai-scheda">
-                                <a role="button" href="{{ route('newsletter-create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
+                            <div class="col-md-6">
+                                <h5>Lista Mail</h5>
                             </div>
-                            <div class="link md-6 xs-6 sm-6">
-                                <span id="copyTarget2">{{ route('newsletter-create') }}</span> 
-                            </div>
-                            <div class="md-2 xs-2 sm-2 offset-md-1">
-                                <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            <div class="col-md-4 offset-md-1">
+                                <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-outline-info">Lista Mail</a>
                             </div>
                         </div>
                         <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Newsletter</h5>
+                            </div>
+                            <div class="col-md-4 offset-md-1">
+                                <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-outline-dark">Newsletter</a>
+                            </div>
+                        </div>
+                    <br>
+                    <hr>
+                    <h4>Schede Iscrizione</h4>
+                    <div class="row ">
+                        <div class="col-3" >
+                            <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
+                        </div>
+                        <div class="col-6 link">
+                            <span id="copyTarget1">{{ route('scheda-1') }}</span> 
+                        </div>
+                        <div class="col-2">
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row ">
+                        <div class="col-3" >
+                            <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
+                        </div>
+                        <div class="col-6 link">
+                            <span id="copyTarget1">{{ route('scheda-2') }}</span> 
+                        </div>
+                        <div class="col-2">
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row ">
+                        <div class="col-3">
+                            <a role="button" href="{{ route('newsletter-create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
+                        </div>
+                        <div class="col-6 link">
+                            <span id="copyTarget2">{{ route('newsletter-create') }}</span> 
+                        </div>
+                        <div class="col-2">
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div><br>
+
+        <div class="card">
+            <div class="card-header"><h4>Ultimi iscritti</h4></div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="md-12">
+                            <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
+                                <tr>
+                                    <th>
+                                        Nome
+                                    </th>
+                                    <th>
+                                        Cognome
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Telefono
+                                    </th>
+                                    <th>
+                                        Codice Corso
+                                    </th>
+                                    <th>
+                                        Iscritto
+                                    </th>
+                                    <th>
+                                        Dettagli
+                                    </th>
+                                </tr>
+                            @foreach($partecipants as $p)
+                                <tr>
+                                    <td>
+                                        {{ $p->name }}
+                                    </td>
+                                    <td>
+                                        {{ $p->surname }}
+                                    </td>
+                                    <td>
+                                        {{ $p->email }}
+                                    </td>
+                                    <td>
+                                        {{ $p->phone }}
+                                    </td>
+                                    <td>
+                                        <a role="button" href="{{ route('course-index', ['course_id' =>$p->courses()->latest()->first()->id, 'partecipant_id' => $p->id] ) }}" class="btn btn-outline-dark btn-sm">{{ $p->courses()->latest()->first()->long_id }}</a>
+                                    </td>
+                                    <td>
+                                        {{ $p->created_at->diffForHumans() }}
+                                    </td>
+                                    <td>
+                                        <a role="button" href="{{ route('partecipant-show', $p->slug) }}" class="btn btn-outline-dark btn-sm">Dettagli</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

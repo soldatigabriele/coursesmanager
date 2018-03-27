@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Faker\Generator as Faker;
 
 /*
@@ -38,5 +39,6 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
         'phone' => '3'.rand(111111111, 999999999),
         'data' => json_encode($data),
         'meta' => json_encode(['ip'=>$faker->ipv4]),
+        'created_at' => Carbon::now()->subMinutes(rand(10, 40000)),
     ];
 });

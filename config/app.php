@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'it',
     'faker_locale' => 'it_IT',
     /*
     |--------------------------------------------------------------------------
@@ -118,6 +118,8 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
+
+
 
     'providers' => [
 
