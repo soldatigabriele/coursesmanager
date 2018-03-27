@@ -34,7 +34,7 @@
                                     <h5>Crea un nuovo corso</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="courses/create" class="btn btn-outline-danger">Crea un nuovo Corso</a>
+                                    <a role="button" href="courses/create" class="btn btn-danger">Crea un nuovo Corso</a>
                                 </div>
                             </div>
                             <br>
@@ -43,7 +43,7 @@
                                     <h5>Controlla le Tabelle esistenti</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="courses" class="btn btn-outline-success">Tabelle</a>
+                                    <a role="button" href="courses" class="btn btn-success">Tabelle</a>
                                 </div>
                             </div>
                             <br>
@@ -52,7 +52,7 @@
                                     <h5>Lista Mail</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-outline-warning">Lista Mail</a>
+                                    <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-warning">Lista Mail</a>
                                 </div>
                             </div>
                             <br>
@@ -61,7 +61,7 @@
                                     <h5>Newsletter</h5>
                                 </div>
                                 <div class="col-md-4 offset-md-1">
-                                    <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-outline-warning">Newsletter</a>
+                                    <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-warning">Newsletter</a>
                                 </div>
                             </div>
                         <br>
