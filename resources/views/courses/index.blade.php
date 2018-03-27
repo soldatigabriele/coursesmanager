@@ -144,20 +144,14 @@
                                 </table>
                             </div>
                             <div class="col-md-12 breadcrumb">  
-                            <!-- <div class="col-md-12 emails">   -->
                             @foreach($course->getDistinctEmails('email') as $p)
-                            
                                 {{ $p->email }},
-                        
                             @endforeach
                             </div>
                         </div>
                         <br>
-                        <!-- <hr>     -->
                         </div>
-
                         @endforeach
-
                     </div>
                 </div>
                 {!! $courses->render() !!}
