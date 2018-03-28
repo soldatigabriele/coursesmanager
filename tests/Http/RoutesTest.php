@@ -74,7 +74,7 @@ class RoutesTest extends TestCase
         $this->get(route('partecipant-show', $p->slug))
             ->assertStatus(200);
 
-        $res = $this->get(route('partecipant-show', 1))
+        $res = $this->get(route('partecipant-show', 'non_existing_slug'))
             ->assertStatus(200);
         $res->assertSee('no user found');
         

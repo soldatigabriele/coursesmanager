@@ -209,25 +209,40 @@ class PartecipantsController extends Controller
         return $partecipant;
     }
 
-    protected function validateCaptcha($captcha){
-        $fields_string = '';
-        $fields = array(
-            'secret' => env('INVISIBLE_RECAPTCHA_SECRETKEY'),
-            'response' => $captcha
+    protected function validateCaptcha($captcha)
+    {
+        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+
+        $post_data = http_build_query(
+            array(
+                'secret' => env('INVISIBLE_RECAPTCHA_SECRETKEY'),
+                'response' => $response,
+                'remoteip' => $remoteip
+            )
+        );  
+
+        $options=array(
+
+            // If site has SSL then
+            'ssl'=>array(
+                'cafile'            => env('PATH_TO_PEM'),
+                'verify_peer'       => true,
+                'verify_peer_name'  => true,
+            ),
+
+           'http' =>
+            array(
+                'method'  => 'POST',
+                'header'  => 'Content-type: application/x-www-form-urlencoded',
+                'content' => $post_data
+            )
         );
-        foreach($fields as $key=>$value)
-        $fields_string .= $key . '=' . $value . '&';
-        $fields_string = rtrim($fields_string, '&');
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
-        curl_setopt($ch, CURLOPT_POST, count($fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
+        $context = stream_context_create( $options );   
 
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $result_json = file_get_contents( $url, false, $context )
+        $result = json_decode($result_json, true);
 
-        return json_decode($result, true);
     }
 }
