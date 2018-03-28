@@ -241,7 +241,7 @@ class PartecipantsController extends Controller
 
         $context = stream_context_create( $options );   
 
-        $result_json = file_get_contents( $url, false, $context )
+        $result_json = file_get_contents( $url, false, $context );
         $result = json_decode($result_json, true);
 
     }
