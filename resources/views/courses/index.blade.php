@@ -221,6 +221,7 @@ $(document).ready(function(){
     if( partecipant_id ){
         function scrollToAnchor(aid){
             var aTag = $("#course-"+ aid );
+            $("#partecipants-"+ aid ).addClass('collapse show');
             $('html,body').animate({scrollTop: aTag.offset().top},'fast');
         }
     scrollToAnchor(course_id);
