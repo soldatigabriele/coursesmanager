@@ -96,7 +96,7 @@
                             $collapse = ( app('request')->input('course_id') == $course->id )? null : 'collapse';
                         @endphp
                         <div class="col-md-12 tabella">
-                            <div class="{{ $collapse }} table">
+                            <div class="{{ $collapse }} table" id="partecipants-{{$course->id}}">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
                                     <tr class="subtitle tabelle">
                                         <td>
@@ -164,32 +164,32 @@
 
 <!-- MODAL -->
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Elimina Corso</h4>
-    </div>
-    <div class="modal-body">
-        <p>Vuoi eliminare questo corso?</p>
-        <div style="padding:10px;border:solid 1px #efefef">
-            
-        </style>
-            
-        <p id="course-long_id"></p>
-        <p id="course-description"></p>
-        <p id="course-date"></p>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <form action="" id="form-delete" method="post"> 
-            <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
-            <button type="submit" class="btn btn-danger">Elimina</button>
-             {{ method_field('DELETE') }} 
-            {{ csrf_field() }}
-        </form>
-    </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Elimina Corso</h4>
+            </div>
+            <div class="modal-body">
+                <p>Vuoi eliminare questo corso?</p>
+                <div style="padding:10px;border:solid 1px #efefef">
 
-</div>
+                </style>
+
+                <p id="course-long_id"></p>
+                <p id="course-description"></p>
+                <p id="course-date"></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <form action="" id="form-delete" method="post"> 
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+                <button type="submit" class="btn btn-danger">Elimina</button>
+                 {{ method_field('DELETE') }} 
+                {{ csrf_field() }}
+            </form>
+        </div>
+
+    </div>
 </div>
 </div>
 
@@ -214,17 +214,17 @@ $(document).ready(function(){
         return $.getUrlVars()[name];
       }
     });
+
     let course_id = $.getUrlVar('course_id');
-    // let partecipant_id = $.getUrlVar('partecipant_id');
+    let partecipant_id = $.getUrlVar('partecipant_id');
 
-    function scrollToAnchor(aid){
-        var aTag = $("#course-"+ aid );
-        console.log(aTag)
-
-        $('html,body').animate({scrollTop: aTag.offset().top},'fast');
-    }
-
+    if( partecipant_id ){
+        function scrollToAnchor(aid){
+            var aTag = $("#course-"+ aid );
+            $('html,body').animate({scrollTop: aTag.offset().top},'fast');
+        }
     scrollToAnchor(course_id);
+    }
 
     $( "#flash-message" ).delay(4000).fadeOut( "slow");
     
