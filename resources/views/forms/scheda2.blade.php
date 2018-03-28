@@ -116,15 +116,24 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="col-xs-10 col-sm-10 col-md-10">
-            <label>Sono d'accordo a condividere con gli altri corsisti telefono ed email per organizzare i trasporti ?</label>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-xs-10 col-sm-10 col-md-10">
+              <label>Sono d'accordo a condividere con gli altri corsisti telefono ed email per organizzare i trasporti ?</label>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 form-group">
+              <select name="shares" class="form-control">
+                <option value="si">si</option>
+                <option value="no">no</option>
+              </select>
+            </div>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-2 form-group">
-            <select name="shares" class="form-control">
-              <option value="si">si</option>
-              <option value="no">no</option>
-            </select>
+       </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-xs-10 col-sm-10 col-md-10">
+              {!! NoCaptcha::display() !!}
+            </div>
           </div>
        </div>
         <div class="row">
