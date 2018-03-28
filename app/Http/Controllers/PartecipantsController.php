@@ -111,16 +111,8 @@ class PartecipantsController extends Controller
         ];
 
         if(env('REQUIRE_CAPTCHA') === 'yes' ){
-            $rules['g-recaptcha-response'] = 'required';
+            $rules['g-recaptcha-response'] = 'required|captcha';
         }
-
-        if(env('APP_ENV') !== 'testing' ){
-            $captchaValid = $this->validateCaptcha($request->get('g-recaptcha-response'));
-            if(!$captchaValid['success']){
-                return back()->withErrors($captchaValid['error-codes']);
-            }
-        }
-
 
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
@@ -207,42 +199,5 @@ class PartecipantsController extends Controller
     {
         $partecipant->delete();
         return $partecipant;
-    }
-
-    protected function validateCaptcha($captcha)
-    {
-        $remoteip = $_SERVER['REMOTE_ADDR'];
-        dump($remoteip);
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-
-        $post_data = http_build_query(
-            array(
-                'secret' => env('INVISIBLE_RECAPTCHA_SECRETKEY'),
-                'response' => $captcha,
-                'remoteip' => $remoteip
-            )
-        );  
-
-        $options=array(
-
-            // If site has SSL then
-            'ssl'=>array(
-                'cafile'            => env('PATH_TO_PEM'),
-                'verify_peer'       => true,
-                'verify_peer_name'  => true,
-            ),
-
-           'http' =>
-            array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded',
-                'content' => $post_data
-            )
-        );
-
-        $context = stream_context_create( $options );
-        $result_json = file_get_contents( $url, false, $context );
-        $result = json_decode($result_json, true);
-
     }
 }
