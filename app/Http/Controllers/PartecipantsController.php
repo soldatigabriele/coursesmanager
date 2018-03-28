@@ -212,6 +212,7 @@ class PartecipantsController extends Controller
     protected function validateCaptcha($captcha)
     {
         $remoteip = $_SERVER['REMOTE_ADDR'];
+        dump($remoteip);
         $url = "https://www.google.com/recaptcha/api/siteverify";
 
         $post_data = http_build_query(
@@ -239,7 +240,7 @@ class PartecipantsController extends Controller
             )
         );
 
-        $context = stream_context_create( $options );   
+        $context = stream_context_create( $options );
         $result_json = file_get_contents( $url, false, $context );
         $result = json_decode($result_json, true);
 
