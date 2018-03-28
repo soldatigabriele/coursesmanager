@@ -217,7 +217,7 @@ class PartecipantsController extends Controller
         $post_data = http_build_query(
             array(
                 'secret' => env('INVISIBLE_RECAPTCHA_SECRETKEY'),
-                'response' => $response,
+                'response' => $captcha,
                 'remoteip' => $remoteip
             )
         );  
