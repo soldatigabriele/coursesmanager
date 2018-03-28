@@ -57,6 +57,7 @@ class RoutesTest extends TestCase
             'active' => 1,
             'meta' => json_encode(['ip'=>'127.0.0.2']),
         ];
+        factory('App\Course', 10)->create();
 
     }
 
@@ -81,7 +82,7 @@ class RoutesTest extends TestCase
             ->assertStatus(200);
         
         $this->get(route('scheda-2'))
-            ->assertStatus(200);        
+            ->assertStatus(200);
 
         $this->get(route('newsletter-create'))
             ->assertStatus(200);
@@ -131,10 +132,6 @@ class RoutesTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         $this->assertEquals($p->deleted_at, null);
-
-        $this->post(route('partecipant-store'), [])
-            ->assertStatus(302)
-            ->assertRedirect(route('login'));
         
         $this->get(route('partecipant-edit', $p->id))
             ->assertStatus(302)
@@ -221,9 +218,8 @@ class RoutesTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_store_new_partecipant()
+    public function test_unauth_user_can_subscribe_to_a_course()
     {
-        $this->actingAs($this->user);
         $res = $this->post(route('partecipant-store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
         $this->assertInstanceOf('App\Partecipant', Partecipant::where('phone', $this->newPartecipantData['phone'])->first());

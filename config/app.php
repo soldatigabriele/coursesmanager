@@ -161,8 +161,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        // Captcha plugin
-        Buzz\LaravelGoogleCaptcha\CaptchaServiceProvider::class,
+        // Google captcha
+        // AlbertCht\InvisibleReCaptcha\InvisibleReCaptchaServiceProvider::class,
 
 
     ],

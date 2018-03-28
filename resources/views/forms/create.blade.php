@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-
+<br>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-10 col-sm-12">
@@ -30,7 +30,7 @@
           </div>
           @endif
           
-          <form action="{{ route('partecipant-store') }}" method="post">
+          <form action="{{ route('partecipant-store') }}" method="post" id='i-recaptcha'>
                 {{ csrf_field() }}
             
                 @yield('formcontent')

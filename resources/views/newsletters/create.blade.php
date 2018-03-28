@@ -87,17 +87,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-9">
-                  {!! app('captcha')->display() !!}
-                </div>
-                <br>
+                  @captcha
                 <div class="col-xs-8 col-sm-9 col-md-12">
                  Cliccando su <strong class="label label-primary">Iscrivimi alla Newsletter</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
                 </div>
                  <hr class="colorgraph">
                  <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input name="subscribe" class="btn btn-lg btn-success" type="submit" value="Iscrivimi alla Newsletter Laboa.org"/>
+                    <submit name="subscribe" class="btn btn-lg btn-success" type="submit" value="Iscrivimi alla Newsletter Laboa.org"/>
                   </div>
                 </div>
             </div>

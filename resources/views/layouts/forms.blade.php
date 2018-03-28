@@ -10,8 +10,13 @@
 
     <title>{{ config('app.name', 'Courses Manager') }}</title>
 
-    <!-- Scripts -->
-
+    <!-- Google Scripts -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            document.getElementById("i-recaptcha").submit();
+        }
+    </script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
@@ -23,11 +28,7 @@
 </head>
 <body>
     <div id="app">
-
-
-        <main class="py-4">
             @yield('content')
-        </main>
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>

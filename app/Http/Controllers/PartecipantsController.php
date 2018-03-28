@@ -21,15 +21,6 @@ use Illuminate\Database\Eloquent\Collection;
 class PartecipantsController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth', [
-            'except' => [
-                'show', 'scheda1', 'scheda2'
-            ]
-        ]);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -107,7 +98,7 @@ class PartecipantsController extends Controller
             'email.email' => 'Inserire un indirizzo email valido',
             'g-recaptcha-response.required' => 'Cliccare il box: "Non sono un robot"',
         ];
-         $rules = [
+        $rules = [
             'name' => 'required|string',
             'surname' => 'required|string',
             'phone' => 'required',
@@ -118,9 +109,19 @@ class PartecipantsController extends Controller
             'region_id' => new RegionRule,
             'course_id' => new CourseRule,
         ];
-         if(env('REQUIRE_CAPTCHA') === 'yes' ){
-            $rules['g-recaptcha-response'] = 'required|captcha';
-         }
+
+        if(env('REQUIRE_CAPTCHA') === 'yes' ){
+            $rules['g-recaptcha-response'] = 'required';
+        }
+
+        if(env('APP_ENV') !== 'testing' ){
+            $captchaValid = $this->validateCaptcha($request->get('g-recaptcha-response'));
+            if(!$captchaValid['success']){
+                return back()->withErrors($captchaValid['error-codes']);
+            }
+        }
+
+
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
@@ -206,5 +207,27 @@ class PartecipantsController extends Controller
     {
         $partecipant->delete();
         return $partecipant;
+    }
+
+    protected function validateCaptcha($captcha){
+        $fields_string = '';
+        $fields = array(
+            'secret' => env('INVISIBLE_RECAPTCHA_SECRETKEY'),
+            'response' => $captcha
+        );
+        foreach($fields as $key=>$value)
+        $fields_string .= $key . '=' . $value . '&';
+        $fields_string = rtrim($fields_string, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($result, true);
     }
 }
