@@ -72,7 +72,7 @@ class TelegramIntegrationTest extends TestCase
 
     public function test_telegram_message_is_sent_after_newsletter()
     {
-        $this->newNewsletterData['disableNotification'] = true;
+        $this->newNewsletterData['disableNotification'] = 'true';
         $this->newNewsletterData['testTelegramMessages'] = true;
         $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
         $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
@@ -87,7 +87,7 @@ class TelegramIntegrationTest extends TestCase
     {
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
-        $this->newPartecipantData['disableNotification'] = true;
+        $this->newPartecipantData['disableNotification'] = 'true';
         $this->newPartecipantData['testTelegramMessages'] = true;
         $res = $this->post(route('partecipant-store'), $this->newPartecipantData );
         $log = ApplicationLog::latest()->where('description', 'Partecipant Subscription Success')->first();

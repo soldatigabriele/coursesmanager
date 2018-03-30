@@ -10,7 +10,7 @@ use App\Helpers\Logger;
 
 class Telegram{
 
-	public static function alert($text, $disable_notification = false)
+	public static function alert($text, $disable_notification = 'false')
 	{
 	    $client = new \GuzzleHttp\Client();
 	    // mia
@@ -22,7 +22,7 @@ class Telegram{
 	    if(env('APP_ENV') === 'production')
 	    {
 // replace with db value
-	    	$disable_notification = false;
+	    	$disable_notification = 'false';
 	    	// use the db value
 	    	// $chat_id = User::find($course->user_id)->telegram_chat_id;
     		// papa
