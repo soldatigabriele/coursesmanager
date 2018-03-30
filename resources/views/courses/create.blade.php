@@ -44,6 +44,11 @@
                            <td><label> Data corso </label></td>
                            <td><input class="form-control" type="text" name="date" value="{{ old('date') }}" /></td>
                        </tr>
+                       
+                       <tr>
+                        <div class="">
+                          <input id="datepicker" width="276">
+                        </div>
                        <tr>
                            <td><label> Numero max iscritti (indicativo, pu&ograve essere superato)</label></td>
                            <td><select name="limit" class="form-control">
@@ -78,12 +83,16 @@
   <script type="text/javascript">
 
     $(document).ready(function(){
-        $('#long_id').keyup(function(){
-            $(this).val($(this).val().toUpperCase());
-            // console.log($(this).val());
-        });
+      $('#long_id').keyup(function(){
+          $(this).val($(this).val().toUpperCase());
+          // console.log($(this).val());
+      });
+
+      $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+      });
     });
 
   </script>
 
-@endsection
+@append
