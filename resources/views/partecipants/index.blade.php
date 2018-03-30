@@ -116,7 +116,7 @@
                                     </td>
                                     <td>
                                         @if($n->slug)
-                                            <a href="{{ route('partecipant-show', $n->slug) }}" role="button" class="btn btn-sm btn-outline-secondary">Dettagli</a>
+                                            <a href="{{ route('partecipant-show', $n->slug) }}" role="button" class="btn btn-sm btn-outline-secondary">Corsista</a>
                                         @else 
                                             Newsletter
                                         @endif
