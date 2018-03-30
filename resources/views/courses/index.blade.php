@@ -86,7 +86,7 @@
                                 {{ $course->subs() }} / {{ $course->limit }}
                             </div>
                             <div class="col-md-1">
-                                <a role="button" class="btn btn-outline-secondary" href="{{route('course-edit', $course->id)}}">Modifica</a>
+                                <a role="button" class="btn btn-outline-primary" href="{{route('course-edit', $course->id)}}">Modifica</a>
                             </div>
                             <div class="col-md-1">
                                 <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-outline-success">Mostra</button>
