@@ -108,16 +108,53 @@ class CoursesController extends Controller
     }
 
     /**
+     * Show the form to update the specific resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Course $course)
+    {
+        return view('courses.edit')->with(['course' => $course]);
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Course $course)
+    public function update(Course $course, Request $request)
     {
+        
+        $messages = [
+            'long_id.required' => 'Inserire un codice corso valido',
+            'date.required' => 'Inserire una data',
+            'description.required' => 'Inserire il nome corso',
+        ];
+         $rules = [
+            'date' => 'required',
+            'description' => 'required',
+            'long_id' => 'required',
+        ];
+    
+        $validation = Validator::make($request->all(), $rules, $messages);
+        if ($validation->fails()) {
+            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
+            (new Logger)->log('0', 'Course Update Error', json_encode($data), $request);
+            return redirect(route('course-edit', $course->id))
+                        ->withErrors($validation);
+        }
+
+        (new Logger)->log('1', 'Course Update Success', json_encode($request->all()), $request);
+
         $course->fill($request->all());
-        return $course;
+        $course->save();
+
+        return back()->with('edited', 'Corso '.$course->long_id.' aggiornato correttamente');
+
     }
 
     /**

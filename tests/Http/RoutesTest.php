@@ -201,6 +201,9 @@ class RoutesTest extends TestCase
         $this->get(route('course-create'))
             ->assertStatus(200);
 
+        $this->get(route('course-edit', $c->id))
+            ->assertStatus(200);
+
         $this->get(route('newsletter-index'))
             ->assertStatus(200);
         
@@ -214,7 +217,6 @@ class RoutesTest extends TestCase
         $partecipant = factory('App\Partecipant')->create();
         $this->put(route('partecipant-update', $partecipant->id), $this->newPartecipantData);
         $this->assertEquals($partecipant->fresh()->email, $this->newPartecipantData['email']);
-
     }
 
     public function test_destroy_partecipant()
@@ -226,6 +228,7 @@ class RoutesTest extends TestCase
             ->assertStatus(200);
         $this->assertNotEquals($p->fresh()->deleted_at, null);
     }
+
     
     /**
      * Index request does not show other admin courses

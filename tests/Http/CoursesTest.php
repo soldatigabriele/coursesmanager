@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Course;
+use Faker\Factory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,6 +16,7 @@ class CoursesTest extends TestCase
     {
         Parent::setUp();
         $this->user = factory('App\User')->create();
+        $this->faker = Factory::create('it_IT');
 
     }
 
@@ -50,13 +52,18 @@ class CoursesTest extends TestCase
     }
 
     /**
-     * 
+     * Authorised user can update a course
      *
      * @return void
      */
-    // public function test_()
-    // {
-        // $response = $this->get('courses');
-        // $response->assertJsonFragment();
-    // }
+    public function test_auth_user_can_update_course()
+    {
+        $this->actingAs($this->user);
+        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $courseData = $course->toArray();
+        $courseData['description'] = $this->faker->sentence;
+        $res = $this->put(route('course-update', $course->id), $courseData );
+        $this->assertEquals($courseData['description'], $course->fresh()->description);
+    }
+
 }
