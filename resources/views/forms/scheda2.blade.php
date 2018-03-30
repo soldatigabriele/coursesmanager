@@ -145,8 +145,7 @@
        <hr class="colorgraph">
        <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-6">
-          <input class="g-recaptcha btn btn-lg btn-success" data-sitekey="{{ env('INVISIBLE_RECAPTCHA_SITEKEY') }}" data-callback="onSubmit"
-          name="subscribe" type="submit" value="Completa Iscrizione"/>
+          <input class="btn btn-lg btn-success" name="subscribe" type="submit" value="Completa Iscrizione"/>
         </div>
       </div>
   </div>

@@ -25,7 +25,7 @@ class Course implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $value !== 'empty'; 
+        return ($value !== 'empty' || $value === null);
     }
 
     /**

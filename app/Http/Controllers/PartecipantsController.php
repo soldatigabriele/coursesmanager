@@ -107,8 +107,9 @@ class PartecipantsController extends Controller
             'job' => 'required',
             'city' => 'required',
             'region_id' => new RegionRule,
-            'course_id' => new CourseRule,
+            'course_id' => [new CourseRule, 'required'],
         ];
+
 
         if(env('REQUIRE_CAPTCHA') === 'yes' ){
             $rules['g-recaptcha-response'] = 'required|captcha';
@@ -117,13 +118,14 @@ class PartecipantsController extends Controller
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
-
             (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data), $request);
             return redirect()->back()
                         ->withErrors($validation)
                         ->withInput();
         }
+
         (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
+
         $data = $request->all();
         $p = new Partecipant();
         $p->name = $request->name;
@@ -134,6 +136,8 @@ class PartecipantsController extends Controller
         $p->phone = $request->phone;
 
         array_forget($data, 'g-recaptcha-response');
+        array_forget($data, 'disableNotification');
+        array_forget($data, 'testTelegramMessages');
         array_forget($data, 'name');
         array_forget($data, '_token');
         array_forget($data, 'subscribe');
@@ -149,10 +153,12 @@ class PartecipantsController extends Controller
         $p = $p->fresh();
         $p->courses()->sync($request->course_id);
 
-        if(env('APP_ENV') !== 'testing' ){
+        if(env('APP_ENV') !== 'testing' || $request->testTelegramMessages){
             // send and log the message
-            $response = Telegram::alert($p, Course::find($request->course_id));
-
+            $c = Course::find($request->course_id);
+            $url = url(route('course-index').'?course_id='. $c->id.'&partecipant_id='. $p->fresh()->id);
+            $text = '*'.$p->name.' '.$p->surname.'* - *'.$p->email.'* *'.$p->phone.'* si è iscritto al corso *'.$c->long_id.'* del '.$c->date.' [Vai alla scheda]('.$url.')';
+            $response = Telegram::alert($text, $request->disableNotification);
             (new Logger)->log('2', 'Telegram Response', $response, $request);
         }
 

@@ -10,6 +10,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'password' => bcrypt(uniqid()),
         'api_token' => strtolower(md5(uniqid())).strtolower(md5(uniqid())),
         'telegram_chat_id' => strtolower(md5(uniqid())),
+        'telegram_settings' => json_encode(['telegram_chat_id' => strtolower(md5(uniqid())), 'silent' => true, 'disable_notification' => false]),
         'active' => 1,
     ];
 });

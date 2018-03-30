@@ -94,7 +94,6 @@ class NewslettersController extends Controller
         }
 
         (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()));
-        
         $data = $request->all();
         $newsletter = new Newsletter();
         $newsletter->name = $request->name;
@@ -105,11 +104,12 @@ class NewslettersController extends Controller
         $newsletter->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $newsletter->save();
 
-        // if(env('APP_ENV') !== 'testing' ){
-        //     // send and log the message
-        //     $response = Telegram::alert($p, Course::find($request->course_id));
-        //     (new Logger)->log('2', 'Telegram Response', $response, $request);
-        // }
+        if(env('APP_ENV') !== 'testing' || $request->testTelegramMessages){
+            // send and log the message
+            $text = '*'.$newsletter->name.' '.$newsletter->surname.'* - *'.$newsletter->email.'* si è iscritto alla * Newsletter *';
+            $response = Telegram::alert($text, $request->disableNotification);
+            (new Logger)->log('2', 'Telegram Response', $response, $request);
+        }
 
         return redirect()->route('newsletter-show', $newsletter)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
     }

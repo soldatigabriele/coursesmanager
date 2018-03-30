@@ -218,13 +218,14 @@ $(document).ready(function(){
     let course_id = $.getUrlVar('course_id');
     let partecipant_id = $.getUrlVar('partecipant_id');
 
-    if( partecipant_id ){
+    if( partecipant_id )
+    {
         function scrollToAnchor(aid){
             var aTag = $("#course-"+ aid );
             $("#partecipants-"+ aid ).addClass('collapse show');
             $('html,body').animate({scrollTop: aTag.offset().top},'fast');
         }
-    scrollToAnchor(course_id);
+        scrollToAnchor(course_id);
     }
 
     $( "#flash-message" ).delay(4000).fadeOut( "slow");

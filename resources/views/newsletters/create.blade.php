@@ -20,7 +20,7 @@
 @endsection
 
 @section('content')
-
+<br>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8 col-sm-12">
@@ -87,14 +87,21 @@
                     </div>
                   </div>
                 </div>
-                  @captcha
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="col-xs-10 col-sm-10 col-md-10">
+                      {!! NoCaptcha::display() !!}
+                    </div>
+                  </div>
+               </div>
                 <div class="col-xs-8 col-sm-9 col-md-12">
                  Cliccando su <strong class="label label-primary">Iscrivimi alla Newsletter</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
                 </div>
                  <hr class="colorgraph">
                  <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
-                    <submit name="subscribe" class="btn btn-lg btn-success" type="submit" value="Iscrivimi alla Newsletter Laboa.org"/>
+                    <input class="btn btn-lg btn-success" name="subscribe" type="submit" value="Iscrivimi alla newsletter"/>
+
                   </div>
                 </div>
             </div>

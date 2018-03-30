@@ -8,6 +8,7 @@ use Faker\Factory;
 use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
+use App\ApplicationLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoutesTest extends TestCase
@@ -58,7 +59,6 @@ class RoutesTest extends TestCase
             'meta' => json_encode(['ip'=>'127.0.0.2']),
         ];
         factory('App\Course', 10)->create();
-
     }
 
 
@@ -88,14 +88,6 @@ class RoutesTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_unath_user_can_subscribe_to_newsletter()
-    {
-        
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
-        $newNewsletter = Newsletter::where('email', $this->newNewsletterData['email'])->first();
-        $this->assertInstanceOf('App\Newsletter', $newNewsletter);
-    }
-
     /**
      * Unathorised user dont reach protected routes for newsletter
      *
@@ -103,8 +95,6 @@ class RoutesTest extends TestCase
      */
     public function test_unath_user_dont_reach_protected_newsletter_routes()
     {
-
-        
         $this->get(route('newsletter-index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -216,13 +206,6 @@ class RoutesTest extends TestCase
         
         $this->get(route('newsletter-create'))
             ->assertStatus(200);
-    }
-
-    public function test_unauth_user_can_subscribe_to_a_course()
-    {
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
-        $this->assertInstanceOf('App\Partecipant', Partecipant::where('phone', $this->newPartecipantData['phone'])->first());
     }
 
     public function test_update_new_partecipant()

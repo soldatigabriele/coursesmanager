@@ -69,6 +69,7 @@ class PartecipantsTest extends TestCase
             'data' => json_encode($data),
         ];
     	$response = $this->post('api/partecipants', $partecipant_data, ['HTTP_Authorization' => $this->token]);
+        dd($response->getContent());
         $id = (json_decode($response->getContent()))->id;
         $response->assertJsonFragment([$name]);
         $this->assertDatabaseHas('partecipants', ['id'=>$id, 'name' => $name]);
