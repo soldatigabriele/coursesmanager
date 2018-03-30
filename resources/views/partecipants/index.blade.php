@@ -46,7 +46,7 @@
                                         <select class="form-control" name="region_id">
                                           <option value="empty"> - </option>
                                           @foreach($regions as $region)
-                                            <option value="{{ $region->id }}" @if(old('region_id') == $region->id)selected @endif>{{ $region->name}}</option>
+                                            <option value="{{ $region->id }}" @if($region_id == $region->id)selected @endif>{{ $region->name}}</option>
                                           @endforeach
                                         </select>
                                       </div>

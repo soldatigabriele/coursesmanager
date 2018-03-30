@@ -57,6 +57,5 @@ class RegionFilterTest extends TestCase
         foreach($news_two as $p){
             $res->assertDontSee($p->name);
         }
-        // $res->assertSee('');
     }
 }

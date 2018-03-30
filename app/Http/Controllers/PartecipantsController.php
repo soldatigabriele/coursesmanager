@@ -56,12 +56,13 @@ class PartecipantsController extends Controller
         $parts = User::partecipants();
         $news = Newsletter::all(); 
 
+        $region_id = (isset($request->region_id))? $request->region_id: null;
         if(isset($request->find)){
             $region_id = $request->region_id;
             $parts = $parts->filter(function($item, $value) use ($region_id){
                 return $item->region['id'] == $region_id;
             });
-            $news = Newsletter::where('region_id', $region_id)->get(); 
+            $news = Newsletter::where('region_id', $region_id)->get();
         }
 
         $all = $parts->merge($news);
@@ -75,7 +76,7 @@ class PartecipantsController extends Controller
         $all = (new CollectionHelpers())->paginate($all);
 
 
-        return view('partecipants.index')->with(['regions'=>$regions, 'partecipants'=> $all, 'emails' => $emails, 'regions'=>Region::all()]);
+        return view('partecipants.index')->with(['regions'=>$regions, 'region_id'=>$region_id, 'partecipants'=> $all, 'emails' => $emails, 'regions'=>Region::all()]);
     }
 
     /**
