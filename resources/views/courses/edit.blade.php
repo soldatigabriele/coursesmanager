@@ -48,6 +48,16 @@
                        </div>
                        <div class="row">
                         <div class="col">
+                          <label for="start_date">Data inizio</label>
+                          <input name="start_date" class="datepicker form-control" width="276" value=" {{ \Carbon\Carbon::parse($course->start_date)->format('d/m/Y')}}">
+                        </div>
+                        <div class="col">
+                          <label for="end_date">Data fine</label>
+                          <input name="end_date"class="datepicker datepicker_end form-control" width="276" value="{{ \Carbon\Carbon::parse($course->end_date)->format('d/m/Y')}}">
+                        </div>
+                      </div>
+                       <div class="row">
+                        <div class="col">
                            <label> Data corso </label>
                            <input class="form-control" type="text" name="date" value="{{ $course->date }}" />
                         </div>
@@ -108,12 +118,19 @@
 @section('scripts')
 
   <script type="text/javascript">
-
     $(document).ready(function(){
         $('#long_id').keyup(function(){
             $(this).val($(this).val().toUpperCase());
             // console.log($(this).val());
         });
+
+      $('.datepicker').datepicker({
+        uiLibrary: 'bootstrap4',
+        dateFormat: 'dd/mm/yy',
+        dayNamesShort: [ "Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa" ],
+        dayNamesMin: [ "Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa" ],
+        firstDay: 1,
+      });
     });
 
   </script>

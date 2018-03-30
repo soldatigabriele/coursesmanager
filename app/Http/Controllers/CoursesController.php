@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Course;
+use Carbon\Carbon;
 use App\Helpers\Logger;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $courses = Course::where('user_id', Auth::user()->id)->orderByDesc('created_at')->paginate(10);
+        $courses = Course::where('user_id', Auth::user()->id)->orderBy('start_date')->paginate(10);
         return view('courses.index')->with(['courses' => $courses, 'header'=>['test', 'test2', 'test3']]);
     }
 
@@ -61,12 +62,15 @@ class CoursesController extends Controller
 
         (new Logger)->log('1', 'Course Creation Success', json_encode($request->all()), $request);
 
-
         $user_id = Auth::user()->id;
         $course = new Course;
         $course->date = $request->date;
         $course->limit = $request->limit;
         $course->description = $request->description;
+        $start_date = Carbon::createFromFormat('d/m/yy', $request->start_date);
+        $end_date = Carbon::createFromFormat('d/m/yy', $request->end_date);
+        $course->start_date = $start_date;
+        $course->end_date = $end_date;
         $course->user_id = $user_id;
         $course->save();
         $course->long_id = $course->fresh()->id.'-'.$request->long_id;
@@ -75,8 +79,6 @@ class CoursesController extends Controller
         $message = 'Corso creato correttamente: '.$course->description.' - '.$course->date.' - '.$course->long_id;
 
         return redirect('/')->with('status', $message);
-
-        
 
     }
 
@@ -151,6 +153,12 @@ class CoursesController extends Controller
         (new Logger)->log('1', 'Course Update Success', json_encode($request->all()), $request);
 
         $course->fill($request->all());
+
+        $start_date = Carbon::createFromFormat('d/m/yy', $request->start_date);
+        $end_date = Carbon::createFromFormat('d/m/yy', $request->end_date);
+
+        $course->start_date = $start_date;
+        $course->end_date = $end_date;
         $course->save();
 
         return back()->with('edited', 'Corso '.$course->long_id.' aggiornato correttamente');

@@ -2,8 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Course;
 use App\User;
+use App\Course;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -92,11 +93,14 @@ class CoursesTest extends TestCase
         $data = ['long_id' => $long_id,
         'description' => str_random(30),
         'date' => date('d/m/Y').' al '.date('d/m/Y'),
+        'start_date' => date('d/m/Y'),
+        'end_date' => date('d/m/Y'),
         'limit' => rand(1, 20) ];
         $response = $this->post('api/courses', $data, ['HTTP_Authorization' => $this->token]);
         $course = Course::find(json_decode($response->getContent())->id);
         // check course has user id
         $this->assertEquals($course->user_id, $this->user->id);
+        $this->assertEquals($course->start_date, Carbon::now());
         $response->assertJsonFragment([$long_id]);
     }
 

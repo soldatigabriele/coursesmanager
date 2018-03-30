@@ -10,8 +10,12 @@ class Course extends Model
 {
     use softDeletes;
 
-    protected $fillable = ['long_id', 'date', 'limit', 'description'];
+    protected $fillable = ['long_id', 'date', 'limit', 'description', 'start_date', 'end_date'];
     
+    // protected $casts = [
+    //     'start_date' => 'date',
+    //     'end_date' => 'date',
+    // ];
     public function partecipants()
     {
     	return $this->belongsToMany('App\Partecipant')->withTimestamps();

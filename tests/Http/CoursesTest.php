@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Course;
+use Carbon\Carbon;
 use Faker\Factory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,7 +63,12 @@ class CoursesTest extends TestCase
         $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
         $courseData = $course->toArray();
         $courseData['description'] = $this->faker->sentence;
+        $start = (Carbon::parse($courseData['start_date'])->format('d/m/Y'));
+        $end = (Carbon::parse($courseData['end_date'])->format('d/m/Y'));
+        $courseData['start_date'] = $start;
+        $courseData['end_date'] = $end;
         $res = $this->put(route('course-update', $course->id), $courseData );
+
         $this->assertEquals($courseData['description'], $course->fresh()->description);
     }
 
