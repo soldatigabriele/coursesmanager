@@ -13,6 +13,10 @@
     .titles{
         font-weight: 600;
     }
+    .ricerca{
+        position:relative;
+        top:30px;
+    }
 
 </style>
 @endsection
@@ -33,8 +37,52 @@
             <div class="card">
                 <div class="card-header"><h4>Lista di tutti i corsisti </h4></div>
                     <div class="card-body">
-
-                            <table class="table table-bordered table-striped" >
+                        <div class="col-md-12">
+                            <form action="{{ route('partecipant-index') }}" method="get" accept-charset="utf-8">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                        <label>Regione:</label>
+                                        <select class="form-control" name="region_id">
+                                          <option value="empty"> - </option>
+                                          @foreach($regions as $region)
+                                            <option value="{{ $region->id }}" @if(old('region_id') == $region->id)selected @endif>{{ $region->name}}</option>
+                                          @endforeach
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!-- <div class="col">
+                                        <label>Nome:</label>
+                                        <div class="form-group">
+                                        <input type="text" name="name" id="name" class="form-control input-lg" placeholder="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label>Cognome:</label>
+                                            <input type="text" name="surname" id="surname" class="form-control input-lg" placeholder="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label>Email:</label>
+                                            <input type="text" name="email" id="email" class="form-control input-lg" placeholder="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label>Telefono:</label>
+                                            <input type="text" name="mobile" id="mobile" class="form-control input-lg" placeholder="" value="">
+                                        </div>
+                                    </div> -->
+                                    <div class="col">
+                                        {{ csrf_field() }}
+                                        <input class="btn btn-md btn-success ricerca" name="find" type="submit" value="Ricerca">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table table-bordered table-striped" >
                             <tr class="titles">
                                 <td>
                                     #
@@ -49,37 +97,29 @@
                                     Email
                                 </td>
                                 <td >
-                                    Data corso
-                                </td>
-                                <td >
-                                    Descrizione corso
-                                </td>
-                                <td >
-                                    Codice Corso
+                                    Tipo
                                 </td>
                             </tr>
                             @foreach($partecipants as $n)
                                 <tr>
-                                    <td >
+                                    <td>
                                         {{$n->id}}
                                     </td>
-                                    <td >
+                                    <td>
                                         {{$n->surname}} {{$n->name}}
                                     </td>
-                                    <td >
+                                    <td>
                                         {{ $regions[$n->region_id-1]['name'] }}
                                     </td>
-                                    <td >
+                                    <td>
                                         {{$n->email}}
                                     </td>
-                                    <td >
-                                        {{ $n->courses->first()->date }}
-                                    </td>
-                                    <td >
-                                        {{ $n->courses->first()->description }}
-                                    </td>
-                                    <td >
-                                        {{ $n->courses->first()->long_id }}
+                                    <td>
+                                        @if($n->slug)
+                                            <a href="{{ route('partecipant-show', $n->slug) }}" role="button" class="btn btn-sm btn-outline-secondary">Dettagli</a>
+                                        @else 
+                                            Newsletter
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -91,12 +131,12 @@
             </div>
             <br>
             <div class="card">
-                <div class="card-header"><h4>Lista di tutte le Email dei corsisti</h4></div>
+                <div class="card-header"><h4>Lista di tutte le Email</h4></div>
                     <div class="card-body">
                         <div class="container">
                             <div class="col">
                                 @foreach($emails as $e)
-                                    {{$e->email}},
+                                    {{$e}},
                                 @endforeach
                             </div>
                         </div>

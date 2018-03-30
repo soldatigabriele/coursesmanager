@@ -32,7 +32,6 @@ class ViewsTest extends TestCase
      */
     public function test_new_partecipants_are_shown_in_homepage()
     {
-
         $partecipants = collect([]);
         $partecipants = $partecipants->merge(factory('App\Partecipant', 3)->create(['created_at'=>Carbon::now()]));
 
@@ -53,6 +52,29 @@ class ViewsTest extends TestCase
         }
     }
 
+    /**
+     * New partecipants and newsletters are shown in the mail page
+     *
+     * @return void
+     */
+    public function test_partecipants_and_newsletters_are_shown_in_mail_page()
+    {
+        $partecipants = collect([]);
+        $partecipants = factory('App\Partecipant')->create(['email'=>'test@test.com']);
+        $course = factory('App\Course')->create(['user_id' => $this->user->id ]);
+
+        $partecipants->each(function($item) use ($course){
+            $course->partecipants()->save($item);
+        });
+
+        $news =  factory('App\Newsletter')->create(['email' => 'testNewsletter@test.com' ]);
+        $this->actingAs($this->user);
+        $res = $this->get(route('partecipant-index'))
+            ->assertStatus(200);
+
+        $res->assertSee('testNewsletter@test.com');
+        $res->assertSee('test@test.com');
+    }
 
     /**
      * Auth user sees tables in courses index page
@@ -67,9 +89,8 @@ class ViewsTest extends TestCase
         });
 
         $this->actingAs($user);
+        $res = $this->get(route('course-index'));
 
-        $res = $this->get(route('course-index'))
-            ->assertStatus(200);
         foreach($courses as $c){
             $res->assertSee($c->long_id);
         }

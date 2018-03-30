@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use App\Course;
 use App\Region;
+use App\Newsletter;
 use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
@@ -26,7 +27,7 @@ class PartecipantsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
         // $myPartecipants = Partecipant::select('partecipants.*')
@@ -35,10 +36,46 @@ class PartecipantsController extends Controller
         // ->where('courses.user_id', Auth::user()->id)
         // ->paginate(10);
 
-        $myPartecipants = User::partecipants(); 
-        $myPartecipants = (new CollectionHelpers())->paginate($myPartecipants);
+        //unire partecipanti e newsletter
+        // selezionando distinct mail 
 
-        return view('partecipants.index')->with(['partecipants'=> $myPartecipants, 'emails' => Partecipant::select('email')->get(), 'regions'=>Region::all()]);
+        
+        // if(isset($request->find)){
+        //     $parts = User::partecipants();
+        //         // ->where('email', 'like', '%' . $request->email . '%');
+        //     $parts->filter(function ($item) use ($productName) {
+        //         return false !== preg_match($item->email, $request->email);
+        //     )
+        //     dd($parts);
+        //     $news = Newsletter::all()
+        //         ->where('email', 'like', '%' . $request->email . '%')->all();
+        //     $all = array_merge($parts, $news);
+        //     $emails = [];
+        // }else{
+
+        $parts = User::partecipants();
+        $news = Newsletter::all(); 
+
+        if(isset($request->find)){
+            $region_id = $request->region_id;
+            $parts = $parts->filter(function($item, $value) use ($region_id){
+                return $item->region['id'] == $region_id;
+            });
+            $news = Newsletter::where('region_id', $region_id)->get(); 
+        }
+
+        $all = $parts->merge($news);
+        // get the emails
+        $emails = $parts->pluck('email');
+        $news_emails = $news->pluck('email');
+        $emails = $emails->merge($news_emails);
+        $regions = Region::all();
+        // }
+        
+        $all = (new CollectionHelpers())->paginate($all);
+
+
+        return view('partecipants.index')->with(['regions'=>$regions, 'partecipants'=> $all, 'emails' => $emails, 'regions'=>Region::all()]);
     }
 
     /**
