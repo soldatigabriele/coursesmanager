@@ -41,6 +41,8 @@
             @yield('content')
     </div>
 
+    @include('partials.terms-and-conditions')
+
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('scripts')
