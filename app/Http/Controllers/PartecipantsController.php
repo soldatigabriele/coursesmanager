@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use App\Course;
 use App\Region;
+use Carbon\Carbon;
 use App\Newsletter;
 use App\Partecipant;
 use App\Helpers\Logger;
@@ -89,7 +90,7 @@ class PartecipantsController extends Controller
     public function create()
     {
         // return the course creation form 
-        return view('forms.create')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+        return view('forms.create')->with(['regions'=> Region::all(), 'courses'=> Course::where('end_date', '>', Carbon::today())->get()]);
     }
 
 
@@ -102,7 +103,7 @@ class PartecipantsController extends Controller
     public function scheda1()
     {
         // return the course creation form 
-        return view('forms.scheda1')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+        return view('forms.scheda1')->with(['regions'=> Region::all(), 'courses'=> Course::where('end_date', '>', Carbon::today())->get()]);
     }
 
 
@@ -115,7 +116,7 @@ class PartecipantsController extends Controller
     public function scheda2()
     {
         // return the course creation form 
-        return view('forms.scheda2')->with(['regions'=> Region::all(), 'courses'=> Course::all()]);
+        return view('forms.scheda2')->with(['regions'=> Region::all(), 'courses'=> Course::where('end_date', '>', Carbon::today())->get()]);
     }
 
     /**
@@ -185,7 +186,7 @@ class PartecipantsController extends Controller
         array_forget($data, 'email_again');
         array_forget($data, 'phone');
         array_forget($data, 'course_id');
-        $p->data = json_encode($data);
+        $p->data = json_encode(array_map('ucfirst', (array_map('strtolower', $data))));
 
         $p->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $p->save();

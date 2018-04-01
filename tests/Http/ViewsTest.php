@@ -114,6 +114,30 @@ class ViewsTest extends TestCase
         $res->assertDontSee($old_course->long_id);
     }
 
+
+    /**
+     * Old courses are not displayed in courses list scheda
+     *
+     * @return void
+     */
+    public function test_old_courses_are_not_displayed_in_scheda_courses_select()
+    {
+        $user = factory('App\User')->create();
+        $future_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->addDays(10)]);
+        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::tomorrow()]);
+        $yesterday_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::yesterday()]);
+        $past_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->subDays(10)]);
+        $this->actingAs($user);
+        $routes = ['scheda-1', 'scheda-2'];
+        foreach($routes as $r){
+            $res = $this->get(route($r));
+            $res->assertSee($future_course->long_id);
+            $res->assertSee($tomorrow_course->long_id);
+            $res->assertDontSee($yesterday_course->long_id);
+            $res->assertDontSee($past_course->long_id);
+        }
+    }
+
     /**
      * Auth user doesnt see other users tables in courses index page
      *
