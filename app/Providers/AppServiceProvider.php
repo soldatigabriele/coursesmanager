@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Queue\Events\JobProcessed;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +18,13 @@ class AppServiceProvider extends ServiceProvider
     {
         \Carbon\Carbon::setLocale(config('app.locale'));
 
+        Queue::after(function (JobProcessed $event) {
+            // \Log::info($event->job->payload());
+        });
+
+        Queue::failing(function (JobFailed $event) {
+            \Log::info($event->exception);
+        });
     }
 
     /**

@@ -27,7 +27,7 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $courses = Course::where('user_id', Auth::user()->id)->orderBy('start_date')->paginate(10);
+        $courses = Course::where('user_id', Auth::user()->id)->where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
         return view('courses.index')->with(['courses' => $courses, 'header'=>['test', 'test2', 'test3']]);
     }
 

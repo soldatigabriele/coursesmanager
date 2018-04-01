@@ -94,6 +94,26 @@ class ViewsTest extends TestCase
         }
     }
 
+
+    /**
+     * Old courses are not displayed in courses index
+     *
+     * @return void
+     */
+    public function test_old_courses_are_not_displayed_in_courses_index_page()
+    {
+        $user = factory('App\User')->create();
+        $course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->addDays(10)]);
+        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::tomorrow()]);
+        $old_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->subDays(10)]);
+        $this->actingAs($user);
+        $res = $this->get(route('course-index'));
+
+        $res->assertSee($course->long_id);
+        $res->assertSee($tomorrow_course->long_id);
+        $res->assertDontSee($old_course->long_id);
+    }
+
     /**
      * Auth user doesnt see other users tables in courses index page
      *

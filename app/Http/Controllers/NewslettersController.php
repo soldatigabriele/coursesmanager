@@ -8,11 +8,12 @@ use App\Newsletter;
 use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
+use App\Jobs\TelegramAlert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Rules\Region as RuleRegion;
 use App\Rules\Course as CourseRule;
 use App\Rules\Region as RegionRule;
+use App\Rules\Region as RuleRegion;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -93,7 +94,8 @@ class NewslettersController extends Controller
                         ->withInput();
         }
 
-        (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()));
+        (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()), $request);
+
         $data = $request->all();
         $newsletter = new Newsletter();
         $newsletter->name = $request->name;
@@ -104,12 +106,9 @@ class NewslettersController extends Controller
         $newsletter->meta = json_encode(['user_agent'=> request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $newsletter->save();
 
-        if(env('APP_ENV') !== 'testing' || $request->testTelegramMessages){
-            // send and log the message
-            $text = '*'.$newsletter->name.' '.$newsletter->surname.'* - *'.$newsletter->email.'* si è iscritto alla * Newsletter *';
-            $response = Telegram::alert($text, $request->disableNotification);
-            (new Logger)->log('2', 'Telegram Response', $response, $request);
-        }
+        // send and log the message
+        $text = '*'.$newsletter->name.' '.$newsletter->surname.'* - *'.$newsletter->email.'* si è iscritto alla * Newsletter *';
+        TelegramAlert::dispatch($text, $request->disableNotification, $request->toArray());
 
         return redirect()->route('newsletter-show', $newsletter)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
     }

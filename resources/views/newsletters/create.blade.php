@@ -36,7 +36,14 @@
             </ul>
           </div>
           @endif
+          @php
+          if(env('APP_ENV')=='local')
+            
+            $name = 'baababa';
+            $surname = 'baababa';
+            $email = 'a@a.a';
           
+          @endphp
           <form action="{{ route('newsletter-store') }}" method="post">
                 {{ csrf_field() }}
             <div class="row">
@@ -46,14 +53,14 @@
                     <div class="col-xs-12 col-sm-12 col-md-12">
                       <div class="form-group">
                         <label>Nome:</label>
-                        <input type="text" name="name" id="name" class="form-control input-lg" placeholder="" value="{{ old('name') }}">
+                        <input type="text" name="name" id="name" class="form-control input-lg" placeholder="" value="{{ old('name') }} @php if(isset($name)){ echo $name;} @endphp">
                       </div>
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-12">
                       <div class="form-group">
                         <label>Cognome:</label>
-                        <input type="text" name="surname" id="surname" class="form-control input-lg" placeholder="" value="{{ old('surname') }}">
+                        <input type="text" name="surname" id="surname" class="form-control input-lg" placeholder="" value="{{ old('surname') }} @php if(isset($surname)){ echo $surname;} @endphp">
                       </div>
                     </div>
                   </div>
@@ -62,14 +69,14 @@
                       <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
                           <label>Email:</label>
-                          <input type="text" class="form-control" name="email" value="{{ old('email') }}">
+                          <input type="text" class="form-control" name="email" value="{{ old('email') }} @php if(isset($email)){ echo $email;} @endphp">
                         </div>
                       </div>
                     
                       <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
                           <label>Ripeti Email:</label>
-                          <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}">
+                          <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }} @php if(isset($email)){ echo $email;} @endphp">
                         </div>
                       </div>
                     </div>

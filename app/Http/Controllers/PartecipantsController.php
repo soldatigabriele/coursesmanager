@@ -11,6 +11,7 @@ use App\Partecipant;
 use App\Helpers\Logger;
 use App\Helpers\Telegram;
 use App\Helpers\FromToken;
+use App\Jobs\TelegramAlert;
 use Illuminate\Http\Request;
 use App\Helpers\CollectionHelpers;
 use App\Rules\Course as CourseRule;
@@ -191,17 +192,16 @@ class PartecipantsController extends Controller
         $p = $p->fresh();
         $p->courses()->sync($request->course_id);
 
-        if(env('APP_ENV') !== 'testing' || $request->testTelegramMessages){
-            // send and log the message
-            $c = Course::find($request->course_id);
-            $url = url(route('course-index').'?course_id='. $c->id.'&partecipant_id='. $p->fresh()->id);
-            $text = '*'.$p->name.' '.$p->surname.'* - *'.$p->email.'* *'.$p->phone.'* si è iscritto al corso *'.$c->long_id.'* del '.$c->date.' [Vai alla scheda]('.$url.')';
-            $response = Telegram::alert($text, $request->disableNotification);
-            (new Logger)->log('2', 'Telegram Response', $response, $request);
-        }
-
+        // send and log the message
+        $c = Course::find($request->course_id);
+        $url = url(route('course-index').'?course_id='. $c->id.'&partecipant_id='. $p->fresh()->id);
+        $text = '*'.$p->name.' '.$p->surname.'* - *'.$p->email.'* *'.$p->phone.'* si è iscritto al corso *'.$c->long_id.'* del '.$c->date.' [Vai alla scheda]('.$url.')';
+        // send and log the message
+        $disableNotification = ($request->disableNotification)?? false;
+        TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
         return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
+
 
     /**
      * Display the specified resource.

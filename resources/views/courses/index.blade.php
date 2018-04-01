@@ -86,14 +86,16 @@
                                 {{ $course->subs() }} / {{ $course->limit }}
                             </div>
                             <div class="col-md-1">
-                                <a role="button" class="btn btn-outline-primary" href="{{route('course-edit', $course->id)}}">Modifica</a>
                             </div>
                             <div class="col-md-1">
-                                <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-outline-success">Mostra</button>
+                                <a role="button" class="btn btn-primary" href="{{route('course-edit', $course->id)}}">Modifica</a>
                             </div>
                             <div class="col-md-1">
+                                <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-success">Mostra</button>
+                            </div>
+                            <!-- <div class="col-md-1">
                                 <button type="submit" data-course-long_id="{{ $course->long_id }}" data-course-date="{{ $course->date }}" data-course-description="{{ $course->description }}" data-course-id="{{$course->id}}" class="btn btn-outline-danger delete-button">Elimina</button>
-                            </div>
+                            </div> -->
                         </div>
                         @php 
                             $collapse = ( app('request')->input('course_id') == $course->id )? null : 'collapse';

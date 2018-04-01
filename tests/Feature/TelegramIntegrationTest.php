@@ -10,6 +10,9 @@ use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
 use App\ApplicationLog;
+use App\Jobs\TelegramAlert;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TelegramIntegrationTest extends TestCase
@@ -62,18 +65,26 @@ class TelegramIntegrationTest extends TestCase
         factory('App\Course', 10)->create();
     }
 
-    public function tearDown()
+
+    public function test_newsletter_subscription_triggers_telegram_alert()
     {
-        // Mockery::close();
+        Queue::fake();
+        $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
+        Queue::assertPushed(TelegramAlert::class, 1);
     }
 
-
-
+    public function test_participant_subscription_triggers_telegram_alert()
+    {
+        Queue::fake();
+        $course = Course::inRandomOrder()->first();
+        $this->newPartecipantData['course_id'] = $course->id;
+        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        Queue::assertPushed(TelegramAlert::class, 1);
+    }
 
     public function test_telegram_message_is_sent_after_newsletter()
     {
         $this->newNewsletterData['disableNotification'] = 'true';
-        $this->newNewsletterData['testTelegramMessages'] = true;
         $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
         $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
         $this->assertTrue(json_decode($log->value)->ok);
@@ -88,8 +99,8 @@ class TelegramIntegrationTest extends TestCase
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
         $this->newPartecipantData['disableNotification'] = 'true';
-        $this->newPartecipantData['testTelegramMessages'] = true;
         $res = $this->post(route('partecipant-store'), $this->newPartecipantData );
+
         $log = ApplicationLog::latest()->where('description', 'Partecipant Subscription Success')->first();
         $this->assertEquals(1, $log->status);
         $this->assertContains($this->newPartecipantData['email'], $log->value);
@@ -97,26 +108,5 @@ class TelegramIntegrationTest extends TestCase
         $this->assertContains($this->newPartecipantData['surname'], $log->value);
     }
 
-
-    // public function test_telegram_message_is_sent()
-    // {
-//         $c = Course::inRandomOrder()->first();
-//         $this->newPartecipantData['course_id'] = $c->id;
-//         $this->newPartecipantData['disableNotification'] = true;
-//         $this->newPartecipantData['testTelegramMessages'] = true;
-
-//         // mock telegram class
-//         $mock =  Mockery::mock('App\Helpers\Telegram');
-        
-//         $mock->shouldReceive('alert')
-//             ->once()
-//             ->andReturn('json');
-
-//         $url = url(route('course-index'));
-//         $text = '*'.$this->newPartecipantData['name'].' '.$this->newPartecipantData['surname'].'* - *'.$this->newPartecipantData['email'].'* *'.$this->newPartecipantData['phone'].'* si è iscritto al corso *'.$c->long_id.'* del '.$c->date.' [Vai alla scheda]('.$url.')';
-//         $response = $mock->alert($text);
-//         $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
-// dump($response);
-    // }
 
 }
