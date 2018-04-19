@@ -39,10 +39,10 @@
           @php
           if(env('APP_ENV')=='local')
             
-            $name = 'baababa';
+<!--             $name = 'baababa';
             $surname = 'baababa';
             $email = 'a@a.a';
-          
+ -->          
           @endphp
           <form action="{{ route('newsletter-store') }}" method="post">
                 {{ csrf_field() }}
