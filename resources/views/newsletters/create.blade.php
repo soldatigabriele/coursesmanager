@@ -37,14 +37,12 @@
           </div>
           @endif
           @php
-          if(env('APP_ENV')==='local'){
-          
-            echo env("APP_ENV");  
-            $name = 'baababa';
-            $surname = 'baababa';
-            $email = 'a@a.a';
-        }
-          
+          if(env('APP_ENV')==='local')
+          {
+              $name = 'Test';
+              $surname = 'User';
+              $email = 'test@gmail.com';
+          }
           @endphp
           <form action="{{ route('newsletter-store') }}" method="post">
                 {{ csrf_field() }}
