@@ -126,7 +126,7 @@ class NewslettersController extends Controller
         if($n){
             return view('newsletters.show')->with(['newsletter' => $n]);
         }
-        return 'no user found';
+        abort(404);
     }
 
     /**

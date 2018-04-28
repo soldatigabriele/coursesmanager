@@ -217,7 +217,7 @@ class PartecipantsController extends Controller
             $courses = $p->courses;
             return view('partecipants.show')->with(['partecipant' => $p]);
         }
-        return 'no user found';
+        abort(404);
     }
 
     /**
