@@ -20,6 +20,7 @@ class RoutesTest extends TestCase
     {
         Parent::setUp();
         $this->user = factory('App\User')->create();
+        $this->newsletter = factory('App\Newsletter')->create();
 
         $this->faker = Factory::create('it_IT');
 
@@ -85,6 +86,9 @@ class RoutesTest extends TestCase
             ->assertStatus(200);
 
         $this->get(route('newsletter-create'))
+            ->assertStatus(200);
+
+        $this->get(route('newsletter-show', $this->newsletter->slug))
             ->assertStatus(200);
     }
 
