@@ -100,7 +100,7 @@ class NewslettersController extends Controller
         $newsletter = new Newsletter();
         $newsletter->name = $request->name;
         $newsletter->surname = $request->surname;
-        $newsletter->slug = str_random(10);
+        $newsletter->slug = str_random(30);
         $newsletter->region_id = $request->region_id;
         $newsletter->email = $request->email;
         $newsletter->active = 1;
