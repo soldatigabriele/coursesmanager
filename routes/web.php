@@ -35,9 +35,9 @@ Route::resource('newsletters', 'NewslettersController', [
         'index' => 'newsletter-index',
         'create' => 'newsletter-create',
         'store' => 'newsletter-store',
-        'show' => 'newsletter-show',
     ],
 ]);
+Route::get('newsletters/{slug}', 'NewslettersController@show')->name('newsletter-show');
 
 Route::get('corsi/scheda/1', 'PartecipantsController@scheda1')->name('scheda-1');
 Route::get('corsi/scheda/2', 'PartecipantsController@scheda2')->name('scheda-2');

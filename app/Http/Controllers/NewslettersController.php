@@ -100,6 +100,7 @@ class NewslettersController extends Controller
         $newsletter = new Newsletter();
         $newsletter->name = $request->name;
         $newsletter->surname = $request->surname;
+        $newsletter->slug = str_random(10);
         $newsletter->region_id = $request->region_id;
         $newsletter->email = $request->email;
         $newsletter->active = 1;
@@ -110,7 +111,7 @@ class NewslettersController extends Controller
         $text = '*'.$newsletter->name.' '.$newsletter->surname.'* - *'.$newsletter->email.'* si è iscritto alla * Newsletter *';
         TelegramAlert::dispatch($text, $request->disableNotification, $request->toArray());
 
-        return redirect()->route('newsletter-show', $newsletter)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
+        return redirect()->route('newsletter-show', $newsletter->slug)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
     }
 
     /**
@@ -119,10 +120,13 @@ class NewslettersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($newsletter)
+    public function show($slug)
     {
-        $n = Newsletter::find($newsletter);
-        return view('newsletters.show')->with(['newsletter' => $n]);
+        $n = Newsletter::where('slug', $slug)->first();
+        if($n){
+            return view('newsletters.show')->with(['newsletter' => $n]);
+        }
+        return 'no user found';
     }
 
     /**

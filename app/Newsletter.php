@@ -9,7 +9,7 @@ class Newsletter extends Model
 {
 	use SoftDeletes;
 	
-    protected $fillable = ['name', 'surname', 'email', 'region_id'];
+    protected $fillable = ['name', 'surname','slug', 'email', 'region_id'];
 
 
     public function region()
