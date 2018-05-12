@@ -32,8 +32,8 @@ class NewslettersTest extends TestCase
         foreach($news as $n){
             $res = $this->get(route('newsletter-show', $n->slug));
             $this->assertContains($n->email, $res->getContent());
-            $this->assertContains($n->name, $res->getContent());
-            $this->assertContains($n->surname, $res->getContent());
+            $this->assertContains(htmlspecialchars($n->name, ENT_QUOTES), $res->getContent());
+            $this->assertContains(htmlspecialchars($n->surname, ENT_QUOTES), $res->getContent());
         }
     }
 }
