@@ -192,8 +192,8 @@ class ViewsTest extends TestCase
         $res = $this->actingAs($this->user)->get(route('courses.export', $course));
         
         $res->assertSee($partecipantDoesntShare->city);
-        $res->assertSee($partecipantDoesntShare->name);
-        $res->assertSee($partecipantDoesntShare->surname);
+        $res->assertSee(htmlspecialchars($partecipantDoesntShare->name, ENT_QUOTES));
+        $res->assertSee(htmlspecialchars($partecipantDoesntShare->surname, ENT_QUOTES));
         $res->assertDontSee($partecipantDoesntShare->phone);
         $res->assertDontSee($partecipantDoesntShare->email);
         $res->assertSee('NON CONDIVIDE');
@@ -201,7 +201,7 @@ class ViewsTest extends TestCase
         $res->assertSee($partecipantShares->email);
         $res->assertSee($partecipantShares->phone);
         $res->assertSee($partecipantShares->city);
-        $res->assertSee($partecipantShares->name);
-        $res->assertSee($partecipantShares->surname);
+        $res->assertSee(htmlspecialchars($partecipantShares->name, ENT_QUOTES));
+        $res->assertSee(htmlspecialchars($partecipantShares->surname, ENT_QUOTES));
     }
 }

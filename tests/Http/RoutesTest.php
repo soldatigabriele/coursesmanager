@@ -18,7 +18,7 @@ class RoutesTest extends TestCase
 
     protected function setUp()
     {
-        Parent::setUp();
+        parent::setUp();
         $this->user = factory('App\User')->create();
         $this->course = factory('App\Course')->create();
         $this->partecipant = factory('App\Partecipant')->create();

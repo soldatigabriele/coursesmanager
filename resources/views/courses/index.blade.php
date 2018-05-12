@@ -136,9 +136,12 @@
                                             {{ $p->region['name'] }}
                                         </td>
                                         @foreach($p->getData() as $key => $value)
-
                                         <td>
+                                        @if($key == 'shares')
+                                            @php echo ($value == 1)? "Si" : "No"; @endphp
+                                        @else
                                             {{ ($value) }}
+                                        @endif
                                         </td>
                                         @endforeach                                        
                                     </tr>
