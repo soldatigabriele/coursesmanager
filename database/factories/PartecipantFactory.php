@@ -23,8 +23,7 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
 	$data['transport'] = $trans[mt_rand(0, count($trans) - 1)];
 	$source = ['facebook', 'sito', 'amici'];
 	$data['source'] = $source[mt_rand(0, count($source) - 1)];
-	$shares = ['Si', 'No'];
-	$data['shares'] = $shares[mt_rand(0, count($shares) - 1)];
+	$data['shares'] = random_int(0, 1);
 	$data['city'] = $faker->city;
 	$data['fiscal_code'] = $faker->taxId;
 	$food = ['veget', 'vegano', 'onnivoro'];

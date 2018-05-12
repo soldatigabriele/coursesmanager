@@ -123,8 +123,8 @@
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 form-group">
               <select name="shares" class="form-control">
-                <option value="si">si</option>
-                <option value="no">no</option>
+                <option value="1">si</option>
+                <option value="0">no</option>
               </select>
             </div>
           </div>

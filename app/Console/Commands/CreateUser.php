@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Manager;
+use App\User;
 use Illuminate\Console\Command;
 
-class CreateManager extends Command
+class CreateUser extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:CreateManager';
+    protected $signature = 'command:CreateUser';
 
     /**
      * The console command description.
@@ -44,6 +44,10 @@ class CreateManager extends Command
         $is_active = $this->choice('Is the manager active? ',['no','yes']);
         $this->info($is_active);
         $is_active = ($is_active == 'yes') ? true : false;
+        $email = $this->ask('What is the user email?');
+        $this->info($email);
+        $password = $this->ask('What is the user password?');
+        $this->info($password);
 
         //generates the apikey
         $token = strtolower(md5(uniqid())).strtolower(md5(uniqid()));
@@ -51,12 +55,14 @@ class CreateManager extends Command
 
         $this->info('This is his API token: '.$token);
 
-        $manager = new Manager;
+        $manager = new User;
         $manager->name = $name;
+        $manager->email = $email;
+        $manager->telegram_chat_id = 0;
+        $manager->telegram_settings = "{}";
+        $manager->password = bcrypt($password);
         $manager->api_token = $token;
         $manager->active = $is_active;
-        
         $manager->save();
-
     }
 }

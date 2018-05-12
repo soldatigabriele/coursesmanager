@@ -32,8 +32,7 @@ class RoutesTest extends TestCase
         $data['transport'] = $trans[mt_rand(0, count($trans) - 1)];
         $source = ['facebook', 'sito', 'amici'];
         $data['source'] = $source[mt_rand(0, count($source) - 1)];
-        $shares = ['si', 'no'];
-        $data['shares'] = $shares[mt_rand(0, count($shares) - 1)];
+        $data['shares'] = random_int(0, 1);
         $data['city'] = $this->faker->city;
         $data['fiscal_code'] = $this->faker->taxId;
         $food = ['veget', 'vegano', 'onnivoro'];

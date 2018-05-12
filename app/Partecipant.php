@@ -14,12 +14,12 @@ class Partecipant extends Model
 
     public function courses()
     {
-    	return $this->belongsToMany('App\Course')->withTimestamps();
+        return $this->belongsToMany('App\Course')->withTimestamps();
     }
 
     public function getData()
     {
-    	return json_decode($this->data);
+        return json_decode($this->data);
     }
 
     public function getCityAttribute()
@@ -29,7 +29,7 @@ class Partecipant extends Model
 
     public function getSharesAttribute()
     {
-        return (isset(json_decode($this->data)->shares)) ? json_decode($this->data)->shares : '';
+        return (isset(json_decode($this->data)->shares)) ? json_decode($this->data)->shares : '1';
     }
 
     public function getTransportAttribute()

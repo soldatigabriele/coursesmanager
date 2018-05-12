@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(RegionsTableSeeder::class);
-        if(env('APP_ENV') !== 'production'){
-            factory('App\Course', random_int(4, 20))->create(['user_id' => 2])->each(function($u){
+        if (env('APP_ENV') !== 'production') {
+            factory('App\Course', random_int(4, 20))->create(['user_id' => 2])->each(function ($u) {
                 $u->partecipants()->saveMany(factory('App\Partecipant', random_int(0, 10))->create());
             });
-            factory('App\Course', random_int(4, 10))->create(['user_id' => 1])->each(function($u){
+            factory('App\Course', random_int(4, 10))->create(['user_id' => 1])->each(function ($u) {
                 $u->partecipants()->saveMany(factory('App\Partecipant', random_int(0, 10))->create());
             });
             factory('App\Newsletter', 100)->create();

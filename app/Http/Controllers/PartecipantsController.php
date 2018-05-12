@@ -151,7 +151,7 @@ class PartecipantsController extends Controller
         ];
 
 
-        if(env('REQUIRE_CAPTCHA') === 'yes' ){
+        if (env('REQUIRE_CAPTCHA') === 'yes') {
             $rules['g-recaptcha-response'] = 'required|captcha';
         }
 

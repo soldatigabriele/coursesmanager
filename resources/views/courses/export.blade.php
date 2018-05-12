@@ -112,10 +112,10 @@
                                             {{ $p->surname }}
                                         </td>
                                         <td>
-                                            @if($p->shares == 'Si') {{ $p->email }} @else {{'NON CONDIVIDE'}} @endif
+                                            @if($p->shares) {{ $p->email }} @else {{'NON CONDIVIDE'}} @endif
                                         </td>
                                         <td>
-                                            @if($p->shares == 'Si') {{ $p->phone }} @else {{'NON CONDIVIDE'}} @endif
+                                            @if($p->shares) {{ $p->phone }} @else {{'NON CONDIVIDE'}} @endif
                                         </td>
                                         <td>
                                             {{ $p->city }}

@@ -167,20 +167,20 @@ class ViewsTest extends TestCase
     public function test_auth_user_can_see_export_tables()
     {
         $user = factory('App\User')->create();
-        $phone = random_int(1111111111,9999999999);
-        $phone2 = random_int(1111111111,9999999999);
+        $phone = random_int(1111111111, 9999999999);
+        $phone2 = random_int(1111111111, 9999999999);
         $partecipantShares = factory('App\Partecipant')->create(
             ['data' => json_encode([
-                'shares' => 'Si',
+                'shares' => 1,
                 ])
             ]);
         $partecipantDoesntShare = factory('App\Partecipant')->create(
             ['data' => json_encode([
-                'shares' => 'No',
+                'shares' => 0,
                 ])
             ]);
 
-        $course = factory('App\Course')->create(['user_id' => $user->id])->each(function($u) use ($partecipantShares, $partecipantDoesntShare){
+        $course = factory('App\Course')->create(['user_id' => $user->id])->each(function ($u) use ($partecipantShares, $partecipantDoesntShare){
             $u->partecipants()->save(
                 $partecipantShares
             );
@@ -189,7 +189,7 @@ class ViewsTest extends TestCase
             );
         });
 
-        $res = $this->actingAs($this->user)->get(route('courses.export', $course ));
+        $res = $this->actingAs($this->user)->get(route('courses.export', $course));
         
         $res->assertSee($partecipantDoesntShare->city);
         $res->assertSee($partecipantDoesntShare->name);
