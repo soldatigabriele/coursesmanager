@@ -18,7 +18,7 @@ class ViewsTest extends TestCase
 
     protected function setUp()
     {
-        Parent::setUp();
+        parent::setUp();
         $this->user = factory('App\User')->create();
         $this->faker = Factory::create('it_IT');
     }
@@ -87,7 +87,7 @@ class ViewsTest extends TestCase
         });
 
         $this->actingAs($user);
-        $res = $this->get(route('course-index'));
+        $res = $this->get(route('courses.index'));
 
         foreach($courses as $c){
             $res->assertSee($c->long_id);
@@ -107,7 +107,7 @@ class ViewsTest extends TestCase
         $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::tomorrow()]);
         $old_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->subDays(10)]);
         $this->actingAs($user);
-        $res = $this->get(route('course-index'));
+        $res = $this->get(route('courses.index'));
 
         $res->assertSee($course->long_id);
         $res->assertSee($tomorrow_course->long_id);
@@ -152,10 +152,56 @@ class ViewsTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $res = $this->get(route('course-index'))
+        $res = $this->get(route('courses.index'))
             ->assertStatus(200);
         foreach($courses as $c){
             $res->assertDontSee($c->long_id);
         }
+    }
+
+    /**
+     * Auth users can see export table and right values are shown or hidden
+     *
+     * @return void
+     */
+    public function test_auth_user_can_see_export_tables()
+    {
+        $user = factory('App\User')->create();
+        $phone = random_int(1111111111,9999999999);
+        $phone2 = random_int(1111111111,9999999999);
+        $partecipantShares = factory('App\Partecipant')->create(
+            ['data' => json_encode([
+                'shares' => 'Si',
+                ])
+            ]);
+        $partecipantDoesntShare = factory('App\Partecipant')->create(
+            ['data' => json_encode([
+                'shares' => 'No',
+                ])
+            ]);
+
+        $course = factory('App\Course')->create(['user_id' => $user->id])->each(function($u) use ($partecipantShares, $partecipantDoesntShare){
+            $u->partecipants()->save(
+                $partecipantShares
+            );
+            $u->partecipants()->save(
+                $partecipantDoesntShare
+            );
+        });
+
+        $res = $this->actingAs($this->user)->get(route('courses.export', $course ));
+        
+        $res->assertSee($partecipantDoesntShare->city);
+        $res->assertSee($partecipantDoesntShare->name);
+        $res->assertSee($partecipantDoesntShare->surname);
+        $res->assertDontSee($partecipantDoesntShare->phone);
+        $res->assertDontSee($partecipantDoesntShare->email);
+        $res->assertSee('NON CONDIVIDE');
+
+        $res->assertSee($partecipantShares->email);
+        $res->assertSee($partecipantShares->phone);
+        $res->assertSee($partecipantShares->city);
+        $res->assertSee($partecipantShares->name);
+        $res->assertSee($partecipantShares->surname);
     }
 }

@@ -85,12 +85,9 @@
                             <div class="col-md-1">
                                 {{ $course->subs() }} / {{ $course->limit }}
                             </div>
-                            <div class="col-md-1">
-                            </div>
-                            <div class="col-md-1">
-                                <a role="button" class="btn btn-primary" href="{{route('course-edit', $course->id)}}">Modifica</a>
-                            </div>
-                            <div class="col-md-1">
+                            <div class="col-md-3 ">
+                                <a role="button" class="btn btn-warning" href="{{route('courses.edit', $course->id)}}">Modifica</a>
+                                <a role="button" class="btn btn-secondary" href="{{route('courses.export', $course->id)}}" >Esporta</a>
                                 <button type="submit" data-toggle="collapse" data-target="#partecipants-{{ $course->id }}" aria-expanded="false" aria-controls="collapseExample" class="btn btn-success">Mostra</button>
                             </div>
                             <!-- <div class="col-md-1">

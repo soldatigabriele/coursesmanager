@@ -3,14 +3,18 @@
 Auth::routes();
 
 Route::resource('courses', 'CoursesController', ['names' => [
-    'index' => 'course-index',
-    'create' => 'course-create',
-    'show' => 'course-show',
-    'destroy' => 'course-destroy',
-    'store' => 'course-store',
-    'edit' => 'course-edit',
-    'update' => 'course-update',
+    'index' => 'courses.index',
+    'create' => 'courses.create',
+    'show' => 'courses.show',
+    'destroy' => 'courses.destroy',
+    'store' => 'courses.store',
+    'edit' => 'courses.edit',
+    'update' => 'courses.update',
 ]]);
+Route::get('courses/{course}/export')
+    ->name('courses.export')
+    ->uses('CoursesController@export')
+    ->middleware('auth');
 
 Route::resource('partecipants', 'PartecipantsController', [
     'names' => [

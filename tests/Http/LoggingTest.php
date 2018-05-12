@@ -9,6 +9,8 @@ use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
 use App\ApplicationLog;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoggingTest extends TestCase
@@ -18,8 +20,7 @@ class LoggingTest extends TestCase
 
     protected function setUp()
     {
-        Parent::setUp();
-
+        parent::setUp();
         $this->faker = Factory::create('it_IT');
 
         $data = [];
@@ -54,6 +55,7 @@ class LoggingTest extends TestCase
 
     public function test_successful_partecipant_creation()
     {
+        Queue::fake();
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
         $res = $this->post(route('partecipant-store'), $this->newPartecipantData);

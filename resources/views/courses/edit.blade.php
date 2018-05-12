@@ -30,13 +30,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a role="button" href="{{route('course-index')}}" class="btn btn-outline-secondary">Indietro</a>
+            <a role="button" href="{{route('courses.index')}}" class="btn btn-outline-secondary">Indietro</a>
             <div class="clearfix"></div><br>
             <div class="card">
                 <div class="card-header">MODIFICA CORSO {{ strtoupper($course->long_id) }}</div>
                 <div class="card-body">
 
-                  <form action="{{ route('course-update', $course->id) }}" method="post" id="formprova" name="a">
+                  <form action="{{ route('courses.update', $course->id) }}" method="post" id="formprova" name="a">
                       @csrf
                       @method('PUT')
                       <table>
@@ -64,9 +64,9 @@
                            <div class="col">
                             <label> Numero iscritti (indicativo)</label>
                            <div><select name="limit" class="form-control">
-                             <?php
+                             @php
                              for($i=5;$i<20;$i++){echo '<option value="'.$i.'">'.$i.'</option>';}
-                                 ?>
+                            @endphp
                              <option value="20" selected="selected">20</option>
                              <option value="99">illimitato</option>
                            </select>

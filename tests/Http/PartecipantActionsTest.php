@@ -9,16 +9,16 @@ use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
 use App\ApplicationLog;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PartecipantActionsTest extends TestCase
 {
-
     use RefreshDatabase;
 
     protected function setUp()
     {
-        Parent::setUp();
+        parent::setUp();
         $this->user = factory('App\User')->create();
 
         factory('App\Course', 10)->create();
@@ -64,6 +64,7 @@ class PartecipantActionsTest extends TestCase
 
     public function test_unath_user_can_subscribe_to_newsletter()
     {
+        Queue::fake();
         $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
         $newNewsletter = Newsletter::where('email', $this->newNewsletterData['email'])->first();
         $this->assertInstanceOf('App\Newsletter', $newNewsletter);
@@ -71,6 +72,7 @@ class PartecipantActionsTest extends TestCase
 
     public function test_unauth_user_can_subscribe_to_a_course()
     {
+        Queue::fake();
         $res = $this->post(route('partecipant-store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
@@ -78,5 +80,4 @@ class PartecipantActionsTest extends TestCase
         $course = $newPartecipant->courses->first()->id;
         $this->assertEquals($course, $this->newPartecipantData['course_id']);
     }
-
 }

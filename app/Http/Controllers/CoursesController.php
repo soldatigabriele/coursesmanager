@@ -55,7 +55,7 @@ class CoursesController extends Controller
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
             (new Logger)->log('0', 'Course Creation Error', json_encode($data), $request);
-            return redirect(route('course-create'))
+            return redirect(route('courses.create'))
                         ->withErrors($validation)
                         ->withInput();
         }
@@ -146,7 +146,7 @@ class CoursesController extends Controller
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
             (new Logger)->log('0', 'Course Update Error', json_encode($data), $request);
-            return redirect(route('course-edit', $course->id))
+            return redirect(route('courses.edit', $course->id))
                         ->withErrors($validation);
         }
 
@@ -168,12 +168,23 @@ class CoursesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
     public function destroy(Course $course)
     {
         $course->delete();
         return back()->with('deleted', 'Corso '.$course->long_id.' eliminato correttamente');
+    }
+
+    /**
+     * Show the table to be exported
+     *
+     * @param  \App\Course $course
+     * @return \Illuminate\Http\Response
+     */
+    public function export(Course $course)
+    {
+        return view('courses.export')->with(['course' => $course]);
     }
 }

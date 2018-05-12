@@ -195,7 +195,7 @@ class PartecipantsController extends Controller
 
         // send and log the message
         $c = Course::find($request->course_id);
-        $url = url(route('course-index').'?course_id='. $c->id.'&partecipant_id='. $p->fresh()->id);
+        $url = url(route('courses.index').'?course_id='. $c->id.'&partecipant_id='. $p->fresh()->id);
         $text = '*'.$p->name.' '.$p->surname.'* - *'.$p->email.'* *'.$p->phone.'* si è iscritto al corso *'.$c->long_id.'* del '.$c->date.' [Vai alla scheda]('.$url.')';
         // send and log the message
         $disableNotification = ($request->disableNotification)?? false;

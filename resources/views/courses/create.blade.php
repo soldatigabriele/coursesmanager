@@ -37,7 +37,7 @@
           </div>
           @endif
           <div class="container">
-            <form action="{{ route('course-store') }}" method="post" id="formprova" name="a">
+            <form action="{{ route('courses.store') }}" method="post" id="formprova" name="a">
               @csrf
               <div class="row">
                 <div class="col">
@@ -65,9 +65,9 @@
                 <div class="col">
                   <label> Numero iscritti (indicativo)</label>
                   <select name="limit" class="form-control">
-                   <?php
+                   @php
                    for($i=5;$i<20;$i++){echo '<option value="'.$i.'">'.$i.'</option>';}
-                     ?>
+                    @endphp
                    <option value="20" selected="selected">20</option>
                    <option value="99">illimitato</option>
                  </select>

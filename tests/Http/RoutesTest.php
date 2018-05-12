@@ -142,31 +142,35 @@ class RoutesTest extends TestCase
     public function test_unath_user_dont_reach_protected_courses_routes()
     {
 
-        $this->get(route('course-index'))
+        $this->get(route('courses.index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         
-        $this->get(route('course-show', $this->course->id))
+        $this->get(route('courses.show', $this->course->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         
-        $this->get(route('course-create'))
+        $this->get(route('courses.create'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
-        $this->post(route('course-store'), [])
+        $this->post(route('courses.store'), [])
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
-        $this->delete(route('course-destroy', $this->course->id))
+        $this->delete(route('courses.destroy', $this->course->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
-        $this->get(route('course-edit', $this->course->id))
+        $this->get(route('courses.edit', $this->course->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
-        $this->put(route('course-update', $this->course->id))
+        $this->put(route('courses.update', $this->course->id))
+            ->assertStatus(302)
+            ->assertRedirect(route('login'));
+
+        $this->get(route('courses.export', $this->course->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
@@ -193,16 +197,19 @@ class RoutesTest extends TestCase
         $this->get(route('partecipant-create'))
             ->assertStatus(200);
         
-        $this->get(route('course-index'))
+        $this->get(route('courses.index'))
             ->assertStatus(200);
         
-        $this->get(route('course-show', $this->course->id))
+        $this->get(route('courses.show', $this->course->id))
             ->assertStatus(200);
         
-        $this->get(route('course-create'))
+        $this->get(route('courses.create'))
             ->assertStatus(200);
 
-        $this->get(route('course-edit', $this->course->id))
+        $this->get(route('courses.edit', $this->course->id))
+            ->assertStatus(200);
+
+        $this->get(route('courses.export', $this->course->id))
             ->assertStatus(200);
 
         $this->get(route('newsletter-index'))

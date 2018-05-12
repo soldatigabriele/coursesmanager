@@ -22,6 +22,21 @@ class Partecipant extends Model
     	return json_decode($this->data);
     }
 
+    public function getCityAttribute()
+    {
+        return (isset(json_decode($this->data)->city)) ? json_decode($this->data)->city : '';
+    }
+
+    public function getSharesAttribute()
+    {
+        return (isset(json_decode($this->data)->shares)) ? json_decode($this->data)->shares : '';
+    }
+
+    public function getTransportAttribute()
+    {
+        return (isset(json_decode($this->data)->transport)) ? json_decode($this->data)->transport : '';
+    }
+
     public function region()
     {
         return $this->belongsTo('App\Region');

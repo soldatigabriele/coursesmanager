@@ -15,10 +15,9 @@ class CoursesTest extends TestCase
 
     protected function setUp()
     {
-        Parent::setUp();
+        parent::setUp();
         $this->user = factory('App\User')->create();
         $this->faker = Factory::create('it_IT');
-
     }
 
     /**
@@ -67,7 +66,7 @@ class CoursesTest extends TestCase
         $end = (Carbon::parse($courseData['end_date'])->format('d/m/Y'));
         $courseData['start_date'] = $start;
         $courseData['end_date'] = $end;
-        $res = $this->put(route('course-update', $course->id), $courseData );
+        $res = $this->put(route('courses.update', $course->id), $courseData );
 
         $this->assertEquals($courseData['description'], $course->fresh()->description);
     }

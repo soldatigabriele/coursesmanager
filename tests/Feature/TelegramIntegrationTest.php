@@ -17,12 +17,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TelegramIntegrationTest extends TestCase
 {
-
     use RefreshDatabase;
 
     protected function setUp()
     {
-        Parent::setUp();
+        parent::setUp();
         $this->user = factory('App\User')->create();
 
         $this->faker = Factory::create('it_IT');
@@ -69,7 +68,7 @@ class TelegramIntegrationTest extends TestCase
     public function test_newsletter_subscription_triggers_telegram_alert()
     {
         Queue::fake();
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
+        $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
         Queue::assertPushed(TelegramAlert::class, 1);
     }
 
@@ -85,7 +84,7 @@ class TelegramIntegrationTest extends TestCase
     public function test_telegram_message_is_sent_after_newsletter()
     {
         $this->newNewsletterData['disableNotification'] = 'true';
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
+        $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
         $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
         $this->assertTrue(json_decode($log->value)->ok);
         $this->assertContains($this->newNewsletterData['email'], $log->value);
@@ -93,13 +92,12 @@ class TelegramIntegrationTest extends TestCase
         $this->assertContains($this->newNewsletterData['surname'], $log->value);
     }
 
-
     public function test_telegram_message_is_sent_after_partecipant_subscription()
     {
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
         $this->newPartecipantData['disableNotification'] = 'true';
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData );
+        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
 
         $log = ApplicationLog::latest()->where('description', 'Partecipant Subscription Success')->first();
         $this->assertEquals(1, $log->status);
@@ -107,6 +105,4 @@ class TelegramIntegrationTest extends TestCase
         $this->assertContains($this->newPartecipantData['name'], $log->value);
         $this->assertContains($this->newPartecipantData['surname'], $log->value);
     }
-
-
 }

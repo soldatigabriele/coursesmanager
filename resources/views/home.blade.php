@@ -161,7 +161,7 @@
                                         {{ $p->phone }}
                                     </td>
                                     <td class="table-buttons">
-                                        <a role="button" href="{{ route('course-index', ['course_id' =>$p->courses()->latest()->first()->id, 'partecipant_id' => $p->id] ) }}" class="btn btn-outline-dark btn-sm">{{ $p->courses()->latest()->first()->long_id }}</a>
+                                        <a role="button" href="{{ route('courses.index', ['course_id' =>$p->courses()->latest()->first()->id, 'partecipant_id' => $p->id] ) }}" class="btn btn-outline-dark btn-sm">{{ $p->courses()->latest()->first()->long_id }}</a>
                                     </td>
                                     <td>
                                         {{ $p->created_at->diffForHumans() }}
