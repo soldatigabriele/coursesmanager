@@ -16,6 +16,8 @@ class Telegram
         \Log::info('chat id:');
         \Log::info($chat_id);
         $chat_id = '31019486';
+        \Log::info('chat id again:');
+        \Log::info($chat_id);
         $disable_notification = (env('APP_ENV') === 'testing')? 'true' : 'false';
         
         if($chat_id == null){
