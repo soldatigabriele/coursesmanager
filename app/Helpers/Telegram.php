@@ -10,19 +10,16 @@ class Telegram
     {
         $client = new \GuzzleHttp\Client();
 
-        $disable_notification = 'false';
         $chat_id = app('config')->get('app.telegram.chat_id');
-
-        if (env('APP_ENV') === 'testing') {
-            $disable_notification = true;
-        }
+        \Log::info('chat id:');
+        \Log::info($chat_id);
+        $disable_notification = (env('APP_ENV') === 'testing')? 'true' : 'false';
+        
         if(!$chat_id){
             return json_encode(['error' => 'no chat id selected']);
         }
         $url = env('TELEGRAM_URI') . env('TELEGRAM_TOKEN') . '/sendMessage?&disable_notification=' . $disable_notification . '&parse_mode=markdown&&chat_id=' . $chat_id . '&text=' . urlencode($text);
         $response = $client->request('GET', $url, ['Accept' => 'application/json']);
-        $json = $response->getBody();
-
-        return $json;
+        return $response->getBody();
     }
 }
