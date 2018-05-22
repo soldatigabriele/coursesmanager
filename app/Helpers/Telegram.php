@@ -11,7 +11,6 @@ class Telegram
         $client = new \GuzzleHttp\Client();
 
         $chat_id = app('config')->get('app.telegram.chat_id');
-        
         $disable_notification = (env('APP_ENV') === 'testing')? 'true' : 'false';
         
         if($chat_id == null){
