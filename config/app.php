@@ -5,7 +5,7 @@ return [
     'telegram' => [
 
         // la mia chat id di default
-        'chat_id' => env('TELEGRAM_CHAT', '31019486'),
+        'chat_id' => env('TELEGRAM_CHAT', null),
 
     ],
 
