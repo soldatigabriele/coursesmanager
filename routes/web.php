@@ -43,6 +43,10 @@ Route::resource('newsletters', 'NewslettersController', [
 ]);
 Route::get('newsletters/{slug}', 'NewslettersController@show')->name('newsletter-show');
 
+Route::get('corsi/scheda/test', function () {
+        return view('forms.scheda-test')->with(['regions' => \App\Region::all(), 'courses' => \App\Course::where('end_date', '>', \Carbon\Carbon::today())->get()]);
+    })->name('scheda-test')
+    ->middleware('auth');
 Route::get('corsi/scheda/1', 'PartecipantsController@scheda1')->name('scheda-1');
 Route::get('corsi/scheda/2', 'PartecipantsController@scheda2')->name('scheda-2');
 
