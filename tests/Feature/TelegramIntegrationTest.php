@@ -64,12 +64,12 @@ class TelegramIntegrationTest extends TestCase
     }
 
 
-    public function test_newsletter_subscription_triggers_telegram_alert()
-    {
-        Queue::fake();
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
-        Queue::assertPushed(TelegramAlert::class, 1);
-    }
+    // public function test_newsletter_subscription_triggers_telegram_alert()
+    // {
+    //     Queue::fake();
+    //     $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
+    //     Queue::assertPushed(TelegramAlert::class, 1);
+    // }
 
     public function test_participant_subscription_triggers_telegram_alert()
     {
@@ -80,16 +80,16 @@ class TelegramIntegrationTest extends TestCase
         Queue::assertPushed(TelegramAlert::class, 1);
     }
 
-    public function test_telegram_message_is_sent_after_newsletter()
-    {
-        $this->newNewsletterData['disableNotification'] = 'true';
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
-        $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
-        $this->assertTrue(json_decode($log->value)->ok);
-        $this->assertContains($this->newNewsletterData['email'], $log->value);
-        $this->assertContains($this->newNewsletterData['name'], $log->value);
-        $this->assertContains($this->newNewsletterData['surname'], $log->value);
-    }
+    // public function test_telegram_message_is_sent_after_newsletter()
+    // {
+    //     $this->newNewsletterData['disableNotification'] = 'true';
+    //     $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
+    //     $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
+    //     $this->assertTrue(json_decode($log->value)->ok);
+    //     $this->assertContains($this->newNewsletterData['email'], $log->value);
+    //     $this->assertContains($this->newNewsletterData['name'], $log->value);
+    //     $this->assertContains($this->newNewsletterData['surname'], $log->value);
+    // }
 
     public function test_telegram_message_is_sent_after_partecipant_subscription()
     {
