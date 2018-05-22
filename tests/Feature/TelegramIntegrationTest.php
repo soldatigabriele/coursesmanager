@@ -10,6 +10,7 @@ use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
 use App\ApplicationLog;
+use App\Helpers\Telegram;
 use App\Jobs\TelegramAlert;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
@@ -103,5 +104,15 @@ class TelegramIntegrationTest extends TestCase
         $this->assertContains($this->newPartecipantData['email'], $log->value);
         $this->assertContains($this->newPartecipantData['name'], $log->value);
         $this->assertContains($this->newPartecipantData['surname'], $log->value);
+    }
+
+    /**
+     * Test an error is returned when no chat id is set in the config or in the env
+     */
+    public function test_error_is_logged_if_no_chatId_is_found_in_env()
+    {
+        app('config')->set('app.telegram.chat_id', null);
+        $response = Telegram::alert('text', true);
+        $this->assertContains('no chat id selected', $response);
     }
 }
