@@ -68,7 +68,7 @@ class TelegramIntegrationTest extends TestCase
     // public function test_newsletter_subscription_triggers_telegram_alert()
     // {
     //     Queue::fake();
-    //     $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
+    //     $res = $this->post(route('newsletter.store'), $this->newNewsletterData);
     //     Queue::assertPushed(TelegramAlert::class, 1);
     // }
 
@@ -77,14 +77,14 @@ class TelegramIntegrationTest extends TestCase
         Queue::fake();
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData);
         Queue::assertPushed(TelegramAlert::class, 1);
     }
 
     // public function test_telegram_message_is_sent_after_newsletter()
     // {
     //     $this->newNewsletterData['disableNotification'] = 'true';
-    //     $res = $this->post(route('newsletter-store'), $this->newNewsletterData);
+    //     $res = $this->post(route('newsletter.store'), $this->newNewsletterData);
     //     $log = ApplicationLog::latest()->where('description', 'Telegram Response')->first();
     //     $this->assertTrue(json_decode($log->value)->ok);
     //     $this->assertContains($this->newNewsletterData['email'], $log->value);
@@ -97,7 +97,7 @@ class TelegramIntegrationTest extends TestCase
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
         $this->newPartecipantData['disableNotification'] = 'true';
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData);
 
         $log = ApplicationLog::latest()->where('description', 'Partecipant Subscription Success')->first();
         $this->assertEquals(1, $log->status);

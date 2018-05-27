@@ -111,7 +111,7 @@ class NewslettersController extends Controller
         $text = '*'.$newsletter->name.' '.$newsletter->surname.'* - *'.$newsletter->email.'* si è iscritto alla * Newsletter *';
         // TelegramAlert::dispatch($text, $request->disableNotification, $request->toArray());
 
-        return redirect()->route('newsletter-show', $newsletter->slug)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
+        return redirect()->route('newsletter.show', $newsletter->slug)->with('status', 'Iscrizione alla newsletter avvenuta con successo!');
     }
 
     /**

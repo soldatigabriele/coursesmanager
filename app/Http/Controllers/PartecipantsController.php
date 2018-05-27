@@ -31,30 +31,6 @@ class PartecipantsController extends Controller
      */
     public function index(Request $request)
     {
-
-        // $myPartecipants = Partecipant::select('partecipants.*')
-        // ->join('course_partecipant', 'course_partecipant.partecipant_id', '=', 'partecipants.id')
-        // ->join('courses', 'courses.id', '=', 'course_partecipant.course_id')
-        // ->where('courses.user_id', Auth::user()->id)
-        // ->paginate(10);
-
-        //unire partecipanti e newsletter
-        // selezionando distinct mail 
-
-        
-        // if(isset($request->find)){
-        //     $parts = User::partecipants();
-        //         // ->where('email', 'like', '%' . $request->email . '%');
-        //     $parts->filter(function ($item) use ($productName) {
-        //         return false !== preg_match($item->email, $request->email);
-        //     )
-        //     dd($parts);
-        //     $news = Newsletter::all()
-        //         ->where('email', 'like', '%' . $request->email . '%')->all();
-        //     $all = array_merge($parts, $news);
-        //     $emails = [];
-        // }else{
-
         $parts = User::partecipants();
         $news = Newsletter::all(); 
 
@@ -64,19 +40,11 @@ class PartecipantsController extends Controller
             $parts = $parts->filter(function($item, $value) use ($region_id){
                 return $item->region['id'] == $region_id;
             });
-            $news = Newsletter::where('region_id', $region_id)->get();
         }
-
-        $all = $parts->merge($news);
         // get the emails
         $emails = $parts->pluck('email');
-        $news_emails = $news->pluck('email');
-        $emails = $emails->merge($news_emails);
         $regions = Region::all();
-        // }
-        
-        $all = (new CollectionHelpers())->paginate($all);
-
+        $all = (new CollectionHelpers())->paginate($parts);
 
         return view('partecipants.index')->with(['regions'=>$regions, 'region_id'=>$region_id, 'partecipants'=> $all, 'emails' => $emails, 'regions'=>Region::all()]);
     }
@@ -200,7 +168,7 @@ class PartecipantsController extends Controller
         // send and log the message
         $disableNotification = ($request->disableNotification)?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
-        return redirect()->route('partecipant-show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
+        return redirect()->route('partecipant.show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
     }
 
 

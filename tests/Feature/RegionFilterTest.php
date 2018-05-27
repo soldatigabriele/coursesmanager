@@ -33,14 +33,14 @@ class RegionFilterTest extends TestCase
     {
         $courses = factory('App\Course')->create(['user_id' => $this->user->id])
         ->each(function($u){
-            $u->partecipants()->saveMany(factory('App\Partecipant', 2)->create(['region_id'=>1]));
-            $u->partecipants()->saveMany(factory('App\Partecipant', 2)->create(['region_id'=>2]));
+            $u->partecipants()->saveMany(factory('App\Partecipant', 3)->create(['region_id'=>1]));
+            $u->partecipants()->saveMany(factory('App\Partecipant', 3)->create(['region_id'=>2]));
         });
         $news_one = factory('App\Newsletter', 3)->create(['name'=>'NEWS','region_id'=>1]);
         $news_two = factory('App\Newsletter', 3)->create(['name'=>'NewsZZZ','region_id'=>2]);
 
         $this->actingAs($this->user);
-        $res = $this->get(route('partecipant-index', ['find'=>'Ricerca', 'region_id' => 1]));
+        $res = $this->get(route('partecipant.index', ['find'=>'Ricerca', 'region_id' => 1]));
 
         $partecipants_one = Partecipant::where('region_id', 1)->get();
         $partecipants_two = Partecipant::where('region_id', 2)->get();
@@ -51,10 +51,10 @@ class RegionFilterTest extends TestCase
         foreach($partecipants_two as $p){
             $res->assertDontSee($p->name);
         }
-        foreach($news_one as $p){
-            $res->assertSee($p->name);
-        }
-        foreach($news_two as $p){
+        // foreach($news_one as $p){
+        //     $res->assertSee($p->name);
+        // }
+        foreach($news_two->merge($news_one) as $p){
             $res->assertDontSee($p->name);
         }
     }

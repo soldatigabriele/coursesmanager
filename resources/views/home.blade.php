@@ -65,7 +65,7 @@
                                 <h5>Lista Mail</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
-                                <a role="button" href="{{ route('partecipant-index') }}" class="btn btn-outline-info">Lista Mail</a>
+                                <a role="button" href="{{ route('partecipant.index') }}" class="btn btn-outline-info">Lista Mail</a>
                             </div>
                         </div>
                         <br>
@@ -74,7 +74,7 @@
                                 <h5>Newsletter</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
-                                <a role="button" href="{{ route('newsletter-index') }}" class="btn btn-outline-dark">Newsletter</a>
+                                <a role="button" href="{{ route('newsletter.index') }}" class="btn btn-outline-dark">Newsletter</a>
                             </div>
                         </div>
                         </div>
@@ -108,10 +108,10 @@
                     <br>
                     <div class="row justify-content-between">
                         <div class="col-3 schede-buttons">
-                            <a role="button" href="{{ route('newsletter-create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
+                            <a role="button" href="{{ route('newsletter.create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
                         </div>
                         <div class="col-6 link">
-                            <span id="copyTarget2">{{ route('newsletter-create') }}</span> 
+                            <span id="copyTarget2">{{ route('newsletter.create') }}</span> 
                         </div>
                         <div class="col-2">
                             <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
@@ -167,7 +167,7 @@
                                         {{ $p->created_at->diffForHumans() }}
                                     </td>
                                     <td>
-                                        <a role="button" href="{{ route('partecipant-show', $p->slug) }}" class="btn btn-outline-dark btn-sm">Dettagli</a>
+                                        <a role="button" href="{{ route('partecipant.show', $p->slug) }}" class="btn btn-outline-dark btn-sm">Dettagli</a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -55,22 +55,17 @@ class ViewsTest extends TestCase
      *
      * @return void
      */
-    public function test_partecipants_and_newsletters_are_shown_in_mail_page()
+    public function test_partecipants_are_shown_in_mail_page()
     {
         $partecipants = collect([]);
         $partecipants = factory('App\Partecipant')->create(['email'=>'test@test.com']);
         $course = factory('App\Course')->create(['user_id' => $this->user->id ]);
-
         $partecipants->each(function($item) use ($course){
             $course->partecipants()->save($item);
         });
-
-        $news =  factory('App\Newsletter')->create(['email' => 'testNewsletter@test.com' ]);
         $this->actingAs($this->user);
-        $res = $this->get(route('partecipant-index'))
+        $res = $this->get(route('partecipant.index'))
             ->assertStatus(200);
-
-        $res->assertSee('testNewsletter@test.com');
         $res->assertSee('test@test.com');
     }
 

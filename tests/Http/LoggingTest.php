@@ -57,7 +57,7 @@ class LoggingTest extends TestCase
         Queue::fake();
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData);
 
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $log = ApplicationLog::latest()->first();
@@ -75,7 +75,7 @@ class LoggingTest extends TestCase
 
     public function test_unsuccessful_partecipant_creation_empty_fields()
     {
-        $res = $this->post(route('partecipant-store'), []);
+        $res = $this->post(route('partecipant.store'), []);
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $log = ApplicationLog::latest()->first();
 
@@ -99,7 +99,7 @@ class LoggingTest extends TestCase
     {
         $this->newPartecipantData['email'] = $this->faker->unique()->safeEmail;
         $this->newPartecipantData['email_again'] = $this->faker->unique()->safeEmail;
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData);
 
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $log = ApplicationLog::latest()->first();
@@ -118,7 +118,7 @@ class LoggingTest extends TestCase
     public function test_unsuccessful_partecipant_creation_mail_incorrect()
     {
         $this->newPartecipantData['email'] = $this->faker->name;
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData);
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData);
 
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $log = ApplicationLog::latest()->first();

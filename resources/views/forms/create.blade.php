@@ -30,7 +30,7 @@
           </div>
           @endif
           
-          <form action="{{ route('partecipant-store') }}" method="post" id='i-recaptcha'>
+          <form action="{{ route('partecipant.store') }}" method="post" id='i-recaptcha'>
                 {{ csrf_field() }}
             
                 @yield('formcontent')

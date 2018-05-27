@@ -64,7 +64,7 @@ class PartecipantActionsTest extends TestCase
     public function test_unath_user_can_subscribe_to_newsletter()
     {
         Queue::fake();
-        $res = $this->post(route('newsletter-store'), $this->newNewsletterData );
+        $res = $this->post(route('newsletter.store'), $this->newNewsletterData );
         $newNewsletter = Newsletter::where('email', $this->newNewsletterData['email'])->first();
         $this->assertInstanceOf('App\Newsletter', $newNewsletter);
     }
@@ -72,7 +72,7 @@ class PartecipantActionsTest extends TestCase
     public function test_unauth_user_can_subscribe_to_a_course()
     {
         Queue::fake();
-        $res = $this->post(route('partecipant-store'), $this->newPartecipantData)
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $this->assertInstanceOf('App\Partecipant', $newPartecipant);

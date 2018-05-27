@@ -38,7 +38,7 @@
                 <div class="card-header"><h4>Lista di tutti i corsisti </h4></div>
                     <div class="card-body">
                         <div class="col-md-12">
-                            <form action="{{ route('partecipant-index') }}" method="get" accept-charset="utf-8">
+                            <form action="{{ route('partecipant.index') }}" method="get" accept-charset="utf-8">
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
@@ -116,7 +116,7 @@
                                     </td>
                                     <td>
                                         @if($n->slug)
-                                            <a href="{{ route('partecipant-show', $n->slug) }}" role="button" class="btn btn-sm btn-outline-secondary">Corsista</a>
+                                            <a href="{{ route('partecipant.show', $n->slug) }}" role="button" class="btn btn-sm btn-outline-secondary">Corsista</a>
                                         @else 
                                             Newsletter
                                         @endif

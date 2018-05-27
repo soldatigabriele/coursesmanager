@@ -78,19 +78,19 @@ class RoutesTest extends TestCase
         $this->get(route('scheda-2'))
             ->assertStatus(200);
 
-        $this->get(route('partecipant-show', $this->partecipant->slug))
+        $this->get(route('partecipant.show', $this->partecipant->slug))
             ->assertStatus(200);
 
-        $res = $this->get(route('partecipant-show', 'non_existing_slug'))
+        $res = $this->get(route('partecipant.show', 'non_existing_slug'))
             ->assertStatus(404);
 
-        $this->get(route('newsletter-create'))
+        $this->get(route('newsletter.create'))
             ->assertStatus(200);
 
-        $this->get(route('newsletter-show', $this->newsletter->slug))
+        $this->get(route('newsletter.show', $this->newsletter->slug))
             ->assertStatus(200);
             
-        $res = $this->get(route('newsletter-show', 'non_existing_slug'))
+        $res = $this->get(route('newsletter.show', 'non_existing_slug'))
             ->assertStatus(404);
     }
 
@@ -101,7 +101,7 @@ class RoutesTest extends TestCase
      */
     public function test_unath_user_dont_reach_protected_newsletter_routes()
     {
-        $this->get(route('newsletter-index'))
+        $this->get(route('newsletter.index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
     }
@@ -115,7 +115,7 @@ class RoutesTest extends TestCase
     {
         $name = $this->partecipant->name;
 
-        $this->get(route('partecipant-index'))
+        $this->get(route('partecipant.index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         
@@ -123,16 +123,16 @@ class RoutesTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         
-        $this->delete(route('partecipant-destroy', $this->partecipant->id))
+        $this->delete(route('partecipant.destroy', $this->partecipant->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         $this->assertEquals($this->partecipant->deleted_at, null);
         
-        $this->get(route('partecipant-edit', $this->partecipant->id))
+        $this->get(route('partecipant.edit', $this->partecipant->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         
-        $this->put(route('partecipant-update', $this->partecipant->id), [])
+        $this->put(route('partecipant.update', $this->partecipant->id), [])
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         $this->assertEquals($this->partecipant->name, $name);
@@ -174,7 +174,7 @@ class RoutesTest extends TestCase
             ->assertRedirect(route('login'));
 
         // Doesnt exist yet
-        // $this->get(route('partecipant-edit', $this->partecipant->slug))
+        // $this->get(route('partecipant.edit', $this->partecipant->slug))
         //     ->assertStatus(200);
     }
 
@@ -187,10 +187,10 @@ class RoutesTest extends TestCase
     {        
         $this->actingAs($this->user);
         
-        $this->get(route('partecipant-index'))
+        $this->get(route('partecipant.index'))
             ->assertStatus(200);
         
-        $this->get(route('partecipant-show', $this->partecipant->slug))
+        $this->get(route('partecipant.show', $this->partecipant->slug))
             ->assertStatus(200);
         
         $this->get(route('partecipant-create'))
@@ -211,17 +211,17 @@ class RoutesTest extends TestCase
         $this->get(route('courses.export', $this->course->id))
             ->assertStatus(200);
 
-        $this->get(route('newsletter-index'))
+        $this->get(route('newsletter.index'))
             ->assertStatus(200);
         
-        $this->get(route('newsletter-create'))
+        $this->get(route('newsletter.create'))
             ->assertStatus(200);
     }
 
     public function test_update_new_partecipant()
     {
         $this->actingAs($this->user);
-        $this->put(route('partecipant-update', $this->partecipant->id), $this->newPartecipantData);
+        $this->put(route('partecipant.update', $this->partecipant->id), $this->newPartecipantData);
         $this->assertEquals($this->partecipant->fresh()->email, $this->newPartecipantData['email']);
     }
 
@@ -229,7 +229,7 @@ class RoutesTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $this->delete(route('partecipant-destroy', $this->partecipant->id))
+        $this->delete(route('partecipant.destroy', $this->partecipant->id))
             ->assertStatus(200);
         $this->assertNotEquals($this->partecipant->fresh()->deleted_at, null);
     }

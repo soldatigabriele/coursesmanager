@@ -17,4 +17,18 @@ class Newsletter extends Model
         return $this->belongsTo('App\Region');
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst(strtolower($value));
+    }
+    
+    public function setSurnameAttribute($value)
+    {
+        $this->attributes['surname'] = ucfirst(strtolower($value));
+    }
+    
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
 }

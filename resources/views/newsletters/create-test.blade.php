@@ -44,7 +44,7 @@
               $email = 'test@gmail.com';
           }
           @endphp
-          <form action="{{ route('newsletter-store') }}" method="post">
+          <form action="{{ route('newsletter.store') }}" method="post">
                 {{ csrf_field() }}
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-sm-offset-2 col-md-offset-3">
