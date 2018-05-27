@@ -51,7 +51,7 @@ class ViewsTest extends TestCase
     }
 
     /**
-     * New partecipants and newsletters are shown in the mail page
+     * New partecipants are shown in the mail page
      *
      * @return void
      */

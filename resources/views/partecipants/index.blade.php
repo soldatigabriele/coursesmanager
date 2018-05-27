@@ -44,40 +44,15 @@
                                         <div class="form-group">
                                         <label>Regione:</label>
                                         <select class="form-control" name="region_id">
-                                          <option value="empty"> - </option>
+                                          <option value=""> - </option>
                                           @foreach($regions as $region)
                                             <option value="{{ $region->id }}" @if($region_id == $region->id)selected @endif>{{ $region->name}}</option>
                                           @endforeach
                                         </select>
                                       </div>
                                     </div>
-                                    <!-- <div class="col">
-                                        <label>Nome:</label>
-                                        <div class="form-group">
-                                        <input type="text" name="name" id="name" class="form-control input-lg" placeholder="" value="">
-                                        </div>
-                                    </div>
                                     <div class="col">
-                                        <div class="form-group">
-                                            <label>Cognome:</label>
-                                            <input type="text" name="surname" id="surname" class="form-control input-lg" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label>Email:</label>
-                                            <input type="text" name="email" id="email" class="form-control input-lg" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label>Telefono:</label>
-                                            <input type="text" name="mobile" id="mobile" class="form-control input-lg" placeholder="" value="">
-                                        </div>
-                                    </div> -->
-                                    <div class="col">
-                                        {{ csrf_field() }}
-                                        <input class="btn btn-md btn-success ricerca" name="find" type="submit" value="Ricerca">
+                                        <input class="btn btn-md btn-success ricerca" type="submit" value="Ricerca">
                                     </div>
                                 </div>
                             </form>
@@ -146,22 +121,4 @@
     </div>
 </div>
 
-@endsection
-
-@section('scripts')
-<script>
-    function copyToClipboard(element) {
-        $('.copyButton').attr('class', 'btn btn-outline-secondary copyButton');
-        $('.copyButton').html('Copia Link');
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val($(element).text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-    }
-    function changeClass(){
-        $(tdis).attr('class', 'btn btn-outline-primary copyButton');
-        $(tdis).html('Link copiato');
-    }
-</script>
 @endsection
