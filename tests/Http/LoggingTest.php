@@ -2,16 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\ApplicationLog;
 use App\Course;
+use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use App\Newsletter;
-use Tests\TestCase;
-use App\Partecipant;
-use App\ApplicationLog;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class LoggingTest extends TestCase
 {
@@ -43,10 +41,10 @@ class LoggingTest extends TestCase
             'region_id' => Region::inRandomOrder()->first()->id,
             'email' => $email,
             'email_again' => $email,
-            'phone' => '3'.rand(111111111, 999999999),
+            'phone' => '3' . rand(111111111, 999999999),
             'job' => $data['job'],
             'city' => $data['city'],
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
 
         factory('App\Course', 10)->create();
@@ -64,7 +62,7 @@ class LoggingTest extends TestCase
 
         $this->assertEquals(1, $log->status);
         $this->assertEquals($log->description, 'Partecipant Subscription Success');
-        $this->assertContains((string)$course->id, $log->value);
+        $this->assertContains((string) $course->id, $log->value);
         $this->assertContains($this->newPartecipantData['slug'], $log->value);
         $this->assertContains($this->newPartecipantData['job'], $log->value);
         $this->assertContains($this->newPartecipantData['surname'], $log->value);
@@ -90,7 +88,7 @@ class LoggingTest extends TestCase
             'city.required' => 'Inserire la propria provenienza',
             'email.required' => 'Inserire un indirizzo email',
         ];
-        foreach($messages as $key=>$value){
+        foreach ($messages as $key => $value) {
             $this->assertContains($value, $log->value);
         }
     }
@@ -110,7 +108,7 @@ class LoggingTest extends TestCase
         $messages = [
             'email_again.same' => 'Le email non coincidono',
         ];
-        foreach($messages as $key=>$value){
+        foreach ($messages as $key => $value) {
             $this->assertContains($value, $log->value);
         }
     }
@@ -129,7 +127,7 @@ class LoggingTest extends TestCase
         $messages = [
             'email.email' => 'Inserire un indirizzo email valido',
         ];
-        foreach($messages as $key=>$value){
+        foreach ($messages as $key => $value) {
             $this->assertContains($value, $log->value);
         }
     }

@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Illuminate\Support\Collection;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 class User extends Authenticatable
 {
@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'api_token', 'active'
+        'name', 'email', 'password', 'api_token', 'active',
     ];
 
     /**
@@ -30,22 +30,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-
-
     public function courses()
     {
         return $this->hasMany('App\Course');
     }
 
     /* Finds all the partecipants to a user courses
-    *  if no user_id is provided, the auth id is retrieved
-    *
-    */
+     *  if no user_id is provided, the auth id is retrieved
+     *
+     */
     public static function partecipants($user_id = null)
     {
-        $user = ($user_id)? User::find($user_id) : \Auth::user();
+        $user = ($user_id) ? User::find($user_id) : \Auth::user();
         $all = new Collection;
-        foreach($user->courses as $course){
+        foreach ($user->courses as $course) {
             $all = $all->merge($course->partecipants);
         }
         return $all;

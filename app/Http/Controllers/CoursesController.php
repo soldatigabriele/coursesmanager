@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Course;
-use Carbon\Carbon;
 use App\Helpers\Logger;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
@@ -28,7 +27,7 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::where('user_id', Auth::user()->id)->where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
-        return view('courses.index')->with(['courses' => $courses, 'header'=>['test', 'test2', 'test3']]);
+        return view('courses.index')->with(['courses' => $courses, 'header' => ['test', 'test2', 'test3']]);
     }
 
     /**
@@ -45,19 +44,19 @@ class CoursesController extends Controller
             'date.required' => 'Inserire una data',
             'description.required' => 'Inserire il nome corso',
         ];
-         $rules = [
+        $rules = [
             'date' => 'required',
             'description' => 'required',
             'long_id' => 'required',
         ];
-    
+
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
             (new Logger)->log('0', 'Course Creation Error', json_encode($data), $request);
             return redirect(route('courses.create'))
-                        ->withErrors($validation)
-                        ->withInput();
+                ->withErrors($validation)
+                ->withInput();
         }
 
         (new Logger)->log('1', 'Course Creation Success', json_encode($request->all()), $request);
@@ -73,10 +72,10 @@ class CoursesController extends Controller
         $course->end_date = $end_date;
         $course->user_id = $user_id;
         $course->save();
-        $course->long_id = $course->fresh()->id.'-'.$request->long_id;
+        $course->long_id = $course->fresh()->id . '-' . $request->long_id;
         $course->save();
 
-        $message = 'Corso creato correttamente: '.$course->description.' - '.$course->date.' - '.$course->long_id;
+        $message = 'Corso creato correttamente: ' . $course->description . ' - ' . $course->date . ' - ' . $course->long_id;
 
         return redirect('/')->with('status', $message);
 
@@ -90,7 +89,7 @@ class CoursesController extends Controller
      */
     public function create()
     {
-        // return the course creation form 
+        // return the course creation form
         return view('courses.create');
     }
 
@@ -120,7 +119,6 @@ class CoursesController extends Controller
         return view('courses.edit')->with(['course' => $course]);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
@@ -130,24 +128,24 @@ class CoursesController extends Controller
      */
     public function update(Course $course, Request $request)
     {
-        
+
         $messages = [
             'long_id.required' => 'Inserire un codice corso valido',
             'date.required' => 'Inserire una data',
             'description.required' => 'Inserire il nome corso',
         ];
-         $rules = [
+        $rules = [
             'date' => 'required',
             'description' => 'required',
             'long_id' => 'required',
         ];
-    
+
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
             (new Logger)->log('0', 'Course Update Error', json_encode($data), $request);
             return redirect(route('courses.edit', $course->id))
-                        ->withErrors($validation);
+                ->withErrors($validation);
         }
 
         (new Logger)->log('1', 'Course Update Success', json_encode($request->all()), $request);
@@ -161,7 +159,7 @@ class CoursesController extends Controller
         $course->end_date = $end_date;
         $course->save();
 
-        return back()->with('edited', 'Corso '.$course->long_id.' aggiornato correttamente');
+        return back()->with('edited', 'Corso ' . $course->long_id . ' aggiornato correttamente');
 
     }
 
@@ -174,7 +172,7 @@ class CoursesController extends Controller
     public function destroy(Course $course)
     {
         $course->delete();
-        return back()->with('deleted', 'Corso '.$course->long_id.' eliminato correttamente');
+        return back()->with('deleted', 'Corso ' . $course->long_id . ' eliminato correttamente');
     }
 
     /**

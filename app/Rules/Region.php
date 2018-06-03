@@ -25,7 +25,7 @@ class Region implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $value !== 'empty'; 
+        return $value !== 'empty';
     }
 
     /**

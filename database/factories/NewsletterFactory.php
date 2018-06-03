@@ -10,6 +10,6 @@ $factory->define(App\Newsletter::class, function (Faker $faker) {
         'slug' => str_random(30),
         'region_id' => App\Region::inRandomOrder()->first()->id,
         'active' => 1,
-        'meta' => json_encode(['ip'=>$faker->ipv4]),
+        'meta' => json_encode(['ip' => $faker->ipv4]),
     ];
 });

@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\User;
+use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -19,7 +19,8 @@ class ApiAuth
      *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
 
         try {
             $this->checkApiKey($request);
@@ -37,9 +38,10 @@ class ApiAuth
      *
      * @return User|null
      */
-    private function checkApiKey(Request $request) {
+    private function checkApiKey(Request $request)
+    {
 
-        if (!$request->bearerToken() ) {
+        if (!$request->bearerToken()) {
             throw new BadRequestHttpException('Tokens not provided');
         }
 
@@ -47,6 +49,6 @@ class ApiAuth
         if (!$user) {
             throw new UnauthorizedHttpException('Invalid credentials');
         }
-        
+
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\User;
 use App\Course;
 use App\Helpers\FromToken;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class CoursesController extends Controller
 {
@@ -17,9 +16,9 @@ class CoursesController extends Controller
      */
     public function index(Request $r)
     {
-        $user_id  = FromToken::getUser($r)->id;
+        $user_id = FromToken::getUser($r)->id;
         $courses = Course::where('user_id', $user_id)->get();
-        if($courses->count()){
+        if ($courses->count()) {
             return $courses;
         }
         return response()->json(['error' => 'No course found']);
@@ -53,7 +52,7 @@ class CoursesController extends Controller
     public function show(Course $course, Request $request)
     {
         ($request->bearerToken());
-        if($course->user_id == FromToken::getUser($request)->id){
+        if ($course->user_id == FromToken::getUser($request)->id) {
             return $course;
         }
         return response()->json(['error' => 'You cannot see this resource']);

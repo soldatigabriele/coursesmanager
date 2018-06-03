@@ -3,13 +3,12 @@
 namespace Tests\Feature;
 
 use App\Course;
+use App\Newsletter;
+use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use App\Newsletter;
-use Tests\TestCase;
-use App\Partecipant;
-use App\ApplicationLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class RoutesTest extends TestCase
 {
@@ -46,10 +45,10 @@ class RoutesTest extends TestCase
             'region_id' => Region::inRandomOrder()->first()->id,
             'email' => $email,
             'email_again' => $email,
-            'phone' => '3'.rand(111111111, 999999999),
+            'phone' => '3' . rand(111111111, 999999999),
             'job' => $data['job'],
             'city' => $data['city'],
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
 
         $this->newNewsletterData = [
@@ -58,11 +57,10 @@ class RoutesTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'region_id' => Region::inRandomOrder()->first()->id,
             'active' => 1,
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
         factory('App\Course', 10)->create();
     }
-
 
     /**
      * Unathorised user can see certain routes
@@ -71,10 +69,10 @@ class RoutesTest extends TestCase
      */
     public function test_unath_user_can_see_certain_pages()
     {
-        
-        $this->get(route('scheda-1'))        
+
+        $this->get(route('scheda-1'))
             ->assertStatus(200);
-        
+
         $this->get(route('scheda-2'))
             ->assertStatus(200);
 
@@ -89,7 +87,7 @@ class RoutesTest extends TestCase
 
         $this->get(route('newsletter.show', $this->newsletter->slug))
             ->assertStatus(200);
-            
+
         $res = $this->get(route('newsletter.show', 'non_existing_slug'))
             ->assertStatus(404);
     }
@@ -118,20 +116,20 @@ class RoutesTest extends TestCase
         $this->get(route('partecipant.index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
-        
+
         $this->get(route('partecipant-create'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
-        
+
         $this->delete(route('partecipant.destroy', $this->partecipant->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
         $this->assertEquals($this->partecipant->deleted_at, null);
-        
+
         $this->get(route('partecipant.edit', $this->partecipant->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
-        
+
         $this->put(route('partecipant.update', $this->partecipant->id), [])
             ->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -144,11 +142,11 @@ class RoutesTest extends TestCase
         $this->get(route('courses.index'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
-        
+
         $this->get(route('courses.show', $this->course->id))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
-        
+
         $this->get(route('courses.create'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -184,24 +182,24 @@ class RoutesTest extends TestCase
      * @return void
      */
     public function test_auth_user_can_see_protected_get_routes()
-    {        
+    {
         $this->actingAs($this->user);
-        
+
         $this->get(route('partecipant.index'))
             ->assertStatus(200);
-        
+
         $this->get(route('partecipant.show', $this->partecipant->slug))
             ->assertStatus(200);
-        
+
         $this->get(route('partecipant-create'))
             ->assertStatus(200);
-        
+
         $this->get(route('courses.index'))
             ->assertStatus(200);
-        
+
         $this->get(route('courses.show', $this->course->id))
             ->assertStatus(200);
-        
+
         $this->get(route('courses.create'))
             ->assertStatus(200);
 
@@ -213,7 +211,7 @@ class RoutesTest extends TestCase
 
         $this->get(route('newsletter.index'))
             ->assertStatus(200);
-        
+
         $this->get(route('newsletter.create'))
             ->assertStatus(200);
     }
@@ -234,7 +232,6 @@ class RoutesTest extends TestCase
         $this->assertNotEquals($this->partecipant->fresh()->deleted_at, null);
     }
 
-    
     /**
      * Index request does not show other admin courses
      *
@@ -256,13 +253,13 @@ class RoutesTest extends TestCase
     // }
 
     /**
-     * 
+     *
      *
      * @return void
      */
     // public function test_()
     // {
-        // $response = $this->get('courses');
-        // $response->assertJsonFragment();
+    // $response = $this->get('courses');
+    // $response->assertJsonFragment();
     // }
 }

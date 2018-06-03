@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -46,12 +45,12 @@ class Partecipant extends Model
     {
         $this->attributes['name'] = ucfirst(strtolower($value));
     }
-    
+
     public function setSurnameAttribute($value)
     {
         $this->attributes['surname'] = ucfirst(strtolower($value));
     }
-    
+
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);

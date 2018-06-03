@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CoursePartecipant extends Model
 {
-	use SoftDeletes;
-    
+    use SoftDeletes;
 }

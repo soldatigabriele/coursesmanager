@@ -3,13 +3,11 @@
 namespace Tests\Feature;
 
 use App\Course;
-use App\Region;
+use App\Partecipant;
 use Carbon\Carbon;
 use Faker\Factory;
-use App\Newsletter;
-use Tests\TestCase;
-use App\Partecipant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ViewsTest extends TestCase
 {
@@ -31,18 +29,18 @@ class ViewsTest extends TestCase
     public function test_new_partecipants_are_shown_in_homepage()
     {
         $partecipants = collect([]);
-        $partecipants = $partecipants->merge(factory('App\Partecipant', 3)->create(['created_at'=>Carbon::now()]));
+        $partecipants = $partecipants->merge(factory('App\Partecipant', 3)->create(['created_at' => Carbon::now()]));
 
-        $course =  factory('App\Course')->create(['user_id' => $this->user->id ]);
-        $partecipants->each(function($item) use ($course){
+        $course = factory('App\Course')->create(['user_id' => $this->user->id]);
+        $partecipants->each(function ($item) use ($course) {
             $course->partecipants()->save($item);
-            
+
         });
 
         $this->actingAs($this->user);
         $res = $this->get(route('home'))
             ->assertStatus(200);
-        foreach($partecipants as $p){
+        foreach ($partecipants as $p) {
             $res->assertSee($p->name)
                 ->assertSee($p->email)
                 ->assertSee($p->phone)
@@ -58,9 +56,9 @@ class ViewsTest extends TestCase
     public function test_partecipants_are_shown_in_mail_page()
     {
         $partecipants = collect([]);
-        $partecipants = factory('App\Partecipant')->create(['email'=>'test@test.com']);
-        $course = factory('App\Course')->create(['user_id' => $this->user->id ]);
-        $partecipants->each(function($item) use ($course){
+        $partecipants = factory('App\Partecipant')->create(['email' => 'test@test.com']);
+        $course = factory('App\Course')->create(['user_id' => $this->user->id]);
+        $partecipants->each(function ($item) use ($course) {
             $course->partecipants()->save($item);
         });
         $this->actingAs($this->user);
@@ -77,18 +75,17 @@ class ViewsTest extends TestCase
     public function test_auth_user_see_tables_in_courses_index_page()
     {
         $user = factory('App\User')->create();
-        $courses = factory('App\Course', 10)->create(['user_id' => $user->id])->each(function($u){
+        $courses = factory('App\Course', 10)->create(['user_id' => $user->id])->each(function ($u) {
             $u->partecipants()->saveMany(factory('App\Partecipant', random_int(0, 10))->create());
         });
 
         $this->actingAs($user);
         $res = $this->get(route('courses.index'));
 
-        foreach($courses as $c){
+        foreach ($courses as $c) {
             $res->assertSee($c->long_id);
         }
     }
-
 
     /**
      * Old courses are not displayed in courses index
@@ -98,9 +95,9 @@ class ViewsTest extends TestCase
     public function test_old_courses_are_not_displayed_in_courses_index_page()
     {
         $user = factory('App\User')->create();
-        $course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->addDays(10)]);
-        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::tomorrow()]);
-        $old_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->subDays(10)]);
+        $course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::now()->addDays(10)]);
+        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::tomorrow()]);
+        $old_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::now()->subDays(10)]);
         $this->actingAs($user);
         $res = $this->get(route('courses.index'));
 
@@ -108,7 +105,6 @@ class ViewsTest extends TestCase
         $res->assertSee($tomorrow_course->long_id);
         $res->assertDontSee($old_course->long_id);
     }
-
 
     /**
      * Old courses are not displayed in courses list scheda
@@ -118,13 +114,13 @@ class ViewsTest extends TestCase
     public function test_old_courses_are_not_displayed_in_scheda_courses_select()
     {
         $user = factory('App\User')->create();
-        $future_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->addDays(10)]);
-        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::tomorrow()]);
-        $yesterday_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::yesterday()]);
-        $past_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date'=>Carbon::now()->subDays(10)]);
+        $future_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::now()->addDays(10)]);
+        $tomorrow_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::tomorrow()]);
+        $yesterday_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::yesterday()]);
+        $past_course = factory('App\Course')->create(['user_id' => $user->id, 'end_date' => Carbon::now()->subDays(10)]);
         $this->actingAs($user);
         $routes = ['scheda-1', 'scheda-2'];
-        foreach($routes as $r){
+        foreach ($routes as $r) {
             $res = $this->get(route($r));
             $res->assertSee($future_course->long_id);
             $res->assertSee($tomorrow_course->long_id);
@@ -141,7 +137,7 @@ class ViewsTest extends TestCase
     public function test_auth_user_doesnt_see_othen_users_tables_in_courses_index_page()
     {
         $user = factory('App\User')->create();
-        $courses = factory('App\Course', 10)->create(['user_id' => $user->id])->each(function($u){
+        $courses = factory('App\Course', 10)->create(['user_id' => $user->id])->each(function ($u) {
             $u->partecipants()->saveMany(factory('App\Partecipant', random_int(0, 10))->create());
         });
 
@@ -149,7 +145,7 @@ class ViewsTest extends TestCase
 
         $res = $this->get(route('courses.index'))
             ->assertStatus(200);
-        foreach($courses as $c){
+        foreach ($courses as $c) {
             $res->assertDontSee($c->long_id);
         }
     }
@@ -167,15 +163,15 @@ class ViewsTest extends TestCase
         $partecipantShares = factory('App\Partecipant')->create(
             ['data' => json_encode([
                 'shares' => 1,
-                ])
+            ]),
             ]);
         $partecipantDoesntShare = factory('App\Partecipant')->create(
             ['data' => json_encode([
                 'shares' => 0,
-                ])
+            ]),
             ]);
 
-        $course = factory('App\Course')->create(['user_id' => $user->id])->each(function ($u) use ($partecipantShares, $partecipantDoesntShare){
+        $course = factory('App\Course')->create(['user_id' => $user->id])->each(function ($u) use ($partecipantShares, $partecipantDoesntShare) {
             $u->partecipants()->save(
                 $partecipantShares
             );
@@ -185,7 +181,7 @@ class ViewsTest extends TestCase
         });
 
         $res = $this->actingAs($this->user)->get(route('courses.export', $course));
-        
+
         $res->assertSee($partecipantDoesntShare->city);
         $res->assertSee(htmlspecialchars($partecipantDoesntShare->name, ENT_QUOTES));
         $res->assertSee(htmlspecialchars($partecipantDoesntShare->surname, ENT_QUOTES));

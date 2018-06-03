@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
 
-
-
     public function partecipants()
     {
         return $this->hasMany('App\Partecipant');

@@ -3,14 +3,13 @@
 namespace Tests\Feature;
 
 use App\Course;
+use App\Newsletter;
+use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use App\Newsletter;
-use Tests\TestCase;
-use App\Partecipant;
-use App\ApplicationLog;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class PartecipantActionsTest extends TestCase
 {
@@ -44,11 +43,11 @@ class PartecipantActionsTest extends TestCase
             'region_id' => Region::inRandomOrder()->first()->id,
             'email' => $email,
             'email_again' => $email,
-            'phone' => '3'.rand(111111111, 999999999),
+            'phone' => '3' . rand(111111111, 999999999),
             'job' => $data['job'],
             'city' => $data['city'],
             'course_id' => Course::inRandomOrder()->first()->id,
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
 
         $this->newNewsletterData = [
@@ -57,14 +56,14 @@ class PartecipantActionsTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'region_id' => Region::inRandomOrder()->first()->id,
             'active' => 1,
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
     }
 
     public function test_unath_user_can_subscribe_to_newsletter()
     {
         Queue::fake();
-        $res = $this->post(route('newsletter.store'), $this->newNewsletterData );
+        $res = $this->post(route('newsletter.store'), $this->newNewsletterData);
         $newNewsletter = Newsletter::where('email', $this->newNewsletterData['email'])->first();
         $this->assertInstanceOf('App\Newsletter', $newNewsletter);
     }

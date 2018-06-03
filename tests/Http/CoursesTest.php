@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use App\Course;
 use Carbon\Carbon;
 use Faker\Factory;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CoursesTest extends TestCase
 {
@@ -27,7 +27,7 @@ class CoursesTest extends TestCase
      */
     public function test_index()
     {
-        factory('App\Course', 10)->create(['user_id' => $this->user->id])->each(function($u){
+        factory('App\Course', 10)->create(['user_id' => $this->user->id])->each(function ($u) {
             $u->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
         });
         $this->actingAs($this->user);
@@ -66,7 +66,7 @@ class CoursesTest extends TestCase
         $end = (Carbon::parse($courseData['end_date'])->format('d/m/Y'));
         $courseData['start_date'] = $start;
         $courseData['end_date'] = $end;
-        $res = $this->put(route('courses.update', $course->id), $courseData );
+        $res = $this->put(route('courses.update', $course->id), $courseData);
 
         $this->assertEquals($courseData['description'], $course->fresh()->description);
     }

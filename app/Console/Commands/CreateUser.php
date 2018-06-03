@@ -41,7 +41,7 @@ class CreateUser extends Command
         // ask the user name
         $name = $this->ask('What is the user name?');
         $this->info($name);
-        $is_active = $this->choice('Is the manager active? ',['no','yes']);
+        $is_active = $this->choice('Is the manager active? ', ['no', 'yes']);
         $this->info($is_active);
         $is_active = ($is_active == 'yes') ? true : false;
         $email = $this->ask('What is the user email?');
@@ -50,10 +50,9 @@ class CreateUser extends Command
         $this->info($password);
 
         //generates the apikey
-        $token = strtolower(md5(uniqid())).strtolower(md5(uniqid()));
+        $token = strtolower(md5(uniqid())) . strtolower(md5(uniqid()));
 
-
-        $this->info('This is his API token: '.$token);
+        $this->info('This is his API token: ' . $token);
 
         $manager = new User;
         $manager->name = $name;

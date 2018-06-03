@@ -3,10 +3,8 @@
 return [
 
     'telegram' => [
-
         // la mia chat id di default
         'chat_id' => env('TELEGRAM_CHAT', null),
-
     ],
 
     /*
