@@ -18,7 +18,31 @@ class Partecipant extends Model
 
     public function getData()
     {
-        return json_decode($this->data);
+        $data = json_decode($this->data);
+        // Unset the coupon, if there
+        unset($data->coupon);
+        return $data;
+    }
+
+    /**
+     * Returns true if the user has used a valid coupon during the subscription
+     *
+     * @return boolean
+     */
+    public function hasCoupon()
+    {
+        return (isset(json_decode($this->data)->coupon)) ? true : false;
+    }
+
+    /**
+     * Returns true if the user has used a valid coupon during the subscription
+     *
+     * @return boolean
+     */
+    public function getCoupon()
+    {
+        $data = json_decode($this->data, true);
+        return (isset($data['coupon'])) ? $data['coupon'] : null;
     }
 
     public function getCityAttribute()

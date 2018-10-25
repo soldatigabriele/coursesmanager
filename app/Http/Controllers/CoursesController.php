@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Course;
-use App\Helpers\Logger;
-use App\Http\Controllers\Controller;
 use App\User;
+use App\Course;
 use Carbon\Carbon;
+use App\Helpers\Logger;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 

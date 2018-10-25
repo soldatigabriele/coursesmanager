@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Coupon;
 use App\Course;
 use App\Region;
 use Carbon\Carbon;
@@ -75,6 +76,18 @@ class PartecipantsController extends Controller
     }
 
     /**
+     * Show the scheda 3 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda3()
+    {
+        // return the course creation form
+        return view('forms.scheda3')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -109,18 +122,32 @@ class PartecipantsController extends Controller
             $rules['g-recaptcha-response'] = 'required|captcha';
         }
 
-        $validation = Validator::make($request->all(), $rules, $messages);
-        if ($validation->fails()) {
-            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
-            (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data), $request);
-            return redirect()->back()
-                ->withErrors($validation)
-                ->withInput();
-        }
+        // $validation = Validator::make($request->all(), $rules, $messages);
+        // if ($validation->fails()) {
+        //     $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
+        //     (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data), $request);
+        //     return redirect()->back()
+        //         ->withErrors($validation)
+        //         ->withInput();
+        // }
 
         (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
 
         $data = $request->all();
+
+        // Check that the coupon is valid
+        if (isset($request->coupon)) {
+            dump($request->coupon);
+            $validCoupons = Coupon::whereActive(true)->pluck('value')->toArray();
+            // If not, unset it
+            if (!in_array($request->coupon, $validCoupons)) {
+                unset($data['coupon']);
+            }
+        }else{
+            dd('no coupon');
+        }
+        dd($data);
+
         $p = new Partecipant();
         $p->name = $request->name;
         $p->slug = str_random(30);
