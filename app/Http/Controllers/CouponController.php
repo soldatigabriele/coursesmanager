@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Coupon;
+use App\Course;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -16,12 +17,18 @@ class CouponController extends Controller
     {
         // TODO Set some anti-bruteforce system here
 
-        // If the coupon is valid, return ok and a token to validate the registration
-        $validCoupons = Coupon::whereActive(true)->pluck('value')->toArray();
+        // Get the values of the active coupons related to the course
+        $validCoupons = Course::find($request->course_id)
+            ->coupons
+            ->where('active', true)
+            ->pluck('value')->toArray();
+
+        // If the coupon is between those coupons, return "ok" and save the token in session
         $result['status'] = 'ko';
         if(in_array($request->coupon, $validCoupons)){
             $result['status'] = 'ok';
             session()->put(['coupon' => $request->coupon]);
+            session()->put(['course_id' => $request->course_id]);
         } 
         return $result;
     }

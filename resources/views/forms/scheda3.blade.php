@@ -1,6 +1,21 @@
 @extends('forms.create')
 
 @section('style')
+
+@php
+
+$coupon = session()->get('coupon');
+
+$disabled = '';
+
+if(session()->has('coupon')){
+  $couponApplied = true;
+  $disabled = 'disabled';
+  $display = 'display:true;';
+}
+
+@endphp
+
 <style type="text/css" media="screen">
 .subtitle{
   font-weight: 800;
@@ -107,15 +122,31 @@
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
               <label>Corso:</label>
-              <select name="course_id" class="form-control">
+              <select id="course" name="course_id" class="form-control" {{ $disabled }}>
                 <option value="empty"> - </option>
                 @foreach($courses as $c)
-                <option value="{{$c->id}}" @if(old('course_id') == $c->id)selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
+                <option value="{{$c->id}}" @if(old('course_id') == $c->id || session()->get('course_id') == $c->id) selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
                 @endforeach
               </select>
             </div>
           </div>
         </div>
+        <div class="row">
+            <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display or 'display:none;' }}">
+                <label for="coupons-checkbox">
+                    Sono in possesso di un <strong class="label label-primary">Codice Sconto</strong>
+                </label>
+                <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }}/>
+                <div class="row" id="coupon-container" style="{{ $display or 'display:none;' }}">
+                    <div class="col-8">
+                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" {{ $disabled}}>
+                    </div>
+                    <div class="col-2">
+                        <input type="button" id="apply-coupon" class="btn btn-md btn-outline-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Codice Applicato' : 'Applica Codice' }}" {{ $disabled}}>
+                    </div>
+                </div>
+            </div>
+       </div>
         <div class="row">
           <div class="col-md-12">
             <div class="col-xs-10 col-sm-10 col-md-10">
@@ -140,23 +171,7 @@
           <div class="col-xs-8 col-sm-9 col-md-9">
            Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
          </div>
-       </div>
-        <div class="row">
-            <div class="col-xs-8 col-sm-9 col-md-9">
-                <label for="coupons-checkbox">
-                    Sono in possesso di un <strong class="label label-primary">Codice Sconto</strong> 
-                </label>
-                <input type="checkbox" id="coupons-checkbox"/>
-                <div class="row" id="coupon-container" style="display:none;">
-                    <div class="col-8">
-                        <input id="coupon-field" class="form-control" name="coupon" value="{{ old('coupon') }}">
-                    </div>
-                    <div class="col-2">
-                        <input type="button" id="apply-coupon" class="btn btn-md btn-outline-primary" value="Applica Codice">
-                    </div>
-                </div>
-            </div>
-       </div>
+       </div> 
 
        <hr class="colorgraph">
        <div class="row">
@@ -202,11 +217,23 @@ $(".decimals").keydown(function (event) {
       })
     });
 
+    let course = null;
+
+    $('#course').change(function(){
+      if($(this).val()!== "empty"){
+          $('#coupon-outer-container').show();
+          course = $(this).val();
+      }else{
+          $('#coupon-outer-container').hide();
+          course = null;
+      }
+    });
+
     $('#apply-coupon').click(function(e){
         e.preventDefault();
         $.ajax({
-        url: "{{ route('coupon.check') }}",
-        data: {'coupon': $('#coupon-field').val()},
+          url: "{{ route('coupon.check') }}",
+          data: {'coupon': $('#coupon-field').val(), 'course_id': course},
         }).done(function(response) {
             if(response.status == 'ok'){
                 $("#apply-coupon").attr('class', 'btn btn-md btn-success');
@@ -214,6 +241,7 @@ $(".decimals").keydown(function (event) {
                 $("#apply-coupon").attr('disabled', 'disabled');
                 $("#coupon-field").attr('disabled', 'disabled');
                 $('#coupons-checkbox').attr('disabled', 'disabled');
+                $('#course').attr('disabled', 'disabled');
             }
             if(response.status == 'ko'){
                 $("#apply-coupon").attr('class', 'btn btn-md btn-danger');

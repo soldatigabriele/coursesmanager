@@ -78,10 +78,25 @@ class CouponsTest extends TestCase
         // Valid coupon
         $this->assertNull(session()->get('coupon'));
         // Check the validity of the coupon
-        $res = $this->get(route('coupon.check', ['coupon' => $this->coupon->value]));
+        $res = $this->get(route('coupon.check', ['coupon' => $this->coupon->value, 'course_id' => $this->coupon->course->id]));
         $this->assertEquals('ok', json_decode($res->getContent())->status);
         $this->assertTrue(session()->has('coupon'));
         $this->assertEquals($this->coupon->value, session()->get('coupon'));
+    }
+
+    /**
+     * Check that a coupon is valid but course is different
+     *
+     * @return void
+     */
+    public function test_valid_coupon_wrong_course_check()
+    {
+        // Valid coupon
+        $this->assertNull(session()->get('coupon'));
+        // Check the validity of the coupon
+        $res = $this->get(route('coupon.check', ['coupon' => $this->coupon->value, 'course_id' => ($this->coupon->course->id + 1)]));
+        $this->assertEquals('ko', json_decode($res->getContent())->status);
+        $this->assertFalse(session()->has('coupon'));
     }
 
     /**
@@ -93,7 +108,7 @@ class CouponsTest extends TestCase
     {
         // Inactive coupon
         $this->assertNull(session()->get('coupon'));
-        $data = ['coupon' => $this->inactiveCoupon->value];
+        $data = ['coupon' => $this->inactiveCoupon->value, 'course_id' => $this->coupon->course->id];
         $res = $this->get(route('coupon.check', $data));
         $this->assertEquals('ko', json_decode($res->getContent())->status);
         $this->assertFalse(session()->has('coupon'));
@@ -109,7 +124,7 @@ class CouponsTest extends TestCase
     {
         // Invalid coupon
         $this->assertNull(session()->get('coupon'));
-        $res = $this->get(route('coupon.check', ['coupon' => 'InvalidCoupon']));
+        $res = $this->get(route('coupon.check', ['coupon' => 'InvalidCoupon', 'course_id' => $this->coupon->course->id]));
         $this->assertEquals('ko', json_decode($res->getContent())->status);
         $this->assertFalse(session()->has('coupon'));
     }
