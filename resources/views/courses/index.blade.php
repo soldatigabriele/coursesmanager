@@ -29,6 +29,10 @@
 
         padding-top: 20px;
     }
+    .bold{
+        font-weight:600;
+        text-decoration:underline;
+    }
 </style>
 @endsection
 
@@ -111,31 +115,38 @@
                                         @endforeach
                                     </tr>
                                     @php $i = 1; @endphp
-                                    @foreach($course->partecipants as $p)
+                                    @foreach($course->partecipants as $partecipant)
                                     @php 
-                                        $highlight_partecipant = ( app('request')->input('partecipant_id') == $p->id )? 'table-success' : '';
+                                        $highlight_partecipant = ( app('request')->input('partecipant_id') == $partecipant->id )? 'table-success' : '';
+                                        // Check if the partecipant has a coupon, if so assign class bold
+                                        $coupon = null;
+                                        $bold = null;
+                                        if ($partecipant->hasCoupon()) {
+                                            $bold = 'bold';
+                                            $coupon = '<span title="'.$partecipant->getCoupon().'">(C)</span>';
+                                        }
                                     @endphp
-                                    <tr class="{{ $highlight_partecipant }}" id="partecipant-{{ $p->id }}">
+                                    <tr class="{{ $highlight_partecipant }} {{ $bold }}" id="partecipant-{{ $partecipant->id }}">
                                         <td>
-                                            {{$i}} 
+                                            {{$i}} {!! $coupon !!}
                                             @php $i++; @endphp
                                         </td>
                                         <td>
-                                            {{ $p->name }}
+                                            {{ $partecipant->name }}
                                         </td>
                                         <td>
-                                            {{ $p->surname }}
+                                            {{ $partecipant->surname }}
                                         </td>
                                         <td>
-                                            {{ $p->email }}
+                                            {{ $partecipant->email }}
                                         </td>
                                         <td>
-                                            {{ $p->phone }}
+                                            {{ $partecipant->phone }}
                                         </td>
                                         <td>
-                                            {{ $p->region['name'] }}
+                                            {{ $partecipant->region['name'] }}
                                         </td>
-                                        @foreach($p->getData() as $key => $value)
+                                        @foreach($partecipant->getData() as $key => $value)
                                         <td>
                                         @if($key == 'shares')
                                             @php echo ($value == 1)? "Si" : "No"; @endphp
@@ -149,8 +160,8 @@
                                 </table>
                             </div>
                             <div class="col-md-12 breadcrumb">  
-                            @foreach($course->getDistinctEmails('email') as $p)
-                                {{ $p->email }},
+                            @foreach($course->getDistinctEmails('email') as $partecipant)
+                                {{ $partecipant->email }},
                             @endforeach
                             </div>
                         </div>

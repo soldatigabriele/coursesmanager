@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Coupon;
 use App\Course;
 use App\Region;
 use Carbon\Carbon;
@@ -75,6 +76,18 @@ class PartecipantsController extends Controller
     }
 
     /**
+     * Show the scheda 3 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda3()
+    {
+        // return the course creation form
+        return view('forms.scheda3')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -121,6 +134,17 @@ class PartecipantsController extends Controller
         (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
 
         $data = $request->all();
+
+        // Check if the user has a valid coupon
+        if ($coupon = session()->get('coupon')) {
+            // Double check coupon's validity and increase the counter
+            if ($c = Coupon::where('value', $coupon)->first()) {
+                $c->increment('usages');
+                // Set the coupon in the extra data
+                $data['coupon'] = session()->get('coupon');
+            }
+        }
+
         $p = new Partecipant();
         $p->name = $request->name;
         $p->slug = str_random(30);
@@ -151,10 +175,21 @@ class PartecipantsController extends Controller
         $c = Course::find($request->course_id);
         $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $p->fresh()->id);
         $text = '*' . $p->name . ' ' . $p->surname . '* - *' . $p->email . '* *' . $p->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
+
         // send and log the message
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
-        return redirect()->route('partecipant.show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
+
+        // Create a personal token for the partecipant
+        $couponValue = $this->generateValue($p, $c);
+
+        $personalCoupon = new Coupon(['value' => $couponValue]);
+        $p->personalCoupon()->save($personalCoupon);
+
+        // Associate the coupon with the course
+        $c->coupons()->save($personalCoupon);
+
+        return redirect()->route('partecipant.show', ['slug' => $p->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
     }
 
     /**
@@ -197,5 +232,20 @@ class PartecipantsController extends Controller
     {
         $partecipant->delete();
         return $partecipant;
+    }
+
+    /**
+     * Generate a pseudo random value for the coupon
+     *
+     * @param Partecipant $partecipant
+     * @param Course $course
+     * @return string
+     */
+    public function generateValue(Partecipant $partecipant, Course $course)
+    {
+        do {
+            $value = substr($partecipant->surname, 0, 1) . substr($partecipant->name, 0, 3) . random_int(11, 99) . $course->id;
+        } while (!Coupon::where('value', $value)->get()->isEmpty());
+        return $value;
     }
 }

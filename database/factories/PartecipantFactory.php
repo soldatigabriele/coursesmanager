@@ -19,7 +19,7 @@ $factory->define(App\Partecipant::class, function (Faker $faker) {
     $data['food'] = $food[mt_rand(0, count($food) - 1)];
 
     return [
-        'slug' => str_random(20),
+        'slug' => str_random(30),
         'name' => $faker->firstName,
         'surname' => $faker->lastName,
         'region_id' => App\Region::inRandomOrder()->first()->id,

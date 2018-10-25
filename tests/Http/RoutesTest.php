@@ -3,16 +3,15 @@
 namespace Tests\Feature;
 
 use App\Course;
-use App\Newsletter;
-use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Newsletter;
 use Tests\TestCase;
+use App\Partecipant;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoutesTest extends TestCase
 {
-
     use RefreshDatabase;
 
     protected function setUp()
