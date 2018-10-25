@@ -25,6 +25,16 @@ class Partecipant extends Model
     }
 
     /**
+     * The partecipant has a coupon for that course
+     *
+     * @return void
+     */
+    public function personalCoupon()
+    {
+        return $this->hasOne('App\Coupon');
+    }
+
+    /**
      * Returns true if the user has used a valid coupon during the subscription
      *
      * @return boolean

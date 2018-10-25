@@ -18,7 +18,11 @@ class CouponController extends Controller
 
         // If the coupon is valid, return ok and a token to validate the registration
         $validCoupons = Coupon::whereActive(true)->pluck('value')->toArray();
-        $result['status'] = (in_array($request->coupon, $validCoupons)) ? 'ok' : 'ko';
+        $result['status'] = 'ko';
+        if(in_array($request->coupon, $validCoupons)){
+            $result['status'] = 'ok';
+            session()->put(['coupon' => $request->coupon]);
+        } 
         return $result;
     }
 }

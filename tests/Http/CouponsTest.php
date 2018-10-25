@@ -15,12 +15,13 @@ class CouponsTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $validCoupon;
+    protected $inactiveCoupon;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->user = factory('App\User')->create();
-
-        factory('App\Course', 10)->create();
+        Queue::fake();
         $this->faker = Factory::create('it_IT');
 
         $data = [];
@@ -37,7 +38,7 @@ class CouponsTest extends TestCase
         $email = $this->faker->unique()->safeEmail;
 
         $this->newPartecipantData = [
-            'slug' => str_random(20),
+            'slug' => str_random(30),
             'name' => $this->faker->firstName,
             'surname' => $this->faker->lastName,
             'region_id' => Region::inRandomOrder()->first()->id,
@@ -46,50 +47,41 @@ class CouponsTest extends TestCase
             'phone' => '3' . rand(111111111, 999999999),
             'job' => $data['job'],
             'city' => $data['city'],
-            'coupon' => strtoupper('coupon' . random_int(111, 999)),
-            'course_id' => Course::inRandomOrder()->first()->id,
+            'course_id' => Course::inRandomOrder()->first()->id ?? factory(Course::class)->create()->id,
             'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
 
-        $this->newNewsletterData = [
-            'name' => $this->faker->firstName,
-            'surname' => $this->faker->lastName,
-            'email' => $this->faker->unique()->safeEmail,
-            'region_id' => Region::inRandomOrder()->first()->id,
-            'active' => 1,
-            'meta' => json_encode(['ip' => '127.0.0.2']),
-        ];
+        // $this->coupon = Coupon::create(['value' => strtoupper(str_random(5)), 'active' => true]);
+        $this->coupon = factory(Coupon::class)->create();
+        // $this->inactiveCoupon = Coupon::create(['value' => strtoupper(str_random(5)), 'active' => false]);
+        $this->inactiveCoupon = factory(Coupon::class)->create(['active' => false]);
     }
 
     /**
-     * Test the Partecipant method to check a user without a coupon
+     * Test the coupon value is capitalised when created
      *
      * @return void
      */
-    public function test_user_doesnt_have_coupon()
+    public function test_coupon_mutator()
     {
-        Queue::fake();
-        // Create a user without a coupon
-        unset($this->newPartecipantData['coupon']);
-        $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
-        $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
-        $this->assertFalse($newPartecipant->hasCoupon());
-        $this->assertNull($newPartecipant->getCoupon());
+        $coupon = factory(Coupon::class)->make();
+        $this->assertEquals(strtoupper($coupon->value), $coupon->value);        
     }
 
     /**
-     * Check that a coupon is valid
+     * Check that a coupon is valid and set in the session
      *
      * @return void
      */
     public function test_valid_coupon_check()
     {
         // Valid coupon
-        $coupon = Coupon::create(['value' => 'ValidCoupon', 'active' => true]);
-        $data = ['coupon' => $coupon->value];
-        $res = $this->get(route('coupon.check', $data));
+        $this->assertNull(session()->get('coupon'));
+        // Check the validity of the coupon
+        $res = $this->get(route('coupon.check', ['coupon' => $this->coupon->value]));
         $this->assertEquals('ok', json_decode($res->getContent())->status);
+        $this->assertTrue(session()->has('coupon'));
+        $this->assertEquals($this->coupon->value, session()->get('coupon'));
     }
 
     /**
@@ -100,10 +92,12 @@ class CouponsTest extends TestCase
     public function test_invalid_coupon_check()
     {
         // Inactive coupon
-        $coupon = Coupon::create(['value' => 'ValidCoupon', 'active' => false]);
-        $data = ['coupon' => $coupon->value];
+        $this->assertNull(session()->get('coupon'));
+        $data = ['coupon' => $this->inactiveCoupon->value];
         $res = $this->get(route('coupon.check', $data));
         $this->assertEquals('ko', json_decode($res->getContent())->status);
+        $this->assertFalse(session()->has('coupon'));
+
     }
 
     /**
@@ -114,10 +108,10 @@ class CouponsTest extends TestCase
     public function test_inactive_coupon_check()
     {
         // Invalid coupon
-        $data = ['coupon' => 'InvalidCoupon'];
-        $res = $this->get(route('coupon.check', $data));
-        // dd($res->getContent());
+        $this->assertNull(session()->get('coupon'));
+        $res = $this->get(route('coupon.check', ['coupon' => 'InvalidCoupon']));
         $this->assertEquals('ko', json_decode($res->getContent())->status);
+        $this->assertFalse(session()->has('coupon'));
     }
 
     /**
@@ -127,33 +121,48 @@ class CouponsTest extends TestCase
      */
     public function test_check_valid_coupon_on_subscription()
     {
-        Queue::fake();
-        $coupon = Coupon::create(['value' => strtoupper(str_random(5)), 'active' => true]);
-        $this->newPartecipantData['coupon'] = $coupon->value;
-
-        $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
+        $res = $this->withSession(['coupon' => $this->coupon->value])->post(route('partecipant.store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
 
         // Assert the coupons are equals
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
-        $this->assertEquals(strtoupper($coupon->value), strtoupper($newPartecipant->getCoupon()));
+        $this->assertEquals($this->coupon->value, strtoupper($newPartecipant->getCoupon()));
     }
 
     /**
-     * Test coupons are checked before subscribing user: invalid
+     * Test a new coupon is created on subscribing user
      *
      * @return void
      */
-    public function test_check_invalid_coupon_on_subscription()
+    public function test_a_new_coupon_is_created_on_subscription()
     {
-        Queue::fake();
-        $this->newPartecipantData['coupon'] = strtoupper(str_random(5));
-
         $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
 
-        // Assert the coupons are equals
-        $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
-        $this->assertNull($newPartecipant->getCoupon());
+        $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
+        // Check a new Coupon is created for that user and course
+        $courseId = $this->newPartecipantData['course_id'];
+        // Get the coupon
+        $coupon = $partecipant->personalCoupon;
+        $this->assertInstanceOf(Coupon::class, $coupon);
+        // Check that the coupon is associated with the right course
+        $this->assertEquals($coupon->course->id, $courseId);
+        $res = $this->get(route('partecipant.show', ['slug' => $partecipant->slug]));
+        $this->assertContains($coupon->value, $res->getContent());
+    }
+
+    public function test_coupon_has_partecipant()
+    {
+        $this->assertInstanceOf(Partecipant::class, $this->coupon->partecipant);
+    }
+
+    /**
+     * A coupon is valid only for a course
+     *
+     * @return void
+     */
+    public function test_coupon_is_linked_to_course()
+    {
+        $this->assertInstanceOf(Course::class, $this->coupon->course);
     }
 }

@@ -51,4 +51,14 @@ class Course extends Model
 
         return $headers;
     }
+
+    /**
+     * A course has many coupons
+     *
+     * @return void
+     */
+    public function coupons()
+    {
+        return $this->hasMany('App\Coupon');
+    }
 }
