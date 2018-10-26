@@ -146,7 +146,7 @@ if(session()->has('coupon')){
                         <input type="button" id="apply-coupon" class="btn btn-md btn-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled }}>
                     </div>
                     <div class="col-md-2 col-xs-2 col-sm-2">
-                        <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi" {{ $readonly ? '' : 'hidden' }}>
+                        <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi" {{ $disabled ? '' : 'hidden' }}>
                     </div>
                 </div>
             </div>
@@ -193,6 +193,34 @@ if(session()->has('coupon')){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  
+  /**
+   * Unset the coupon in session
+   *
+   * @return void
+   */
+  function unsetCoupon(){
+    $.ajax({
+      url: "{{ route('coupon.unset') }}",
+    }).done(function(response) {
+        if(response.status == 'ok'){
+            $("#apply-coupon").attr('class', 'btn btn-md btn-warning');
+            $("#apply-coupon").val('Coupon rimosso');
+            $("#coupon-field").removeAttr('readonly');
+            $('#coupons-checkbox').removeAttr('disabled');
+            $('#course').removeAttr('disabled');
+            $('#unset-coupon').hide();
+            $('#coupon-field').val('');
+            $('#course').val('empty');
+            function reset (){
+                $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
+                $("#apply-coupon").val('Applica Coupon');
+                $("#apply-coupon").removeAttr('disabled');
+            }
+            setTimeout(reset, 2000);
+        }
+      });
+  }
 
 $(".decimals").keydown(function (event) {
       if (event.shiftKey === true) {
@@ -245,7 +273,7 @@ $(".decimals").keydown(function (event) {
                 $("#apply-coupon").attr('disabled', 'disabled');
                 $("#coupon-field").attr('readonly', 'readonly');
                 $('#coupons-checkbox').attr('disabled', 'disabled');
-                $('#course').attr('readonly', 'readonly');
+                $('#course').attr('disabled', 'disabled');
                 $('#unset-coupon').removeAttr('hidden');
             }
             if(response.status == 'ko'){
@@ -258,33 +286,14 @@ $(".decimals").keydown(function (event) {
                     $("#apply-coupon").removeAttr('disabled');
                 }
                 setTimeout(reset, 2000);
-                
             }
         });
     });
 
     $('#unset-coupon').click(function(e){
-        e.preventDefault();
-        $.ajax({
-          url: "{{ route('coupon.unset') }}",
-        }).done(function(response) {
-            if(response.status == 'ok'){
-                $("#apply-coupon").attr('class', 'btn btn-md btn-warning');
-                $("#apply-coupon").val('Coupon rimosso');
-                $("#coupon-field").removeAttr('readonly');
-                $('#coupons-checkbox').removeAttr('readonly');
-                $('#course').removeAttr('readonly');
-                $('#unset-coupon').hide();
-                $('#coupon-field').val('');
-                $('#course').val('empty');
-                function reset (){
-                    $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
-                    $("#apply-coupon").val('Applica Coupon');
-                    $("#apply-coupon").removeAttr('readonly');
-                }
-                setTimeout(reset, 2000);
-            }
-        });
+      e.preventDefault();
+      // Delete the coupon from the session
+      unsetCoupon();
     });
 });
 

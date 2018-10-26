@@ -175,10 +175,13 @@ class PartecipantsController extends Controller
         $p->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $p->save();
         $p = $p->fresh();
-        $p->courses()->sync($request->course_id);
+        
+        // If the course_id is in the session, it's not in the request, because the select would be "disabled"
+        $course_id = session()->get('course_id') ?? $request->course_id;
+        $p->courses()->sync($course_id);
 
         // send and log the message
-        $c = Course::find($request->course_id);
+        $c = Course::find($course_id);
         $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $p->fresh()->id);
         $text = '*' . $p->name . ' ' . $p->surname . '* - *' . $p->email . '* *' . $p->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
 
