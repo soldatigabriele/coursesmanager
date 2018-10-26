@@ -197,6 +197,9 @@ class PartecipantsController extends Controller
 
         // Associate the coupon with the course
         $c->coupons()->save($personalCoupon);
+        
+        // Empty the session
+        session()->flush();
 
         return redirect()->route('partecipant.show', ['slug' => $p->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
     }
