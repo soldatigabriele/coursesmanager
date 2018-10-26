@@ -84,6 +84,9 @@
             @yield('content')
         </main>
     </div>
+    
+    @include('partials.test-banner')
+
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('scripts')
