@@ -7,9 +7,10 @@
 $coupon = session()->get('coupon');
 
 $disabled = '';
-
+$readonly = '';
 if(session()->has('coupon')){
   $couponApplied = true;
+  $readonly = 'readonly';
   $disabled = 'disabled';
   $display = 'display:true;';
 }
@@ -122,7 +123,7 @@ if(session()->has('coupon')){
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
               <label>Corso:</label>
-              <select id="course" name="course_id" class="form-control" {{ $disabled }}>
+              <select id="course" name="course_id" class="form-control" {{ $readonly }}>
                 <option value="empty"> - </option>
                 @foreach($courses as $c)
                 <option value="{{$c->id}}" @if(old('course_id') == $c->id || session()->get('course_id') == $c->id) selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
@@ -139,13 +140,13 @@ if(session()->has('coupon')){
                 <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }}/>
                 <div class="row" id="coupon-container" style="{{ $display or 'display:none;' }}">
                     <div class="col-md-6 col-xs-6 col-sm-6">
-                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" maxlength="10" {{ $disabled}}>
+                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" maxlength="10" {{ $readonly}}>
                     </div>
                     <div class="col-md-4 col-xs-4 col-sm-4">
-                        <input type="button" id="apply-coupon" class="btn btn-md btn-outline-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled}}>
+                        <input type="button" id="apply-coupon" class="btn btn-md btn-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled }}>
                     </div>
                     <div class="col-md-2 col-xs-2 col-sm-2">
-                        <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi" {{ $disabled ? '' : 'hidden' }}>
+                        <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi" {{ $readonly ? '' : 'hidden' }}>
                     </div>
                 </div>
             </div>
@@ -242,9 +243,9 @@ $(".decimals").keydown(function (event) {
                 $("#apply-coupon").attr('class', 'btn btn-md btn-success');
                 $("#apply-coupon").val('Coupon applicato');
                 $("#apply-coupon").attr('disabled', 'disabled');
-                $("#coupon-field").attr('disabled', 'disabled');
+                $("#coupon-field").attr('readonly', 'readonly');
                 $('#coupons-checkbox').attr('disabled', 'disabled');
-                $('#course').attr('disabled', 'disabled');
+                $('#course').attr('readonly', 'readonly');
                 $('#unset-coupon').removeAttr('hidden');
             }
             if(response.status == 'ko'){
@@ -270,16 +271,16 @@ $(".decimals").keydown(function (event) {
             if(response.status == 'ok'){
                 $("#apply-coupon").attr('class', 'btn btn-md btn-warning');
                 $("#apply-coupon").val('Coupon rimosso');
-                $("#coupon-field").removeAttr('disabled');
-                $('#coupons-checkbox').removeAttr('disabled');
-                $('#course').removeAttr('disabled');
+                $("#coupon-field").removeAttr('readonly');
+                $('#coupons-checkbox').removeAttr('readonly');
+                $('#course').removeAttr('readonly');
                 $('#unset-coupon').hide();
                 $('#coupon-field').val('');
                 $('#course').val('empty');
                 function reset (){
                     $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
                     $("#apply-coupon").val('Applica Coupon');
-                    $("#apply-coupon").removeAttr('disabled');
+                    $("#apply-coupon").removeAttr('readonly');
                 }
                 setTimeout(reset, 2000);
             }

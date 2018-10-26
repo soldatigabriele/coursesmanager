@@ -32,6 +32,9 @@
     
 </head>
 <body>
+    {{-- Show a banner if the env debug is true --}}
+    @include('partials.test-banner')
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">

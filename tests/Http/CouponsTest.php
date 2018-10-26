@@ -159,7 +159,7 @@ class CouponsTest extends TestCase
 
         // Assert the coupons are equals
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
-        $this->assertEquals($this->coupon->value, strtoupper($newPartecipant->getCoupon()));
+        $this->assertEquals($this->coupon->value, $newPartecipant->getCoupon());
     }
 
     /**

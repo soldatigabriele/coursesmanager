@@ -135,16 +135,6 @@ class PartecipantsController extends Controller
 
         $data = $request->all();
 
-        // Check if the user has a valid coupon
-        if ($coupon = session()->get('coupon')) {
-            // Double check coupon's validity and increase the counter
-            if ($c = Coupon::where('value', $coupon)->first()) {
-                $c->increment('usages');
-                // Set the coupon in the extra data
-                $data['coupon'] = session()->get('coupon');
-            }
-        }
-
         $p = new Partecipant();
         $p->name = $request->name;
         $p->slug = str_random(30);
@@ -153,6 +143,7 @@ class PartecipantsController extends Controller
         $p->email = $request->email;
         $p->phone = $request->phone;
 
+        // Unset all the unused variables
         array_forget($data, 'g-recaptcha-response');
         array_forget($data, 'disableNotification');
         array_forget($data, 'testTelegramMessages');
@@ -164,7 +155,22 @@ class PartecipantsController extends Controller
         array_forget($data, 'email_again');
         array_forget($data, 'phone');
         array_forget($data, 'course_id');
-        $p->data = json_encode(array_map('ucfirst', (array_map('strtolower', $data))));
+
+        // format the data
+        $tempData = array_map('ucfirst', (array_map('strtolower', $data)));
+
+        // Check if the user has a valid coupon
+        if ($coupon = session()->get('coupon')) {
+            // Double check coupon's validity and increase the counter
+            if ($c = Coupon::where('value', $coupon)->first()) {
+                $c->increment('usages');
+                // Set the coupon in the extra data
+                $couponApplied = session()->get('coupon');
+                $tempData['coupon'] = $couponApplied;
+            }
+        }
+
+        $p->data = json_encode($tempData);
 
         $p->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $p->save();

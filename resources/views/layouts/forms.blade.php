@@ -37,6 +37,10 @@
     
 </head>
 <body>
+
+    {{-- Show a banner if the env debug is true --}}
+    @include('partials.test-banner')
+
     <div id="app">
             @yield('content')
     </div>
