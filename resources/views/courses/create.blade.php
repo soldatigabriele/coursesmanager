@@ -74,7 +74,7 @@
                </div>
 
                <div class="col codice_corso">
-                CODICE CORSO: (max 5 caratteri)
+                CODICE CORSO: (max 10 caratteri)
                 <input id="long_id" class="cod form-control" type="text" name="long_id" maxlength="10" value="{{ old('long_id')}}" />
               </div>
             </div>

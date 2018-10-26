@@ -123,7 +123,7 @@ if(session()->has('coupon')){
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
               <label>Corso:</label>
-              <select id="course" name="course_id" class="form-control" {{ $readonly }}>
+              <select id="course" class="form-control" {{ $disabled }}>
                 <option value="empty"> - </option>
                 @foreach($courses as $c)
                 <option value="{{$c->id}}" @if(old('course_id') == $c->id || session()->get('course_id') == $c->id) selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
@@ -132,6 +132,7 @@ if(session()->has('coupon')){
             </div>
           </div>
         </div>
+        <input type="hidden" id="course-copy" name="course_id" value="{{ session()->get('course_id') }}">
         <div class="row">
             <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display or 'display:none;' }}">
                 <label for="coupons-checkbox">
@@ -253,11 +254,12 @@ $(".decimals").keydown(function (event) {
 
     $('#course').change(function(){
       if($(this).val()!== "empty"){
-          $('#coupon-outer-container').show();
-          course = $(this).val();
+        $('#coupon-outer-container').show();
+        course = $(this).val();
+        $('#course-copy').val(course)
       }else{
-          $('#coupon-outer-container').hide();
-          course = null;
+        $('#coupon-outer-container').hide();
+        course = null;
       }
     });
 

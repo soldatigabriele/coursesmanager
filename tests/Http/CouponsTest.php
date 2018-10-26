@@ -158,8 +158,12 @@ class CouponsTest extends TestCase
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
 
         // Assert the coupons are equals
-        $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
-        $this->assertEquals($this->coupon->value, $newPartecipant->getCoupon());
+        $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
+        $this->assertEquals($this->coupon->value, $partecipant->getCoupon());
+
+        // Check that the used coupon is in the summary page
+        $res = $this->get(route('partecipant.show', ['slug' => $partecipant->slug]));
+        $this->assertContains($this->coupon->value, $res->getContent());
     }
 
     /**

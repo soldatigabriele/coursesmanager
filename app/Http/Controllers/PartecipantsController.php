@@ -177,7 +177,7 @@ class PartecipantsController extends Controller
         $p = $p->fresh();
         
         // If the course_id is in the session, it's not in the request, because the select would be "disabled"
-        $course_id = session()->get('course_id') ?? $request->course_id;
+        $course_id = $request->course_id;
         $p->courses()->sync($course_id);
 
         // send and log the message
