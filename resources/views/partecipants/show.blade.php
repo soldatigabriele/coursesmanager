@@ -59,7 +59,7 @@
               Chi si iscriverà con il tuo codice riceverà a sua volta uno sconto di 10€.
               </p>
               <p>
-                Il tuo codice sconto per questo corso è: <span style="font-weight:600;border:solid 1px green;padding:3px;border-radius:4px;"> {{ $coupon->value }} </span>
+                Il tuo codice è: <span style="font-weight:600;border:solid 1px green;padding:3px;border-radius:4px;"> {{ $coupon->value }} </span>
               </p>
             </div>
           @endif

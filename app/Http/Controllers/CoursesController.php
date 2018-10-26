@@ -72,6 +72,7 @@ class CoursesController extends Controller
         $course->end_date = $end_date;
         $course->user_id = $user_id;
         $course->save();
+        // aggiungo l'id per evitare codici doppi
         $course->long_id = $course->fresh()->id . '-' . $request->long_id;
         $course->save();
 

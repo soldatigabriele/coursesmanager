@@ -165,8 +165,7 @@ class PartecipantsController extends Controller
             if ($c = Coupon::where('value', $coupon)->first()) {
                 $c->increment('usages');
                 // Set the coupon in the extra data
-                $couponApplied = session()->get('coupon');
-                $tempData['coupon'] = $couponApplied;
+                $tempData['coupon'] = $coupon;
             }
         }
 

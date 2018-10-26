@@ -118,17 +118,10 @@
                                     @foreach($course->partecipants as $partecipant)
                                     @php 
                                         $highlight_partecipant = ( app('request')->input('partecipant_id') == $partecipant->id )? 'table-success' : '';
-                                        // Check if the partecipant has a coupon, if so assign class bold
-                                        $coupon = null;
-                                        $bold = null;
-                                        if ($partecipant->hasCoupon()) {
-                                            $bold = 'bold';
-                                            $coupon = '<span title="'.$partecipant->getCoupon().'">(C)</span>';
-                                        }
                                     @endphp
-                                    <tr class="{{ $highlight_partecipant }} {{ $bold }}" id="partecipant-{{ $partecipant->id }}">
+                                    <tr class="{{ $highlight_partecipant }}" id="partecipant-{{ $partecipant->id }}">
                                         <td>
-                                            {{$i}} {!! $coupon !!}
+                                            {{$i}}
                                             @php $i++; @endphp
                                         </td>
                                         <td>

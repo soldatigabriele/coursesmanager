@@ -20,7 +20,7 @@ class Partecipant extends Model
     {
         $data = json_decode($this->data);
         // Unset the coupon, if there
-        unset($data->coupon);
+        unset($data->region_id);
         return $data;
     }
 

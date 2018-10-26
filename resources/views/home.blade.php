@@ -47,7 +47,7 @@
                                 <h5>Crea un nuovo corso</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
-                                <a role="button" href="courses/create" class="btn btn-outline-danger">Crea Corso</a>
+                                <a role="button" href="courses/create" class="btn btn-outline-warning">Crea Corso</a>
                             </div>
                         </div>
                         <br>

@@ -141,7 +141,7 @@ if(session()->has('coupon')){
                 <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }}/>
                 <div class="row" id="coupon-container" style="{{ $display or 'display:none;' }}">
                     <div class="col-md-6 col-xs-6 col-sm-6">
-                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" maxlength="10" {{ $readonly}}>
+                        <input id="coupon-field" class="form-control" value="{{ session()->get('coupon') }}" maxlength="10" {{ $readonly}}>
                     </div>
                     <div class="col-md-4 col-xs-4 col-sm-4">
                         <input type="button" id="apply-coupon" class="btn btn-md btn-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled }}>
