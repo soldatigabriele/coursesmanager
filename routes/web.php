@@ -62,4 +62,5 @@ Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['as' => 'coupon.', 'middleware' => 'web'], function(){
     Route::get('coupon/check', 'CouponController@check')->name('check');
+    Route::get('coupon/unset', 'CouponController@unset')->name('unset');
 });

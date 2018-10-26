@@ -138,11 +138,14 @@ if(session()->has('coupon')){
                 </label>
                 <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }}/>
                 <div class="row" id="coupon-container" style="{{ $display or 'display:none;' }}">
-                    <div class="col-8">
-                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" {{ $disabled}}>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        <input id="coupon-field" class="form-control" name="coupon" value="{{ session()->get('coupon') }}" maxlength="10" {{ $disabled}}>
                     </div>
-                    <div class="col-2">
-                        <input type="button" id="apply-coupon" class="btn btn-md btn-outline-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Codice Applicato' : 'Applica Codice' }}" {{ $disabled}}>
+                    <div class="col-md-4 col-xs-4 col-sm-4">
+                        <input type="button" id="apply-coupon" class="btn btn-md btn-outline-{{ $disabled ? 'success' : 'primary' }}" value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled}}>
+                    </div>
+                    <div class="col-md-2 col-xs-2 col-sm-2">
+                        <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi" {{ $disabled ? '' : 'hidden' }}>
                     </div>
                 </div>
             </div>
@@ -242,6 +245,7 @@ $(".decimals").keydown(function (event) {
                 $("#coupon-field").attr('disabled', 'disabled');
                 $('#coupons-checkbox').attr('disabled', 'disabled');
                 $('#course').attr('disabled', 'disabled');
+                $('#unset-coupon').removeAttr('hidden');
             }
             if(response.status == 'ko'){
                 $("#apply-coupon").attr('class', 'btn btn-md btn-danger');
@@ -254,6 +258,30 @@ $(".decimals").keydown(function (event) {
                 }
                 setTimeout(reset, 2000);
                 
+            }
+        });
+    });
+
+    $('#unset-coupon').click(function(e){
+        e.preventDefault();
+        $.ajax({
+          url: "{{ route('coupon.unset') }}",
+        }).done(function(response) {
+            if(response.status == 'ok'){
+                $("#apply-coupon").attr('class', 'btn btn-md btn-warning');
+                $("#apply-coupon").val('Coupon rimosso');
+                $("#coupon-field").removeAttr('disabled');
+                $('#coupons-checkbox').removeAttr('disabled');
+                $('#course').removeAttr('disabled');
+                $('#unset-coupon').hide();
+                $('#coupon-field').val('');
+                $('#course').val('empty');
+                function reset (){
+                    $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
+                    $("#apply-coupon").val('Applica Coupon');
+                    $("#apply-coupon").removeAttr('disabled');
+                }
+                setTimeout(reset, 2000);
             }
         });
     });

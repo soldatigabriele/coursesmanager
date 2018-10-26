@@ -32,4 +32,16 @@ class CouponController extends Controller
         } 
         return $result;
     }
+
+    /**
+     * Unset the coupon and the selected course from session
+     *
+     * @return string JSON
+     */
+    public function unset()
+    {
+        session()->forget('coupon');
+        session()->forget('course_id');
+        return ['status' => 'ok'];
+    }
 }

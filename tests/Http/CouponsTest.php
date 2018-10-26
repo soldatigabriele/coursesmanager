@@ -85,6 +85,24 @@ class CouponsTest extends TestCase
     }
 
     /**
+     * Check that a coupon is unset from the session
+     *
+     * @return void
+     */
+    public function test_coupon_unset()
+    {
+        // Valid coupon
+        $res = $this->get(route('coupon.check', ['coupon' => $this->coupon->value, 'course_id' => $this->coupon->course->id]));
+        $this->assertTrue(session()->has('coupon'));
+        $this->assertTrue(session()->has('course_id'));
+        // Unset the coupon
+        $res = $this->get(route('coupon.unset'));
+        $this->assertEquals('ok', json_decode($res->getContent())->status);
+        $this->assertNull(session()->get('coupon'));
+        $this->assertNull(session()->get('course_id'));
+    }
+
+    /**
      * Check that a coupon is valid but course is different
      *
      * @return void
