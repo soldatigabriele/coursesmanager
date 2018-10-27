@@ -47,7 +47,7 @@
                                 <h5>Crea un nuovo corso</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
-                                <a role="button" href="courses/create" class="btn btn-outline-danger">Crea Corso</a>
+                                <a role="button" href="courses/create" class="btn btn-outline-warning">Crea Corso</a>
                             </div>
                         </div>
                         <br>
@@ -99,10 +99,22 @@
                             <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
                         </div>
                         <div class="col-6 link">
-                            <span id="copyTarget1">{{ route('scheda-2') }}</span> 
+                            <span id="copyTarget2">{{ route('scheda-2') }}</span> 
                         </div>
                         <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row justify-content-between">
+                        <div class="col-3 schede-buttons" >
+                            <a role="button" href="{{ route('scheda-3') }}" class="btn btn-outline-primary">Vai alla scheda 3</a>
+                        </div>
+                        <div class="col-6 link">
+                            <span id="copyTarget3">{{ route('scheda-3') }}</span> 
+                        </div>
+                        <div class="col-2">
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget3'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
                         </div>
                     </div>
                     <br>
@@ -111,10 +123,10 @@
                             <a role="button" href="{{ route('newsletter.create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
                         </div>
                         <div class="col-6 link">
-                            <span id="copyTarget2">{{ route('newsletter.create') }}</span> 
+                            <span id="copyTarget4">{{ route('newsletter.create') }}</span> 
                         </div>
                         <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            <button id="copyButton" onclick="copyToClipboard('#copyTarget4'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
                         </div>
                     </div>
                     <br>

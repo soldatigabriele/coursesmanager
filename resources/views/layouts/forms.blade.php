@@ -37,10 +37,15 @@
     
 </head>
 <body>
+
+    {{-- Show a banner if the env debug is true --}}
+    @include('partials.test-banner')
+
     <div id="app">
             @yield('content')
     </div>
 
+    @include('partials.test-banner')
     @include('partials.terms-and-conditions')
 
     <script src="{{ asset('js/app.js') }}"></script>

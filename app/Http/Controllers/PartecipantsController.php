@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Coupon;
 use App\Course;
 use App\Region;
 use Carbon\Carbon;
@@ -75,6 +76,18 @@ class PartecipantsController extends Controller
     }
 
     /**
+     * Show the scheda 3 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda3()
+    {
+        // return the course creation form
+        return view('forms.scheda3')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -121,14 +134,16 @@ class PartecipantsController extends Controller
         (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
 
         $data = $request->all();
-        $p = new Partecipant();
-        $p->name = $request->name;
-        $p->slug = str_random(30);
-        $p->surname = $request->surname;
-        $p->region_id = $request->region_id;
-        $p->email = $request->email;
-        $p->phone = $request->phone;
 
+        $partecipant = new Partecipant();
+        $partecipant->name = $request->name;
+        $partecipant->slug = str_random(30);
+        $partecipant->surname = $request->surname;
+        $partecipant->region_id = $request->region_id;
+        $partecipant->email = $request->email;
+        $partecipant->phone = $request->phone;
+
+        // Unset all the unused variables
         array_forget($data, 'g-recaptcha-response');
         array_forget($data, 'disableNotification');
         array_forget($data, 'testTelegramMessages');
@@ -140,21 +155,53 @@ class PartecipantsController extends Controller
         array_forget($data, 'email_again');
         array_forget($data, 'phone');
         array_forget($data, 'course_id');
-        $p->data = json_encode(array_map('ucfirst', (array_map('strtolower', $data))));
 
-        $p->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
-        $p->save();
-        $p = $p->fresh();
-        $p->courses()->sync($request->course_id);
+        // format the data
+        $tempData = array_map('ucfirst', (array_map('strtolower', $data)));
+
+        // Check if the user has a valid coupon
+        if ($coupon = session()->get('coupon')) {
+            // Double check coupon's validity and increase the counter
+            if ($couponModel = Coupon::where('value', $coupon)->first()) {
+                $couponModel->increment('usages');
+                // Set the coupon in the extra data
+                $tempData['coupon'] = $coupon;
+            }
+        }
+
+        $partecipant->data = json_encode($tempData);
+
+        $partecipant->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
+        $partecipant->save();
+        $partecipant = $partecipant->fresh();
+        
+        // Get the course
+        $course_id = $request->course_id;
+        $partecipant->courses()->sync($course_id);
 
         // send and log the message
-        $c = Course::find($request->course_id);
-        $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $p->fresh()->id);
-        $text = '*' . $p->name . ' ' . $p->surname . '* - *' . $p->email . '* *' . $p->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
+        $course = Course::find($course_id);
+        $url = url(route('courses.index') . '?course_id=' . $course->id . '&partecipant_id=' . $partecipant->fresh()->id);
+        $text = '*' . $partecipant->name . ' ' . $partecipant->surname . '* - *' . $partecipant->email . '* *' . $partecipant->phone . '* si è iscritto al corso *' . $course->long_id . '* del ' . $course->date . ' [Vai alla scheda](' . $url . ')';
+
         // send and log the message
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
-        return redirect()->route('partecipant.show', ['slug' => $p->slug])->with('status', 'Iscrizione avvenuta con successo!');
+
+        // Create a personal coupon for the partecipant
+        $couponValue = $this->generateValue($partecipant, $course);
+
+        $personalCoupon = new Coupon(['value' => $couponValue]);
+        $partecipant->personalCoupon()->save($personalCoupon);
+
+        // Associate the coupon with the course
+        $course->coupons()->save($personalCoupon);
+        
+        // Empty the session
+        session()->forget('coupon');
+        session()->forget('course_id');
+
+        return redirect()->route('partecipant.show', ['slug' => $partecipant->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
     }
 
     /**
@@ -165,10 +212,10 @@ class PartecipantsController extends Controller
      */
     public function show($slug)
     {
-        $p = Partecipant::where('slug', $slug)->first();
-        if ($p) {
-            $courses = $p->courses;
-            return view('partecipants.show')->with(['partecipant' => $p]);
+        $partecipant = Partecipant::where('slug', $slug)->first();
+        if ($partecipant) {
+            $courses = $partecipant->courses;
+            return view('partecipants.show')->with(['partecipant' => $partecipant]);
         }
         abort(404);
     }
@@ -197,5 +244,20 @@ class PartecipantsController extends Controller
     {
         $partecipant->delete();
         return $partecipant;
+    }
+
+    /**
+     * Generate a pseudo random value for the coupon
+     *
+     * @param Partecipant $partecipant
+     * @param Course $course
+     * @return string
+     */
+    public function generateValue(Partecipant $partecipant, Course $course)
+    {
+        do {
+            $value = substr($partecipant->surname, 0, 1) . substr($partecipant->name, 0, 3) . random_int(11, 99) . $course->id;
+        } while (!Coupon::where('value', $value)->get()->isEmpty());
+        return $value;
     }
 }

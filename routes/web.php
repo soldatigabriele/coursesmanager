@@ -1,6 +1,9 @@
 <?php
 
-Auth::routes();
+// Authentication Routes
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::resource('courses', 'CoursesController', ['names' => [
     'index' => 'courses.index',
@@ -44,6 +47,8 @@ Route::get('newsletters/{slug}', 'NewslettersController@show')->name('newsletter
 
 Route::get('corsi/scheda/1', 'PartecipantsController@scheda1')->name('scheda-1');
 Route::get('corsi/scheda/2', 'PartecipantsController@scheda2')->name('scheda-2');
+Route::get('corsi/scheda/3', 'PartecipantsController@scheda3')->name('scheda-3');
+
 Route::get('corsi/scheda/test', function () {
     return view('forms.scheda-test')->with(['regions' => \App\Region::all(), 'courses' => \App\Course::where('end_date', '>', \Carbon\Carbon::today())->get()]);
 })->name('scheda-test')->middleware('auth');
@@ -57,3 +62,8 @@ Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');
 
 // Homepage
 Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
+
+Route::group(['as' => 'coupon.', 'middleware' => 'web'], function(){
+    Route::get('coupon/check', 'CouponController@check')->name('check');
+    Route::get('coupon/unset', 'CouponController@unset')->name('unset');
+});

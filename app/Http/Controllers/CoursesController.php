@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Course;
-use App\Helpers\Logger;
-use App\Http\Controllers\Controller;
 use App\User;
+use App\Course;
 use Carbon\Carbon;
+use App\Helpers\Logger;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -72,6 +72,7 @@ class CoursesController extends Controller
         $course->end_date = $end_date;
         $course->user_id = $user_id;
         $course->save();
+        // aggiungo l'id per evitare codici doppi
         $course->long_id = $course->fresh()->id . '-' . $request->long_id;
         $course->save();
 

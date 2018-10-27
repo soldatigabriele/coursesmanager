@@ -32,6 +32,9 @@
     
 </head>
 <body>
+    {{-- Show a banner if the env debug is true --}}
+    @include('partials.test-banner')
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
@@ -53,7 +56,6 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -82,6 +84,9 @@
             @yield('content')
         </main>
     </div>
+    
+    @include('partials.test-banner')
+
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('scripts')
