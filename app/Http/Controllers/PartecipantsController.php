@@ -162,8 +162,8 @@ class PartecipantsController extends Controller
         // Check if the user has a valid coupon
         if ($coupon = session()->get('coupon')) {
             // Double check coupon's validity and increase the counter
-            if ($c = Coupon::where('value', $coupon)->first()) {
-                $c->increment('usages');
+            if ($couponModel = Coupon::where('value', $coupon)->first()) {
+                $couponModel->increment('usages');
                 // Set the coupon in the extra data
                 $tempData['coupon'] = $coupon;
             }
@@ -180,22 +180,22 @@ class PartecipantsController extends Controller
         $partecipant->courses()->sync($course_id);
 
         // send and log the message
-        $c = Course::find($course_id);
-        $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $partecipant->fresh()->id);
-        $text = '*' . $partecipant->name . ' ' . $partecipant->surname . '* - *' . $partecipant->email . '* *' . $partecipant->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
+        $course = Course::find($course_id);
+        $url = url(route('courses.index') . '?course_id=' . $course->id . '&partecipant_id=' . $partecipant->fresh()->id);
+        $text = '*' . $partecipant->name . ' ' . $partecipant->surname . '* - *' . $partecipant->email . '* *' . $partecipant->phone . '* si è iscritto al corso *' . $course->long_id . '* del ' . $course->date . ' [Vai alla scheda](' . $url . ')';
 
         // send and log the message
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
 
         // Create a personal coupon for the partecipant
-        $couponValue = $this->generateValue($partecipant, $c);
+        $couponValue = $this->generateValue($partecipant, $course);
 
         $personalCoupon = new Coupon(['value' => $couponValue]);
         $partecipant->personalCoupon()->save($personalCoupon);
 
         // Associate the coupon with the course
-        $c->coupons()->save($personalCoupon);
+        $course->coupons()->save($personalCoupon);
         
         // Empty the session
         session()->forget('coupon');
