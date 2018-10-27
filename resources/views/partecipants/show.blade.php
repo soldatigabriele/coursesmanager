@@ -55,8 +55,8 @@
             <div class="col alert alert-success">
               <h3>BUONO SCONTO</h3>
               <p> 
-              Invita altre persone a iscriversi: per ogni registrazione effettuata con il tuo codice, riceverai uno sconto di 10€ sulla quota di partecipazione al presente seminario (non fruibile su altri corsi). 
-              Chi si iscriverà con il tuo codice riceverà a sua volta uno sconto di 10€.
+              Invita altre persone a iscriversi: per ogni registrazione effettuata con il tuo codice, riceverai uno sconto di <span style="font-weight:600;font-size:120%;">10€</span> sulla quota di partecipazione al presente seminario (non fruibile su altri corsi). 
+              Chi si iscriverà con il tuo codice riceverà a sua volta uno sconto di <span style="font-weight:600;font-size:120%;">10€</span>.
               </p>
               <p>
                 Il tuo codice è: <span style="font-weight:600;border:solid 1px green;padding:3px;border-radius:4px;"> {{ $coupon->value }} </span>
