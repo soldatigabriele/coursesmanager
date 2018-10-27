@@ -93,6 +93,16 @@ if(session()->has('coupon')){
               </select>
             </div>
           </div>
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Preferenze cibo</label>
+              <select name="food" class="form-control" >
+                <option value="Onnivoro"  @if(old('source') == 'Onnivoro')selected @endif>Onnivoro</option>
+                <option value="Vegetariano"  @if(old('source') == 'Vegetariano')selected @endif>Vegetariano</option>
+                <option value="Vegano"  @if(old('source') == 'Vegano')selected @endif>Vegano</option>
+              </select>
+            </div>
+          </div> 
         </div>
 
         <div class="row">
