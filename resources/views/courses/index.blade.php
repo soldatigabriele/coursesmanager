@@ -117,6 +117,7 @@
                                     @php $i = 1; @endphp
                                     @foreach($course->partecipants as $partecipant)
                                     @php 
+                                        // If the partecipant is selected, highlight the row
                                         $highlight_partecipant = ( app('request')->input('partecipant_id') == $partecipant->id )? 'table-success' : '';
                                     @endphp
                                     <tr class="{{ $highlight_partecipant }}" id="partecipant-{{ $partecipant->id }}">
@@ -139,12 +140,12 @@
                                         <td>
                                             {{ $partecipant->region['name'] }}
                                         </td>
-                                        @foreach($partecipant->getData() as $key => $value)
+                                        @foreach($course->extraHeaders() as $key)
                                         <td>
                                         @if($key == 'shares')
-                                            @php echo ($value == 1)? "Si" : "No"; @endphp
+                                            @php echo ($partecipant->getData()->$key == 1)? "Si" : "No"; @endphp
                                         @else
-                                            {{ ($value) }}
+                                            {{ $partecipant->getData()->$key ?? '' }}
                                         @endif
                                         </td>
                                         @endforeach                                        

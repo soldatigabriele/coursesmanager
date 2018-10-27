@@ -11,6 +11,9 @@ class Course extends Model
 
     protected $fillable = ['long_id', 'date', 'limit', 'description', 'start_date', 'end_date'];
 
+    // Base table headers: we will add the extra field
+    protected $headers = ['nome', 'cognome', 'email', 'telefono', 'regione'];
+
     // protected $casts = [
     //     'start_date' => 'date',
     //     'end_date' => 'date',
@@ -42,14 +45,40 @@ class Course extends Model
 
     public function headers()
     {
-        $headers = ['nome', 'cognome', 'email', 'telefono', 'regione'];
-
-        $courseHasPartecipant = $this->partecipants()->first();
-        if ($courseHasPartecipant) {
-            $headers = array_merge($headers, array_keys((array) $this->partecipants()->first()->getData()));
+        $headers = $this->baseHeaders();
+        // If the course has partecipants
+        if ($this->partecipants()->count()) {
+            $this->partecipants()->each(function ($p) use (&$headers){
+                $extra = (array) $p->getData();
+                $headers = array_merge($headers, array_keys($extra));
+            });
         }
+        // Delete the duplicated keys
+        return collect($headers)->unique();
+    }
 
-        return $headers;
+    public function extraHeaders()
+    {
+        $headers = [];
+        // If the course has partecipants
+        if ($this->partecipants()->count()) {
+            $this->partecipants()->each(function ($p) use (&$headers){
+                $extra = (array) $p->getData();
+                $headers = array_merge($headers, array_keys($extra));
+            });
+        }
+        // Delete the duplicated keys
+        return collect($headers)->unique();
+    }
+
+    /**
+     * Return the base table headers
+     *
+     * @return void
+     */
+    public function baseHeaders()
+    {
+        return $this->headers;
     }
 
     /**

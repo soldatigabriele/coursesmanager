@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use App\Course;
 use Carbon\Carbon;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CoursesTest extends TestCase
 {
@@ -69,6 +69,58 @@ class CoursesTest extends TestCase
         $res = $this->put(route('courses.update', $course->id), $courseData);
 
         $this->assertEquals($courseData['description'], $course->fresh()->description);
+    }
+
+    /**
+     * Test the right headers are retrieved
+     *
+     * @return void
+     */
+    public function test_course_headers()
+    {
+        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $data = [
+            'food' => 'vegetariano',
+            'transport' => 'treno',
+        ];
+        $partecipant = factory('App\Partecipant')->create(['data' => json_encode($data)]);
+        $course->partecipants()->save($partecipant);
+        $headers = ["nome", "cognome", "email", "regione", "telefono", "food", "transport"];
+        $this->assertEquals(collect($headers)->sort()->values(), collect($course->headers())->sort()->values());
+
+        // Create the other partecipant with a coupon
+        $data['coupon'] = str_random(6);
+        $partecipant = factory('App\Partecipant')->create(['data' => json_encode($data)]);
+        $course->partecipants()->save($partecipant);
+
+        array_push($headers, 'coupon');
+        $this->assertEquals(collect($headers)->sort()->values(), collect($course->headers())->sort()->values());
+    }
+
+    /**
+     * Test the right extra headers are retrieved
+     *
+     * @return void
+     */
+    public function test_course_extra_headers()
+    {
+        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $data = [
+            'food' => 'vegetariano',
+            'transport' => 'treno',
+        ];
+        $partecipant = factory('App\Partecipant')->create(['data' => json_encode($data)]);
+        $course->partecipants()->save($partecipant);
+        $headers = ["food", "transport"];
+        $this->assertEquals(collect($headers)->sort()->values(), collect($course->extraHeaders())->sort()->values());
+
+        // Create the other partecipant with a coupon
+        $data['coupon'] = str_random(6);
+        $partecipant = factory('App\Partecipant')->create(['data' => json_encode($data)]);
+        $course->partecipants()->save($partecipant);
+
+        array_push($headers, 'coupon');
+        $this->assertEquals(collect($headers)->sort()->values(), collect($course->extraHeaders())->sort()->values());
     }
 
 }
