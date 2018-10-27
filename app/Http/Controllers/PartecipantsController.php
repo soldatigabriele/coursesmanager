@@ -135,13 +135,13 @@ class PartecipantsController extends Controller
 
         $data = $request->all();
 
-        $p = new Partecipant();
-        $p->name = $request->name;
-        $p->slug = str_random(30);
-        $p->surname = $request->surname;
-        $p->region_id = $request->region_id;
-        $p->email = $request->email;
-        $p->phone = $request->phone;
+        $partecipant = new Partecipant();
+        $partecipant->name = $request->name;
+        $partecipant->slug = str_random(30);
+        $partecipant->surname = $request->surname;
+        $partecipant->region_id = $request->region_id;
+        $partecipant->email = $request->email;
+        $partecipant->phone = $request->phone;
 
         // Unset all the unused variables
         array_forget($data, 'g-recaptcha-response');
@@ -169,38 +169,39 @@ class PartecipantsController extends Controller
             }
         }
 
-        $p->data = json_encode($tempData);
+        $partecipant->data = json_encode($tempData);
 
-        $p->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
-        $p->save();
-        $p = $p->fresh();
+        $partecipant->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
+        $partecipant->save();
+        $partecipant = $partecipant->fresh();
         
-        // If the course_id is in the session, it's not in the request, because the select would be "disabled"
+        // Get the course
         $course_id = $request->course_id;
-        $p->courses()->sync($course_id);
+        $partecipant->courses()->sync($course_id);
 
         // send and log the message
         $c = Course::find($course_id);
-        $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $p->fresh()->id);
-        $text = '*' . $p->name . ' ' . $p->surname . '* - *' . $p->email . '* *' . $p->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
+        $url = url(route('courses.index') . '?course_id=' . $c->id . '&partecipant_id=' . $partecipant->fresh()->id);
+        $text = '*' . $partecipant->name . ' ' . $partecipant->surname . '* - *' . $partecipant->email . '* *' . $partecipant->phone . '* si è iscritto al corso *' . $c->long_id . '* del ' . $c->date . ' [Vai alla scheda](' . $url . ')';
 
         // send and log the message
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
 
-        // Create a personal token for the partecipant
-        $couponValue = $this->generateValue($p, $c);
+        // Create a personal coupon for the partecipant
+        $couponValue = $this->generateValue($partecipant, $c);
 
         $personalCoupon = new Coupon(['value' => $couponValue]);
-        $p->personalCoupon()->save($personalCoupon);
+        $partecipant->personalCoupon()->save($personalCoupon);
 
         // Associate the coupon with the course
         $c->coupons()->save($personalCoupon);
         
         // Empty the session
-        session()->flush();
+        session()->forget('coupon');
+        session()->forget('course_id');
 
-        return redirect()->route('partecipant.show', ['slug' => $p->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
+        return redirect()->route('partecipant.show', ['slug' => $partecipant->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
     }
 
     /**
@@ -211,10 +212,10 @@ class PartecipantsController extends Controller
      */
     public function show($slug)
     {
-        $p = Partecipant::where('slug', $slug)->first();
-        if ($p) {
-            $courses = $p->courses;
-            return view('partecipants.show')->with(['partecipant' => $p]);
+        $partecipant = Partecipant::where('slug', $slug)->first();
+        if ($partecipant) {
+            $courses = $partecipant->courses;
+            return view('partecipants.show')->with(['partecipant' => $partecipant]);
         }
         abort(404);
     }
