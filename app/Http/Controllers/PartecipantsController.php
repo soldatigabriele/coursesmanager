@@ -155,6 +155,7 @@ class PartecipantsController extends Controller
         array_forget($data, 'email_again');
         array_forget($data, 'phone');
         array_forget($data, 'course_id');
+        array_forget($data, 'create_coupon');
 
         // format the data
         $tempData = array_map('ucfirst', (array_map('strtolower', $data)));
@@ -188,14 +189,16 @@ class PartecipantsController extends Controller
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
 
-        // Create a personal coupon for the partecipant
-        $couponValue = $this->generateValue($partecipant, $course);
-
-        $personalCoupon = new Coupon(['value' => $couponValue]);
-        $partecipant->personalCoupon()->save($personalCoupon);
-
-        // Associate the coupon with the course
-        $course->coupons()->save($personalCoupon);
+        if(isset($request->create_coupon)){
+            // Create a personal coupon for the partecipant
+            $couponValue = $this->generateValue($partecipant, $course);
+            
+            $personalCoupon = new Coupon(['value' => $couponValue]);
+            $partecipant->personalCoupon()->save($personalCoupon);
+            
+            // Associate the coupon with the course
+            $course->coupons()->save($personalCoupon);
+        }
         
         // Empty the session
         session()->forget('coupon');

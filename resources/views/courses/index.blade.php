@@ -132,7 +132,7 @@
                                             {{ $partecipant->surname }}
                                         </td>
                                         <td>
-                                            {{ $partecipant->email }}
+                                            <a href="{{ route('partecipant.show', $partecipant->slug) }}">{{ $partecipant->email }}</a>
                                         </td>
                                         <td>
                                             {{ $partecipant->phone }}

@@ -133,6 +133,7 @@ if(session()->has('coupon')){
           </div>
         </div>
         <input type="hidden" id="course-copy" name="course_id" value="{{ session()->get('course_id') }}">
+        <input type="hidden" name="create_coupon" value="true">
         <div class="row">
             <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display or 'display:none;' }}">
                 <label for="coupons-checkbox">
