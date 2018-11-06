@@ -167,12 +167,13 @@ class CouponsTest extends TestCase
     }
 
     /**
-     * Test a new coupon is created on subscribing user
+     * Test a new coupon is created on subscribing user if the create_coupon hidden field is in the form
      *
      * @return void
      */
-    public function test_a_new_coupon_is_created_on_subscription()
+    public function test_a_new_coupon_is_created_on_subscription_if_right_form_is_compiled()
     {
+        $this->newPartecipantData["create_coupon"] = true;
         $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
             ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
 
@@ -186,6 +187,22 @@ class CouponsTest extends TestCase
         $this->assertEquals($coupon->course->id, $courseId);
         $res = $this->get(route('partecipant.show', ['slug' => $partecipant->slug]));
         $this->assertContains($coupon->value, $res->getContent());
+    }
+
+    /**
+     * Test a new coupon is created on subscribing user
+     *
+     * @return void
+     */
+    public function test_a_new_coupon_is_created_on_subscription()
+    {
+        $this->assertFalse(isset($this->newPartecipantData["create_coupon"]));
+        $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
+            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
+
+        $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
+        // Get the coupon
+        $this->assertNull($partecipant->personalCoupon);
     }
 
     public function test_coupon_has_partecipant()
