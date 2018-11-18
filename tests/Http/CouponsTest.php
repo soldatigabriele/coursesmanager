@@ -155,7 +155,7 @@ class CouponsTest extends TestCase
     public function test_check_valid_coupon_on_subscription()
     {
         $res = $this->withSession(['coupon' => $this->coupon->value])->post(route('partecipant.store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
+            ->assertSessionHas(['status' => 'Iscrizione al corso avvenuta con successo!']);
 
         // Assert the coupons are equals
         $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
@@ -175,7 +175,7 @@ class CouponsTest extends TestCase
     {
         $this->newPartecipantData["create_coupon"] = true;
         $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
+            ->assertSessionHas(['status' => 'Iscrizione al corso avvenuta con successo!']);
 
         $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         // Check a new Coupon is created for that user and course
@@ -198,7 +198,7 @@ class CouponsTest extends TestCase
     {
         $this->assertFalse(isset($this->newPartecipantData["create_coupon"]));
         $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
+            ->assertSessionHas(['status' => 'Iscrizione al corso avvenuta con successo!']);
 
         $partecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         // Get the coupon

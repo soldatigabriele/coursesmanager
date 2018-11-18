@@ -27,15 +27,12 @@
 
 @section('content')
 
-<div class="container">
+<div class="container" style="padding:30px 0;">
   <div class="row justify-content-center">
     <div class="col-md-10 col-sm-12">
       <div class="card">
         <div class="card-header"><b>RIASSUNTO UTENTE {{ strtoupper($partecipant->name) }} {{ strtoupper($partecipant->surname) }}</b></div>
         <div class="card-body">
-          @if (!$message = Session::get('status'))
-              <h3>{{ $message }}</h3>
-          @endif
           <div class="col alert alert-primary">
             
             <h4>Controlla i tuoi dettagli:</h4>
@@ -92,3 +89,11 @@
 </div>
 
 @endsection
+
+@section('scripts')
+<script>
+  @if(session()->has('status'))
+    swal("{{session()->get('status')}}", "Controlla che i dettagli inseriti siano corretti","success")
+  @endif
+</script>
+@append

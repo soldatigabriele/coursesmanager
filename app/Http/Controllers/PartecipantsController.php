@@ -200,11 +200,12 @@ class PartecipantsController extends Controller
             $course->coupons()->save($personalCoupon);
         }
         
-        // Empty the session
+        // Empty the session and show the confirmation alert
         session()->forget('coupon');
         session()->forget('course_id');
-
-        return redirect()->route('partecipant.show', ['slug' => $partecipant->slug])->with(['status' => 'Iscrizione avvenuta con successo!']);
+        session()->flash('status', 'Iscrizione al corso avvenuta con successo!');
+        
+        return redirect()->route('partecipant.show', ['slug' => $partecipant->slug]);
     }
 
     /**

@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use App\Course;
-use App\Newsletter;
-use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
+use App\Newsletter;
 use Tests\TestCase;
+use App\Partecipant;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PartecipantActionsTest extends TestCase
 {
@@ -72,10 +72,24 @@ class PartecipantActionsTest extends TestCase
     {
         Queue::fake();
         $res = $this->post(route('partecipant.store'), $this->newPartecipantData)
-            ->assertSessionHas(['status' => 'Iscrizione avvenuta con successo!']);
+            ->assertSessionHas(['status' => 'Iscrizione al corso avvenuta con successo!']);
         $newPartecipant = Partecipant::where('phone', $this->newPartecipantData['phone'])->first();
         $this->assertInstanceOf('App\Partecipant', $newPartecipant);
         $course = $newPartecipant->courses->first()->id;
         $this->assertEquals($course, $this->newPartecipantData['course_id']);
+    }
+
+    public function test_user_sees_confirmation_message_after_subscription()
+    {
+        // Open the partecipant show page without the message in the session
+        $partecipant = factory(Partecipant::class)->create();
+        $res = $this->get(route('partecipant.show', $partecipant->slug));
+
+        $this->assertNotContains($message = 'iscrizione avvenuta con successo' ,$res->getContent());
+        // Reach the same page with the message in the session
+        $res = $this->withSession(['status'=> $message])
+            ->get(route('partecipant.show', $partecipant->slug));
+
+        $this->assertContains($message ,$res->getContent());
     }
 }
