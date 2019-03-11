@@ -9,6 +9,8 @@ class Course extends Model
 {
     use softDeletes;
 
+    protected $excludedKeys = ['source', 'regione'];
+
     protected $fillable = ['long_id', 'date', 'limit', 'description', 'start_date', 'end_date'];
 
     // Base table headers: we will add the extra field
@@ -54,7 +56,7 @@ class Course extends Model
             });
         }
         // Delete the duplicated keys
-        return collect($headers)->unique();
+        return collect($headers)->filter(function($key) { return !in_array($key, $this->excludedKeys); })->unique();
     }
 
     public function extraHeaders()
@@ -68,7 +70,7 @@ class Course extends Model
             });
         }
         // Delete the duplicated keys
-        return collect($headers)->unique();
+        return collect($headers)->filter(function($key) { return !in_array($key, $this->excludedKeys); })->unique();
     }
 
     /**

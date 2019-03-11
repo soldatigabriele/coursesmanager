@@ -108,11 +108,17 @@
                                         <td>
                                             #
                                         </td>
+                                        <td>
+                                            Codice
+                                        </td>
                                         @foreach($course->headers() as $key)
                                         <td>
                                             {{ ucfirst($key) }}
                                         </td>
                                         @endforeach
+                                        <td>
+                                            Data
+                                        </td>
                                     </tr>
                                     @php $i = 1; @endphp
                                     @foreach($course->partecipants as $partecipant)
@@ -126,6 +132,9 @@
                                             @php $i++; @endphp
                                         </td>
                                         <td>
+                                            {{ $partecipant->personalCoupon->value ?? '' }}
+                                        </td>
+                                        <td>
                                             {{ $partecipant->name }}
                                         </td>
                                         <td>
@@ -137,9 +146,6 @@
                                         <td>
                                             {{ $partecipant->phone }}
                                         </td>
-                                        <td>
-                                            {{ $partecipant->region['name'] }}
-                                        </td>
                                         @foreach($course->extraHeaders() as $key)
                                         <td>
                                         @if($key == 'shares')
@@ -149,6 +155,9 @@
                                         @endif
                                         </td>
                                         @endforeach                                        
+                                        <td>
+                                            {{ $partecipant->created_at->format('d/m') }}
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </table>
