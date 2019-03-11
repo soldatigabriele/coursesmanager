@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('partecipants/{partecipant}/edit', 'PartecipantsController@edit')->name('partecipant.edit');
     Route::put('partecipants/{partecipant}', 'PartecipantsController@update')->name('partecipant.update');
     Route::delete('partecipants/{partecipant}', 'PartecipantsController@destroy')->name('partecipant.destroy');
+    Route::post('partecipants/{partecipant}/restore', 'PartecipantsController@restore')->name('partecipant.restore');
 });
 
 Route::post('partecipants', 'PartecipantsController@store')->name('partecipant.store');

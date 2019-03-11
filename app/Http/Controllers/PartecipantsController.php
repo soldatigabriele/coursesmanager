@@ -216,7 +216,7 @@ class PartecipantsController extends Controller
      */
     public function show($slug)
     {
-        $partecipant = Partecipant::where('slug', $slug)->first();
+        $partecipant = Partecipant::withTrashed()->where('slug', $slug)->first();
         if ($partecipant) {
             $courses = $partecipant->courses;
             return view('partecipants.show')->with(['partecipant' => $partecipant]);
@@ -247,7 +247,20 @@ class PartecipantsController extends Controller
     public function destroy(Partecipant $partecipant)
     {
         $partecipant->delete();
-        return $partecipant;
+        return redirect()->route('partecipant.show', $partecipant->slug);
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($partecipantId)
+    {
+        $partecipant = Partecipant::withTrashed()->find($partecipantId);
+        $partecipant->restore();
+        return redirect()->route('partecipant.show', $partecipant->slug);
     }
 
     /**

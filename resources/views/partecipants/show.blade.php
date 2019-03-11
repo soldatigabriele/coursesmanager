@@ -27,11 +27,12 @@
 
 @section('content')
 
-<div class="container" style="padding:30px 0;">
+<div class="container" style="padding:30px 0; @if($partecipant->deleted_at) color:#ccc; @endif">
   <div class="row justify-content-center">
     <div class="col-md-10 col-sm-12">
       <div class="card">
         <div class="card-header"><b>RIASSUNTO UTENTE {{ strtoupper($partecipant->name) }} {{ strtoupper($partecipant->surname) }}</b></div>
+       
         <div class="card-body">
           <div class="col alert alert-primary">
             
@@ -49,16 +50,18 @@
           </div>
           <br>
           @if($coupon = $partecipant->personalCoupon)
-            <div class="col alert alert-success">
-              <h3>BUONO SCONTO</h3>
-              <p> 
-              Invita altre persone a iscriversi: per ogni registrazione effettuata con il tuo codice, riceverai uno sconto di <span style="font-weight:600;font-size:120%;">10€</span> sulla quota di partecipazione al presente seminario (non fruibile su altri corsi). 
-              Chi si iscriverà con il tuo codice riceverà a sua volta uno sconto di <span style="font-weight:600;font-size:120%;">10€</span>.
-              </p>
-              <p>
-                Il tuo codice è: <span style="font-weight:600;border:solid 1px green;padding:3px;border-radius:4px;"> {{ $coupon->value }} </span>
-              </p>
-            </div>
+            @if(!$partecipant->deleted_at)
+              <div class="col alert alert-success">
+                <h3>BUONO SCONTO</h3>
+                <p> 
+                Invita altre persone a iscriversi: per ogni registrazione effettuata con il tuo codice, riceverai uno sconto di <span style="font-weight:600;font-size:120%;">10€</span> sulla quota di partecipazione al presente seminario (non fruibile su altri corsi). 
+                Chi si iscriverà con il tuo codice riceverà a sua volta uno sconto di <span style="font-weight:600;font-size:120%;">10€</span>.
+                </p>
+                <p>
+                  Il tuo codice è: <span style="font-weight:600;border:solid 1px green;padding:3px;border-radius:4px;"> {{ $coupon->value }} </span>
+                </p>
+              </div>
+            @endif
           @endif
 
           <div class="clearfix"></div><br>
@@ -77,11 +80,31 @@
           </div>
           <div class="clearfix"></div><br>
           <hr>
-            @auth
-              <a role="button" href="{{ route('home') }}" class="btn btn-secondary">Indietro</a>
-            @else
-              <a role="button" href="http://www.laboa.org" class="btn btn-success">Torna a Laboa.org</a>
-            @endif
+          <div style="display:flex;justify-content:space-between;">
+            <div>
+              @auth
+                <a role="button" href="{{ route('home') }}" class="btn btn-secondary">Indietro</a>
+              @else
+                <a role="button" href="http://www.laboa.org" class="btn btn-success">Torna a Laboa.org</a>
+              @endif
+            </div>
+            <div>
+              @auth
+                @if($partecipant->deleted_at)
+                  <form action="{{ route('partecipant.restore', $partecipant->id) }}" method="POST">
+                    @csrf
+                    <button type="sumbit" class="btn btn-warning">Ripristina</button>
+                  </form>
+                @else
+                  <form action="{{ route('partecipant.destroy', $partecipant->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="sumbit" class="btn btn-danger">Cancella Utente</button>
+                  </form>
+                @endif
+              @endif
+            </div>
+          </div>
         </div>
       </div>
     </div>

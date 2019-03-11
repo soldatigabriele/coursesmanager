@@ -227,7 +227,7 @@ class RoutesTest extends TestCase
         $this->actingAs($this->user);
 
         $this->delete(route('partecipant.destroy', $this->partecipant->id))
-            ->assertStatus(200);
+            ->assertStatus(302);
         $this->assertNotEquals($this->partecipant->fresh()->deleted_at, null);
     }
 
