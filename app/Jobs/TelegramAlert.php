@@ -38,7 +38,9 @@ class TelegramAlert implements ShouldQueue
      */
     public function handle()
     {
-        $response = Telegram::alert($this->text, $this->disableNotification);
+        $client = new \GuzzleHttp\Client();
+        $telegram = new Telegram($client);
+        $response = $telegram->alert($this->text, $this->disableNotification);
         (new Logger)->log('2', 'Telegram Response', $response, $this->request);
     }
 }
