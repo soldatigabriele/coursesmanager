@@ -6,8 +6,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Coupon::class, function (Faker $faker) {
 
-    $course = App\Course::inRandomOrder()->first();
-    $course = factory('App\Course')->create();
+    $course = factory('App\Course')->create([
+        'user_id' => 1,
+    ]);
     $course->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
     $partecipantId = $course->partecipants()->inRandomOrder()->first()->id;
 
