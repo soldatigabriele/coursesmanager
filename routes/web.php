@@ -32,6 +32,11 @@ Route::middleware('auth')->group(function () {
 Route::post('partecipants', 'PartecipantsController@store')->name('partecipant.store');
 Route::get('partecipants/{slug}', 'PartecipantsController@show')->name('partecipant.show');
 
+// Estrattore email
+Route::get('email-extractor', function(){
+    return view('email-extractor');
+})->name('email-extractor');
+
 
 Route::resource('newsletters', 'NewslettersController', [
     'names' => [

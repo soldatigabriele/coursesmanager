@@ -86,9 +86,18 @@
                                 <a role="button" href="{{ route('newsletter.index') }}" class="btn btn-outline-dark">Newsletter</a>
                             </div>
                         </div>
+
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <h5>Estrattore Mail</h5>
+                            </div>
+                            <div class="col-md-4 main-buttons">
+                                <a role="button" href="{{ route('email-extractor') }}" class="btn btn-outline-primary">Estrattore Mail</a>
+                            </div>
                         </div>
 
-                    <br>
+                    </div>
+
                     <hr>
                     <div class="d-flex flex-column justify-content-around" style="height:300px">
                         <h4>Schede Iscrizione</h4>
