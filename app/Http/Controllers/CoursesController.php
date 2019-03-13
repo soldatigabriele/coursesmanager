@@ -26,7 +26,7 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $courses = Course::where('user_id', Auth::user()->id)->where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
+        $courses = Course::where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
         return view('courses.index')->with(['courses' => $courses, 'header' => ['test', 'test2', 'test3']]);
     }
 
@@ -61,7 +61,7 @@ class CoursesController extends Controller
 
         (new Logger)->log('1', 'Course Creation Success', json_encode($request->all()), $request);
 
-        $user_id = Auth::user()->id;
+        $user_id = auth()->user()->id;
         $course = new Course;
         $course->date = $request->date;
         $course->limit = $request->limit;
@@ -70,7 +70,6 @@ class CoursesController extends Controller
         $end_date = Carbon::createFromFormat('d/m/yy', $request->end_date);
         $course->start_date = $start_date;
         $course->end_date = $end_date;
-        $course->user_id = $user_id;
         $course->save();
         // aggiungo l'id per evitare codici doppi
         $course->long_id = $course->fresh()->id . '-' . $request->long_id;
@@ -103,10 +102,6 @@ class CoursesController extends Controller
     public function show(Course $course, Request $request)
     {
         return $course;
-        // if($course->user_id == Man::Id($request)){
-        //     return $course;
-        // }
-        // return response()->json(['error' => 'You cannot see this resource']);
     }
 
     /**

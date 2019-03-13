@@ -61,10 +61,6 @@ Route::get('newsletters/create/test', function () {
     return view('newsletters.create-test')->with(['regions' => \App\Region::all()]);
 })->name('scheda-test')->middleware('auth');
 
-Route::get('getsubscriptions/{user_id?}', 'SubscriptionsController@getSubscriptions');
-Route::post('subscribe', 'SubscriptionsController@subscribe');
-Route::post('unsubscribe', 'SubscriptionsController@unsubscribe');
-
 // Homepage
 Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 

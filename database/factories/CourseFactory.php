@@ -8,9 +8,6 @@ $factory->define(App\Course::class, function (Faker $faker) {
     return [
         'long_id' => strtoupper(str_random(6)),
         'description' => $faker->sentence,
-        'user_id' => function () {
-            return factory('App\User')->create()->id;
-        },
         'date' => date('d/m/Y') . ' al ' . date('d/m/Y'),
         'start_date' => Carbon::now()->addDays($date),
         'end_date' => Carbon::now()->addDays($date + rand(1, 6)),

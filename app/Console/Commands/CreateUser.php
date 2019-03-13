@@ -49,18 +49,12 @@ class CreateUser extends Command
         $password = $this->ask('What is the user password?');
         $this->info($password);
 
-        //generates the apikey
-        $token = strtolower(md5(uniqid())) . strtolower(md5(uniqid()));
-
-        $this->info('This is his API token: ' . $token);
-
         $manager = new User;
         $manager->name = $name;
         $manager->email = $email;
         $manager->telegram_chat_id = 0;
         $manager->telegram_settings = "{}";
         $manager->password = bcrypt($password);
-        $manager->api_token = $token;
         $manager->active = $is_active;
         $manager->save();
     }

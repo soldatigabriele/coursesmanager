@@ -21,7 +21,7 @@ class PartecipantsControllerTest extends TestCase
     public function test_delete()
     {
         $this->actingAs(factory(User::class)->create());
-        $course = factory('App\Course')->create(['user_id' => auth()->id()]);
+        $course = factory('App\Course')->create();
         $course->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
 
         $partecipant = $course->partecipants->random()->first();
@@ -41,7 +41,7 @@ class PartecipantsControllerTest extends TestCase
     public function test_restore()
     {
         $this->actingAs(factory(User::class)->create());
-        $course = factory('App\Course')->create(['user_id' => auth()->id()]);
+        $course = factory('App\Course')->create();
         $course->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
 
         $partecipant = Partecipant::latest('id')->first();
@@ -65,10 +65,10 @@ class PartecipantsControllerTest extends TestCase
     {
         $this->actingAs(factory(User::class)->create());
 
-        $course = factory('App\Course')->create(['user_id' => auth()->id()]);
+        $course = factory('App\Course')->create();
         $activePartecipants = factory('App\Partecipant', 10)->create();
         $course->partecipants()->saveMany($activePartecipants);
-        $course = factory('App\Course')->create(['user_id' => auth()->id()]);
+        $course = factory('App\Course')->create();
         $deletedPartecipants = factory('App\Partecipant', 10)->create(['deleted_at' => now()]);
         $course->partecipants()->saveMany($deletedPartecipants);
 

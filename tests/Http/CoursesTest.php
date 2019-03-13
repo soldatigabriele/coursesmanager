@@ -21,34 +21,19 @@ class CoursesTest extends TestCase
     }
 
     /**
-     * Index request shows your courses
+     * Index request shows all courses
      *
      * @return void
      */
     public function test_index()
     {
-        factory('App\Course', 10)->create(['user_id' => $this->user->id])->each(function ($u) {
+        factory('App\Course', 10)->create()->each(function ($u) {
             $u->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
         });
         $this->actingAs($this->user);
         $response = $this->get('/courses');
         $response->assertStatus(200)
             ->assertSee(Course::first()->description);
-    }
-
-    /**
-     * Index request does not show other admin courses
-     *
-     * @return void
-     */
-    public function test_index_does_not_show_others_courses()
-    {
-        $course = factory('App\Course')->create(['user_id' => $this->user->id]);
-        $course->partecipants()->saveMany(factory('App\Partecipant', 10)->create());
-        $this->actingAs(factory('App\User')->create());
-        $response = $this->get('/courses');
-        $response->assertStatus(200)
-            ->assertDontSee($course->description);
     }
 
     /**
@@ -59,7 +44,7 @@ class CoursesTest extends TestCase
     public function test_auth_user_can_update_course()
     {
         $this->actingAs($this->user);
-        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $course = factory('App\Course')->create(['description' => 'old_description']);
         $courseData = $course->toArray();
         $courseData['description'] = $this->faker->sentence;
         $start = (Carbon::parse($courseData['start_date'])->format('d/m/Y'));
@@ -78,7 +63,7 @@ class CoursesTest extends TestCase
      */
     public function test_course_headers()
     {
-        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $course = factory('App\Course')->create(['description' => 'old_description']);
         $data = [
             'food' => 'vegetariano',
             'transport' => 'treno',
@@ -104,7 +89,7 @@ class CoursesTest extends TestCase
      */
     public function test_course_extra_headers()
     {
-        $course = factory('App\Course')->create(['description' => 'old_description', 'user_id' => $this->user->id]);
+        $course = factory('App\Course')->create(['description' => 'old_description']);
         $data = [
             'food' => 'vegetariano',
             'transport' => 'treno',

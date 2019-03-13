@@ -16,10 +16,6 @@ class Course extends Model
     // Base table headers: we will add the extra field
     protected $headers = ['nome', 'cognome', 'email', 'telefono', 'regione'];
 
-    // protected $casts = [
-    //     'start_date' => 'date',
-    //     'end_date' => 'date',
-    // ];
     public function partecipants()
     {
         return $this->belongsToMany('App\Partecipant')->withTimestamps();
@@ -28,11 +24,6 @@ class Course extends Model
     public function subs()
     {
         return $this->partecipants()->count();
-    }
-
-    public function user()
-    {
-        return $this->belongsTo('App\User');
     }
 
     public function getVegetarians()

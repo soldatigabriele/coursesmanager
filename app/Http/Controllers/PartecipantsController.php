@@ -28,7 +28,7 @@ class PartecipantsController extends Controller
     public function index(Request $request)
     {
         // Get all the user's courses partecipants
-        $parts = User::partecipants();
+        $parts = Partecipant::all();
         $region_id = (isset($request->region_id)) ? $request->region_id : null;
         if ($region_id) {
             $parts = Partecipant::where('region_id', $region_id)->get();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Partecipant;
 use App\ApplicationLog;
 
 class HomeController extends Controller
@@ -14,11 +15,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        $latest_partecipants = Auth::user()->partecipants()->sortByDesc('created_at')->take(15);
-
         return view('home')->with([
-            'partecipants' => $latest_partecipants,
+            'partecipants' => Partecipant::orderByDesc('id')->take(15)->get(),
             'errors' => ApplicationLog::orderByDesc('id')->where('status', '0')->take(5)->get(),
             ]);
     }

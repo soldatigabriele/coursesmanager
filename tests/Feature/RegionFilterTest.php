@@ -31,7 +31,7 @@ class RegionFilterTest extends TestCase
      */
     public function test_region_filter_in_mail_page()
     {
-        $courses = factory('App\Course')->create(['user_id' => $this->user->id])
+        $courses = factory('App\Course')->create()
         ->each(function($u){
             $u->partecipants()->saveMany(factory('App\Partecipant', 3)->create(['region_id'=>1]));
             $u->partecipants()->saveMany(factory('App\Partecipant', 3)->create(['region_id'=>2]));

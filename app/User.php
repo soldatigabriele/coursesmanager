@@ -29,23 +29,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function courses()
-    {
-        return $this->hasMany('App\Course');
-    }
-
-    /* Finds all the partecipants to a user courses
-     *  if no user_id is provided, the auth id is retrieved
-     *
-     */
-    public static function partecipants($user_id = null)
-    {
-        $user = ($user_id) ? User::find($user_id) : \Auth::user();
-        $all = new Collection;
-        foreach ($user->courses as $course) {
-            $all = $all->merge($course->partecipants);
-        }
-        return $all;
-    }
 }
