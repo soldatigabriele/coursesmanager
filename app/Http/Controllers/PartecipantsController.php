@@ -124,8 +124,8 @@ class PartecipantsController extends Controller
 
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
-            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
-            (new Logger)->log('0', 'Partecipant Subscription Error', json_encode($data), $request);
+            $data = ((array_merge($validation->getData(), ['errors' => $validation->errors()->getMessages()])));
+            (new Logger)->log('0', 'Partecipant Subscription Error', $data, $request);
             return redirect()->back()
                 ->withErrors($validation)
                 ->withInput();
