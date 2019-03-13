@@ -49,10 +49,16 @@
                                     Email
                                 </td>
                                 <td >
+                                    Corso
+                                </td>
+                                <td >
+                                    Iscritto il
+                                </td>
+                                <td >
                                     Cancellato il
                                 </td>
                                 <td>
-                                    Manage
+                                    Dettagli
                                 </td>
                             </tr>
                             @foreach($partecipants as $n)
@@ -65,6 +71,12 @@
                                     </td>
                                     <td>
                                         {{$n->email}}
+                                    </td>
+                                    <td>
+                                        {{$n->courses->first()->long_id}}
+                                    </td>
+                                    <td>
+                                        {{$n->created_at->format('d/m/Y - H:i') }}
                                     </td>
                                     <td>
                                         {{$n->deleted_at->format('d/m/Y - H:i') }}
