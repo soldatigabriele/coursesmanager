@@ -116,7 +116,7 @@ class RoutesTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
-        $this->get(route('partecipant-create'))
+        $this->get(route('partecipant.create'))
             ->assertStatus(302)
             ->assertRedirect(route('login'));
 
@@ -190,7 +190,7 @@ class RoutesTest extends TestCase
         $this->get(route('partecipant.show', $this->partecipant->slug))
             ->assertStatus(200);
 
-        $this->get(route('partecipant-create'))
+        $this->get(route('partecipant.create'))
             ->assertStatus(200);
 
         $this->get(route('courses.index'))

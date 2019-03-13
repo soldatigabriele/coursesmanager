@@ -40,8 +40,8 @@
                 <div class="card-header"><h4>Pannello di controllo</h4></div>
                 <div class="card-body">
                     <div class="container">
-                        <div class="col-md-12">
-                            
+                        <div class="col-md-12 d-flex flex-column justify-content-around" style="height:300px">
+
                         <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Crea un nuovo corso</h5>
@@ -50,7 +50,7 @@
                                 <a role="button" href="courses/create" class="btn btn-outline-warning">Crea Corso</a>
                             </div>
                         </div>
-                        <br>
+
                         <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Controlla le Tabelle esistenti</h5>
@@ -59,16 +59,25 @@
                                 <a role="button" href="courses" class="btn btn-outline-success">Tabelle</a>
                             </div>
                         </div>
-                        <br>
+
                         <div class="row justify-content-between">
                             <div class="col-md-6">
-                                <h5>Lista Mail</h5>
+                                <h5>Lista Corsisti</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
-                                <a role="button" href="{{ route('partecipant.index') }}" class="btn btn-outline-info">Lista Mail</a>
+                                <a role="button" href="{{ route('partecipant.index') }}" class="btn btn-outline-info">Lista Corsisti</a>
                             </div>
                         </div>
-                        <br>
+
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <h5>Corsisti Cancellati</h5>
+                            </div>
+                            <div class="col-md-4 main-buttons">
+                                <a role="button" href="{{ route('partecipant.deleted') }}" class="btn btn-outline-secondary">Corsisti Cancellati</a>
+                            </div>
+                        </div>
+
                         <div class="row justify-content-between">
                             <div class="col-md-6">
                                 <h5>Newsletter</h5>
@@ -81,55 +90,53 @@
 
                     <br>
                     <hr>
-                    <h4>Schede Iscrizione</h4>
-                    <div class="row justify-content-between">
-                        <div class="col-3 schede-buttons" >
-                            <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
+                    <div class="d-flex flex-column justify-content-around" style="height:300px">
+                        <h4>Schede Iscrizione</h4>
+                        <div class="row justify-content-between">
+                            <div class="col-3 schede-buttons" >
+                                <a role="button" href="{{ route('scheda-1') }}" class="btn btn-outline-primary">Vai alla scheda 1</a>
+                            </div>
+                            <div class="col-6 link">
+                                <span id="copyTarget1">{{ route('scheda-1') }}</span> 
+                            </div>
+                            <div class="col-2">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
                         </div>
-                        <div class="col-6 link">
-                            <span id="copyTarget1">{{ route('scheda-1') }}</span> 
+                        <div class="row justify-content-between">
+                            <div class="col-3 schede-buttons" >
+                                <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
+                            </div>
+                            <div class="col-6 link">
+                                <span id="copyTarget2">{{ route('scheda-2') }}</span> 
+                            </div>
+                            <div class="col-2">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget1'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                        <div class="row justify-content-between">
+                            <div class="col-3 schede-buttons" >
+                                <a role="button" href="{{ route('scheda-3') }}" class="btn btn-outline-primary">Vai alla scheda 3</a>
+                            </div>
+                            <div class="col-6 link">
+                                <span id="copyTarget3">{{ route('scheda-3') }}</span> 
+                            </div>
+                            <div class="col-2">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget3'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col-3 schede-buttons">
+                                <a role="button" href="{{ route('newsletter.create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
+                            </div>
+                            <div class="col-6 link">
+                                <span id="copyTarget4">{{ route('newsletter.create') }}</span> 
+                            </div>
+                            <div class="col-2">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget4'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="row justify-content-between">
-                        <div class="col-3 schede-buttons" >
-                            <a role="button" href="{{ route('scheda-2') }}" class="btn btn-outline-primary">Vai alla scheda 2</a>
-                        </div>
-                        <div class="col-6 link">
-                            <span id="copyTarget2">{{ route('scheda-2') }}</span> 
-                        </div>
-                        <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget2'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row justify-content-between">
-                        <div class="col-3 schede-buttons" >
-                            <a role="button" href="{{ route('scheda-3') }}" class="btn btn-outline-primary">Vai alla scheda 3</a>
-                        </div>
-                        <div class="col-6 link">
-                            <span id="copyTarget3">{{ route('scheda-3') }}</span> 
-                        </div>
-                        <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget3'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row justify-content-between">
-                        <div class="col-3 schede-buttons">
-                            <a role="button" href="{{ route('newsletter.create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
-                        </div>
-                        <div class="col-6 link">
-                            <span id="copyTarget4">{{ route('newsletter.create') }}</span> 
-                        </div>
-                        <div class="col-2">
-                            <button id="copyButton" onclick="copyToClipboard('#copyTarget4'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
-                        </div>
-                    </div>
-                    <br>
                 </div>
             </div>
         </div>

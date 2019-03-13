@@ -10,6 +10,7 @@ class Partecipant extends Model
     use SoftDeletes;
 
     protected $fillable = ['name', 'surname', 'slug', 'email', 'phone', 'data', 'region_id'];
+    protected $dates = ['deleted_at'];
 
     public function courses()
     {

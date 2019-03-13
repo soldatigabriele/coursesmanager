@@ -27,14 +27,18 @@
 
 @section('content')
 
-<div class="container" style="padding:30px 0; @if($partecipant->deleted_at) color:#ccc; @endif">
+@php
+  $deleted = $partecipant->deleted_at;
+@endphp
+
+<div class="container" style="padding:30px 0; @if($deleted) color:#ccc; @endif">
   <div class="row justify-content-center">
     <div class="col-md-10 col-sm-12">
       <div class="card">
         <div class="card-header"><b>RIASSUNTO UTENTE {{ strtoupper($partecipant->name) }} {{ strtoupper($partecipant->surname) }}</b></div>
        
         <div class="card-body">
-          <div class="col alert alert-primary">
+          <div class="col alert @if($deleted) alert-secondary @else alert-primary @endif ">
             
             <h4>Controlla i tuoi dettagli:</h4>
             
@@ -90,7 +94,7 @@
             </div>
             <div>
               @auth
-                @if($partecipant->deleted_at)
+                @if($deleted)
                   <form action="{{ route('partecipant.restore', $partecipant->id) }}" method="POST">
                     @csrf
                     <button type="sumbit" class="btn btn-warning">Ripristina</button>

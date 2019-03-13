@@ -19,15 +19,10 @@ Route::get('courses/{course}/export')
     ->uses('CoursesController@export')
     ->middleware('auth');
 
-Route::resource('partecipants', 'PartecipantsController', [
-    'names' => [
-        'edit' => 'partecipant.edit',
-        'update' => 'partecipant.update',
-    ],
-]);
 Route::middleware('auth')->group(function () {
     Route::get('partecipants', 'PartecipantsController@index')->name('partecipant.index');
-    Route::get('partecipants/create', 'PartecipantsController@create')->name('partecipant-create');
+    Route::get('partecipants/deleted', 'PartecipantsController@deleted')->name('partecipant.deleted');
+    Route::get('partecipants/create', 'PartecipantsController@create')->name('partecipant.create');
     Route::get('partecipants/{partecipant}/edit', 'PartecipantsController@edit')->name('partecipant.edit');
     Route::put('partecipants/{partecipant}', 'PartecipantsController@update')->name('partecipant.update');
     Route::delete('partecipants/{partecipant}', 'PartecipantsController@destroy')->name('partecipant.destroy');
@@ -36,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
 Route::post('partecipants', 'PartecipantsController@store')->name('partecipant.store');
 Route::get('partecipants/{slug}', 'PartecipantsController@show')->name('partecipant.show');
+
 
 Route::resource('newsletters', 'NewslettersController', [
     'names' => [

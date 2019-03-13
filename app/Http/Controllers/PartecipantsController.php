@@ -277,4 +277,15 @@ class PartecipantsController extends Controller
         } while (!Coupon::where('value', $value)->get()->isEmpty());
         return $value;
     }
+
+    /**
+     * Return the list of deleted partecipants
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function deleted()
+    {
+        $partecipants = Partecipant::withTrashed()->whereNotNull('deleted_at')->get();
+        return view('partecipants.deleted')->with(['partecipants' => $partecipants]);   
+    }
 }
