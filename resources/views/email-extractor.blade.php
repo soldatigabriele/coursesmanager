@@ -30,7 +30,7 @@ function numonly(value){
 }
 
 function findEmail() {
-	$('.copyButton').attr('class', 'btn btn-primary copyButton');
+	$('.copyButton').attr('class', 'btn btn-outline-primary copyButton');
 	$('.copyButton').val('Copia');	
 	var email = "none";
 	var a = 0;
@@ -167,7 +167,7 @@ function findEmail() {
 										<br/>
 										<input class="btn btn-success" type="button" value="Extract" onclick="findEmail();"/> 
 										<input type="reset" class="btn btn-danger" value="Reset" />&nbsp;&nbsp;&nbsp;
-										<input id="copyButton" type="button" onclick="copyToClipboard('#results'), changeClass.call(this)" class="btn btn-primary copyButton" value="Copia">
+										<input id="copyButton" type="button" onclick="copyToClipboard('#results'), changeClass.call(this)" class="btn btn-outline-primary copyButton" value="Copia">
 										</td>
 									<td valign="top" align="right" nowrap="nowrap">
 										<br />
