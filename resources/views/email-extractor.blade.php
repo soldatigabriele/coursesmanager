@@ -30,6 +30,8 @@ function numonly(value){
 }
 
 function findEmail() {
+	$('.copyButton').attr('class', 'btn btn-primary copyButton');
+	$('.copyButton').val('Copia');	
 	var email = "none";
 	var a = 0;
 	var ingroup = 0;
@@ -154,7 +156,7 @@ function findEmail() {
 										<textarea name="input" class="form-control" rows="8" cols="25" style="width:98%"></textarea></td>
 									<td valign="top" align="center" width="50%">
 										<strong>Output</strong><br />
-										<textarea name="output" rows="8" class="form-control" cols="25" style="width:98%" readonly="readonly"></textarea></td>
+										<textarea id="results" name="output" rows="8" class="form-control" cols="25" style="width:98%" readonly="readonly"></textarea></td>
 								</tr>
 								<tr>
 									<td valign="top" align="left" colspan="2" style="border-bottom:1px solid #999999;">
@@ -162,9 +164,10 @@ function findEmail() {
 								</tr>
 								<tr>
 									<td valign="top" align="left">
-										<br />
-										<input class="btn btn-success" type="button" value="Extract" onclick="findEmail();" /> 
+										<br/>
+										<input class="btn btn-success" type="button" value="Extract" onclick="findEmail();"/> 
 										<input type="reset" class="btn btn-danger" value="Reset" />&nbsp;&nbsp;&nbsp;
+										<input id="copyButton" type="button" onclick="copyToClipboard('#results'), changeClass.call(this)" class="btn btn-primary copyButton" value="Copia">
 										</td>
 									<td valign="top" align="right" nowrap="nowrap">
 										<br />
@@ -231,5 +234,17 @@ function findEmail() {
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	})();
 
+	// Copia gli indirizzi email
+	function copyToClipboard(element) {
+			var $temp = $("<textarea>");
+			$("body").append($temp);
+			$temp.val($(element).val()).select();
+			document.execCommand("copy");
+			$temp.remove();
+	}
+	function changeClass(){
+			$(this).attr('class', 'btn btn-primary copyButton');
+			$(this).val('Copiato');
+	}
 	</script>
 @endsection
