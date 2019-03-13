@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\ApplicationLog;
 use App\Course;
-use App\Partecipant;
 use App\Region;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
+use App\Partecipant;
+use App\ApplicationLog;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoggingTest extends TestCase
 {
@@ -89,7 +89,7 @@ class LoggingTest extends TestCase
             'email.required' => 'Inserire un indirizzo email',
         ];
         foreach ($messages as $key => $value) {
-            $this->assertContains($value, $log->value);
+            $this->assertTrue(collect($log->value['errors'])->flatten()->contains($value));
         }
     }
 
@@ -109,7 +109,7 @@ class LoggingTest extends TestCase
             'email_again.same' => 'Le email non coincidono',
         ];
         foreach ($messages as $key => $value) {
-            $this->assertContains($value, $log->value);
+            $this->assertTrue(collect($log->value['errors'])->flatten()->contains($value));
         }
     }
 
@@ -128,7 +128,7 @@ class LoggingTest extends TestCase
             'email.email' => 'Inserire un indirizzo email valido',
         ];
         foreach ($messages as $key => $value) {
-            $this->assertContains($value, $log->value);
+            $this->assertTrue(collect($log->value['errors'])->flatten()->contains($value));
         }
     }
 
