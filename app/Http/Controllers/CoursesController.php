@@ -52,8 +52,8 @@ class CoursesController extends Controller
 
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
-            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
-            (new Logger)->log('0', 'Course Creation Error', json_encode($data), $request);
+            $data = ((array_merge($validation->getData(), ['errors' => $validation->errors()->getMessages()])));
+            (new Logger)->log('0', 'Course Creation Error', $data, $request);
             return redirect(route('courses.create'))
                 ->withErrors($validation)
                 ->withInput();
