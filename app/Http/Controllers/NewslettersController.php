@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Logger;
-use App\Http\Controllers\Controller;
-use App\Newsletter;
 use App\Region;
-use App\Rules\Region as RuleRegion;
+use App\Newsletter;
+use App\Helpers\Logger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\Region as RuleRegion;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class NewslettersController extends Controller
@@ -81,13 +81,13 @@ class NewslettersController extends Controller
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
 
-            (new Logger)->log('0', 'Newsletter Subscription Error', json_encode($data));
+            (new Logger)->log('0', 'Newsletter Subscription Error', $data);
             return redirect()->back()
                 ->withErrors($validation)
                 ->withInput();
         }
 
-        (new Logger)->log('1', 'Newsletter Subscription Success', json_encode($request->all()), $request);
+        (new Logger)->log('1', 'Newsletter Subscription Success', $request->all(), $request);
 
         $data = $request->all();
         $newsletter = new Newsletter();

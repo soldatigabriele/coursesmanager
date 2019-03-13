@@ -9,16 +9,13 @@ class Logger
 
     /*
      *
-     * @params json $json_data
+     * @params array $json_data
      */
-    public function log($status, $description, $json_data = null, $request = null)
+    public function log($status, string $description, array $json_data = [], $request = null)
     {
         $log = new ApplicationLog;
         $log->status = $status;
         $log->description = $description;
-        if (!$json_data) {
-            $json_data = json_encode(['']);
-        }
         $log->value = $json_data;
 
         if ($request) {

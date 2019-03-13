@@ -59,7 +59,7 @@ class CoursesController extends Controller
                 ->withInput();
         }
 
-        (new Logger)->log('1', 'Course Creation Success', json_encode($request->all()), $request);
+        (new Logger)->log('1', 'Course Creation Success', $request->all(), $request);
 
         $user_id = auth()->user()->id;
         $course = new Course;
@@ -139,12 +139,12 @@ class CoursesController extends Controller
         $validation = Validator::make($request->all(), $rules, $messages);
         if ($validation->fails()) {
             $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
-            (new Logger)->log('0', 'Course Update Error', json_encode($data), $request);
+            (new Logger)->log('0', 'Course Update Error', $data, $request);
             return redirect(route('courses.edit', $course->id))
                 ->withErrors($validation);
         }
 
-        (new Logger)->log('1', 'Course Update Success', json_encode($request->all()), $request);
+        (new Logger)->log('1', 'Course Update Success', $request->all(), $request);
 
         $course->fill($request->all());
 

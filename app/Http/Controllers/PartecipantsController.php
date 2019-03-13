@@ -131,7 +131,7 @@ class PartecipantsController extends Controller
                 ->withInput();
         }
 
-        (new Logger)->log('1', 'Partecipant Subscription Success', json_encode($request->all()), $request);
+        (new Logger)->log('1', 'Partecipant Subscription Success', $request->all(), $request);
 
         $data = $request->all();
 
