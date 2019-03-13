@@ -6,13 +6,13 @@ use Mockery;
 use App\Course;
 use App\Region;
 use Faker\Factory;
-use App\Newsletter;
 use Tests\TestCase;
 use App\Partecipant;
+use GuzzleHttp\Client;
 use App\ApplicationLog;
 use App\Helpers\Telegram;
 use App\Jobs\TelegramAlert;
-use Illuminate\Support\Facades\Event;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -47,10 +47,10 @@ class TelegramIntegrationTest extends TestCase
             'region_id' => Region::inRandomOrder()->first()->id,
             'email' => $email,
             'email_again' => $email,
-            'phone' => '3'.rand(111111111, 999999999),
+            'phone' => '3' . rand(111111111, 999999999),
             'job' => $data['job'],
             'city' => $data['city'],
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
 
         $this->newNewsletterData = [
@@ -59,11 +59,10 @@ class TelegramIntegrationTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'region_id' => Region::inRandomOrder()->first()->id,
             'active' => 1,
-            'meta' => json_encode(['ip'=>'127.0.0.2']),
+            'meta' => json_encode(['ip' => '127.0.0.2']),
         ];
         factory('App\Course', 10)->create();
     }
-
 
     // public function test_newsletter_subscription_triggers_telegram_alert()
     // {
@@ -92,8 +91,15 @@ class TelegramIntegrationTest extends TestCase
     //     $this->assertContains($this->newNewsletterData['surname'], $log->value);
     // }
 
+    /**
+     * Test Telegram notification is sent after partecipant subscription to a course
+     *
+     * @return void
+     */
     public function test_telegram_message_is_sent_after_partecipant_subscription()
     {
+        ApplicationLog::truncate();
+        Queue::fake();
         $course = Course::inRandomOrder()->first();
         $this->newPartecipantData['course_id'] = $course->id;
         $this->newPartecipantData['disableNotification'] = 'true';
@@ -112,7 +118,23 @@ class TelegramIntegrationTest extends TestCase
     public function test_error_is_logged_if_no_chatId_is_found_in_env()
     {
         app('config')->set('app.telegram.chat_id', null);
-        $response = Telegram::alert('text', true);
+        $client = new \GuzzleHttp\Client();
+        $telegram = new Telegram($client);
+        $response = $telegram->alert('text', true);
         $this->assertContains('no chat id selected', $response);
+    }
+
+    public function test_telegram_integration()
+    {
+        $guzzle = Mockery::mock(\GuzzleHttp\Client::class);
+        $chatId = app('config')->get('app.telegram.chat_id');
+        $url = env('TELEGRAM_URI') . env('TELEGRAM_TOKEN') . '/sendMessage?&disable_notification=true&parse_mode=markdown&&chat_id=' . $chatId . '&text=text';
+
+        $guzzle->shouldReceive('request')
+            ->with('GET', $url, ['Accept' => 'application/json'])
+            ->once()->andReturn(new Response);
+
+        $telegram = new Telegram($guzzle);
+        $response = $telegram->alert('text', true);
     }
 }
