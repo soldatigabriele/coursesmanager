@@ -79,9 +79,9 @@ class NewslettersController extends Controller
         $validation = Validator::make($request->all(), $rules, $messages);
 
         if ($validation->fails()) {
-            $data = ((array_merge($validation->getData(), $validation->errors()->getMessages())));
+            $data = ((array_merge($validation->getData(), ['errors' => $validation->errors()->getMessages()])));
 
-            (new Logger)->log('0', 'Newsletter Subscription Error', $data);
+            (new Logger)->log('0', 'Newsletter Subscription Error', $data, $request);
             return redirect()->back()
                 ->withErrors($validation)
                 ->withInput();
