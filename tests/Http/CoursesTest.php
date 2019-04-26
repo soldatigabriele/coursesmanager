@@ -37,6 +37,21 @@ class CoursesTest extends TestCase
     }
 
     /**
+     * Authorised user can create a course
+     *
+     * @return void
+     */
+    public function test_auth_user_can_create_course()
+    {
+        $this->actingAs($this->user);
+        $courseData = factory('App\Course')->make()->toArray();
+        $courseData['start_date'] = '10/10/2000';
+        $courseData['end_date'] = '10/10/2000';
+        $this->post(route('courses.store'), $courseData)->assertStatus(302);
+        $this->assertEquals($courseData['description'], Course::latest()->first()->description);
+    }
+
+    /**
      * Authorised user can update a course
      *
      * @return void

@@ -61,7 +61,6 @@ class CoursesController extends Controller
 
         (new Logger)->log('1', 'Course Creation Success', $request->all(), $request);
 
-        $user_id = auth()->user()->id;
         $course = new Course;
         $course->date = $request->date;
         $course->limit = $request->limit;
