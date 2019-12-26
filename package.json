@@ -25,6 +25,6 @@
     "dependencies": {
         "gijgo": "^1.9.4",
         "sweetalert": "^2.1.2",
-        "yarn": "^1.5.1"
+        "yarn": "^1.17.3"
     }
 }
