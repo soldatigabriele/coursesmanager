@@ -46,7 +46,7 @@
             <div class="col-12 elements">Cognome: <span class="value">{{ $partecipant->surname }}</span></div>
             <div class="col-12 elements">Email: <span class="value">{{ $partecipant->email }}</span></div>
             <div class="col-12 elements">Telefono: <span class="value">{{ $partecipant->phone }}</span></div>
-            <div class="col-12 elements">Provenienza: <span class="value">{{ $partecipant->getData()->city }}</span></div>
+            <div class="col-12 elements">Provenienza: <span class="value">{{ $partecipant->getData()->city ?? '' }}</span></div>
 
           </div>
           <div class="col">

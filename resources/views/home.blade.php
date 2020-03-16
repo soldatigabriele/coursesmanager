@@ -135,6 +135,17 @@
                             </div>
                         </div>
                         <div class="row justify-content-between">
+                            <div class="col-3 schede-buttons" >
+                                <a role="button" href="{{ route('scheda-4') }}" class="btn btn-outline-primary">Vai alla scheda 4</a>
+                            </div>
+                            <div class="col-6 link">
+                                <span id="copyTarget3">{{ route('scheda-4') }}</span> 
+                            </div>
+                            <div class="col-2">
+                                <button id="copyButton" onclick="copyToClipboard('#copyTarget3'), changeClass.call(this)" class="btn btn-xs btn-outline-secondary copyButton">Copia</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
                             <div class="col-3 schede-buttons">
                                 <a role="button" href="{{ route('newsletter.create') }}" class="btn btn-outline-primary">Iscrizione Newsletter</a>
                             </div>
