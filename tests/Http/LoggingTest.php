@@ -85,7 +85,7 @@ class LoggingTest extends TestCase
             'surname.required' => 'Inserire una cognome valido',
             'phone.required' => 'Inserire un numero di telefono valido',
             'job.required' => 'Inserire una professione valida',
-            'city.required' => 'Inserire la propria provenienza',
+            // 'city.required' => 'Inserire la propria provenienza',
             'email.required' => 'Inserire un indirizzo email',
         ];
         foreach ($messages as $key => $value) {

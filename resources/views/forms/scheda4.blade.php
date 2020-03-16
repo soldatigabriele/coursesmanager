@@ -1,0 +1,157 @@
+@extends('forms.create')
+
+@section('style')
+<style type="text/css" media="screen">
+.subtitle{
+  font-weight: 800;
+}
+.righe>div{
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+</style>
+@endsection
+
+@section('formcontent')
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-sm-offset-2 col-md-offset-3">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" name="name" id="name" class="form-control input-lg" placeholder="" value="{{ old('name') }}">
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="form-group">
+            <label>Cognome:</label>
+            <input type="text" name="surname" id="surname" class="form-control input-lg" placeholder="" value="{{ old('surname') }}">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="form-group">
+            <label>Professione:</label>
+            <input type="text" class="form-control" name="job" value="{{ old('job') }}">
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="form-group">
+            <label>Regione:</label>
+            <select class="form-control" name="region_id">
+              <option value="empty"> - </option>
+              @foreach($regions as $region)
+                <option value="{{ $region->id }}" @if(old('region_id') == $region->id)selected @endif>{{ $region->name}}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Ho saputo del corso da:</label>
+              <select name="source" class="form-control" >
+                <option value="Sito"  @if(old('source') == 'Sito')selected @endif>Sito LaBoa</option>
+                <option value="Facebook"  @if(old('source') == 'Facebook')selected @endif>Facebook</option>
+                <option value="Amici"  @if(old('source') == 'Amici')selected @endif>Amici</option>
+                <option value="Altro"  @if(old('source') == 'Altro')selected @endif>Altro</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Quante mele voglio offrire?</label>
+              <select name="mele" class="form-control" >
+                <option value="-">-</option>
+                <option value="0"  @if(old('mele') == '0')selected @endif>0</option>
+                <option value="1"  @if(old('mele') == '1')selected @endif>1</option>
+                <option value="2"  @if(old('mele') == '2')selected @endif>2</option>
+                <option value="5"  @if(old('mele') == '5')selected @endif>5</option>
+                <option value="10"  @if(old('mele') == '10')selected @endif>10</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="text" class="form-control" name="email" value="{{ old('email') }}">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Ripeti email:</label>
+              <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Recapito telefonico:</label>
+              <input type="text" class="form-control decimals" name="phone" value="{{ old('phone') }}">
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-6">
+            <div class="form-group">
+              <label>Corso:</label>
+              <select name="course_id" class="form-control">
+                <option value="empty"> - </option>
+                @foreach($courses as $c)
+                <option value="{{$c->id}}" @if(old('course_id') == $c->id)selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-xs-10 col-sm-10 col-md-10">
+              {!! NoCaptcha::display() !!}
+            </div>
+          </div>
+       </div>
+
+       <hr class="colorgraph">
+       <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+          <input class="btn btn-lg btn-success" name="subscribe" type="submit" value="Completa Iscrizione"/>
+        </div>
+      </div>
+  </div>
+</div>
+
+<br/>
+@endsection
+
+@section('scripts')
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$(".decimals").keydown(function (event) {
+      if (event.shiftKey === true) {
+          event.preventDefault();
+      }
+
+      if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+          (event.keyCode >= 96 && event.keyCode <= 105) ||
+          event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+          event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+      } else {
+          event.preventDefault();
+      }
+
+  });
+});
+
+</script>
+
+@endsection

@@ -88,6 +88,18 @@ class PartecipantsController extends Controller
     }
 
     /**
+     * Show the scheda 4 form.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda4()
+    {
+        // return the course creation form
+        return view('forms.scheda4')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -113,7 +125,7 @@ class PartecipantsController extends Controller
             'email' => 'required|email',
             'email_again' => 'same:email',
             'job' => 'required',
-            'city' => 'required',
+            // 'city' => 'required',
             'region_id' => new RegionRule,
             'course_id' => [new CourseRule, 'required'],
         ];
