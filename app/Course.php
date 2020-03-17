@@ -16,6 +16,11 @@ class Course extends Model
     // Base table headers: we will add the extra field
     protected $headers = ['nome', 'cognome', 'email', 'telefono', 'regione'];
 
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
+    }
+
     public function partecipants()
     {
         return $this->belongsToMany('App\Partecipant')->withTimestamps();

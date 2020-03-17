@@ -62,14 +62,12 @@
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
-              <label>Quante mele voglio offrire?</label>
+              <label>Oltre alla mia, quante mele voglio offrire per qualcun altro?</label>
               <select name="mele" class="form-control" >
-                <option value="-">-</option>
                 <option value="0"  @if(old('mele') == '0')selected @endif>0</option>
                 <option value="1"  @if(old('mele') == '1')selected @endif>1</option>
                 <option value="2"  @if(old('mele') == '2')selected @endif>2</option>
-                <option value="5"  @if(old('mele') == '5')selected @endif>5</option>
-                <option value="10"  @if(old('mele') == '10')selected @endif>10</option>
+                <option value="5"  @if(old('mele') == '3')selected @endif>5</option>
               </select>
             </div>
           </div>

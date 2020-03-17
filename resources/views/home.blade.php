@@ -89,6 +89,15 @@
 
                         <div class="row justify-content-between">
                             <div class="col-md-6">
+                                <h5>Domande</h5>
+                            </div>
+                            <div class="col-md-4 main-buttons">
+                                <a role="button" href="{{ route('questions-index') }}" class="btn btn-outline-dark">Domande</a>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
                                 <h5>Estrattore Mail</h5>
                             </div>
                             <div class="col-md-4 main-buttons">
