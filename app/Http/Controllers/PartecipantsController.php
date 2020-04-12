@@ -93,10 +93,15 @@ class PartecipantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function scheda4()
+    public function scheda4(Request $request)
     {
         // return the course creation form
-        return view('forms.scheda4')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+        return view('forms.scheda4')
+            ->with([
+                'regions' => Region::all(),
+                'courses' => Course::where('end_date', '>', Carbon::today())->get(),
+                'mele'    => $request->m, // If m is set, show the "mele" field
+            ]);
     }
 
     /**

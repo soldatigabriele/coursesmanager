@@ -60,6 +60,7 @@
               </select>
             </div>
           </div>
+          @if($mele)
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
               <label>Oltre alla mia, quante mele voglio offrire per qualcun altro?</label>
@@ -71,6 +72,7 @@
               </select>
             </div>
           </div>
+          @endif
         </div>
 
         <div class="row">
