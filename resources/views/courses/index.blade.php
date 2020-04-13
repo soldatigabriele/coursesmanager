@@ -148,7 +148,7 @@
                                         </td>
                                         @foreach($course->extraHeaders() as $key)
                                         <td>
-                                        @if($key == 'shares')
+                                        @if($key == 'shares' && isset($partecipant->getData()->$key))
                                             @php echo ($partecipant->getData()->$key == 1)? "Si" : "No"; @endphp
                                         @else
                                             {{ $partecipant->getData()->$key ?? '' }}
