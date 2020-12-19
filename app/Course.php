@@ -9,7 +9,7 @@ class Course extends Model
 {
     use softDeletes;
 
-    protected $excludedKeys = ['source', 'regione'];
+    protected $excludedKeys = [];
 
     protected $fillable = ['long_id', 'date', 'limit', 'description', 'start_date', 'end_date'];
 

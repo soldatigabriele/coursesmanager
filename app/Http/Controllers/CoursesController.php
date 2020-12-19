@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Course;
 use Carbon\Carbon;
 use App\Helpers\Logger;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
@@ -27,7 +25,7 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
-        return view('courses.index')->with(['courses' => $courses, 'header' => ['test', 'test2', 'test3']]);
+        return view('courses.index')->with(['courses' => $courses]);
     }
 
     /**

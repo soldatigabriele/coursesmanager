@@ -85,7 +85,7 @@ class CoursesTest extends TestCase
         ];
         $partecipant = factory('App\Partecipant')->create(['data' => json_encode($data)]);
         $course->partecipants()->save($partecipant);
-        $headers = ["nome", "cognome", "email", "telefono", "food", "transport"];
+        $headers = ["nome", "cognome", "email", "telefono", "regione", "food", "transport"];
         $this->assertEquals(collect($headers)->sort()->values(), collect($course->headers())->sort()->values());
 
         // Create the other partecipant with a coupon

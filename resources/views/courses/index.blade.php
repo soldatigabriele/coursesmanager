@@ -37,6 +37,7 @@
 @endsection
 
 @section('content')
+        @php $regions = \App\Region::get()->pluck('name', 'id'); @endphp
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-1">
@@ -145,6 +146,9 @@
                                         </td>
                                         <td>
                                             {{ $partecipant->phone }}
+                                        </td>
+                                        <td>
+                                            {{ $regions[$partecipant->region_id] }}
                                         </td>
                                         @foreach($course->extraHeaders() as $key)
                                         <td>
