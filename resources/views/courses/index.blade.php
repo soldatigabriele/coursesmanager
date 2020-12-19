@@ -200,10 +200,10 @@
             </div>
         </div>
         <div class="modal-footer">
-            <form action="" id="form-delete" method="post"> 
+            <form action="" id="form-delete" method="post">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
                 <button type="submit" class="btn btn-danger">Elimina</button>
-                 {{ method_field('DELETE') }} 
+                {{ method_field('DELETE') }}
                 {{ csrf_field() }}
             </form>
         </div>

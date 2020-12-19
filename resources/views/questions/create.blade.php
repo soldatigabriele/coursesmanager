@@ -18,7 +18,7 @@
   <div class="row justify-content-center">
     <div class="col-md-10 col-sm-12">
       <div class="card">
-        <div class="card-header"><b>DOMANDE CORSO {{\App\Course::find($course_id)->long_id}}</b></div>
+        <div class="card-header"><b>CORSO {{\App\Course::find($course_id)->long_id}}</b></div>
         <div class="card-body">
           @if ($errors->any())
           <div class="alert alert-danger">
