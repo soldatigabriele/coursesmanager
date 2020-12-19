@@ -64,6 +64,7 @@
                     @endfor
 
                   </div>
+                  @if($feed)
                     <div class="row">
                       <div class="col-xs-12 col-sm-12 col-md-6">
                         <div class="form-group">
@@ -77,6 +78,7 @@
                           <input type="text" class="form-control decimals"  placeholder="max 250 caratteri" name="feedback-2" value="{{ old('feedback-2') }}" maxlength="300">
                         </div>
                       </div>
+                      @endif
 
                       
                     <div class="row">

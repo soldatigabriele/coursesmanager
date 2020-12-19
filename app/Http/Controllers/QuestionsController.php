@@ -16,14 +16,16 @@ class QuestionsController extends Controller
 {
     public function index(Request $request)
     {
-        $courses = Course::where('end_date', '>', Carbon::today()->subDays(30))->orderBy('start_date')->get();
+        $courses = Course::where('end_date', '>', Carbon::today()->subDays(30))->orderByDesc('start_date')->get();
         return view('questions.index')->with(['courses' => $courses]);
     }
 
     public function create(Request $request)
     {
         $course = Course::findOrFail($request->course_id);
-        return view('questions.create')->with(['course_id' => $course->id, 'qn' => $request->qn]);
+        // If "feed" is provided, the feedback fields are displayed
+        // "qn" is the number of question inputs we want to render
+        return view('questions.create')->with(['course_id' => $course->id, 'qn' => $request->qn, 'feed' => $request->feed]);
     }
 
     public function store(Request $request)
@@ -62,7 +64,6 @@ class QuestionsController extends Controller
             'questions' => $questions,
             'feedback' => $feedback,
         ]);
-        $question->save();
 
         $course = Course::findOrFail($request->courseId);
         $course->questions()->save($question);
