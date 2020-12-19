@@ -100,7 +100,7 @@
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
               <label>Professione:</label>
-              <input type="text" class="form-control" name="job" value="{{ old('job') }}">
+              <input type="text" class="form-control" name="job" value="{{ old('job') }}" maxlength="30">
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6">
