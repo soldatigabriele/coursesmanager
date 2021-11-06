@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Coupon;
 use App\Course;
 use App\Region;
@@ -100,7 +99,7 @@ class PartecipantsController extends Controller
             ->with([
                 'regions' => Region::all(),
                 'courses' => Course::where('end_date', '>', Carbon::today())->get(),
-                'mele'    => $request->m, // If m is set, show the "mele" field
+                'mele' => $request->m, // If m is set, show the "mele" field
             ]);
     }
 
@@ -192,7 +191,7 @@ class PartecipantsController extends Controller
         $partecipant->meta = json_encode(['user_agent' => request()->header('User-Agent'), 'ip' => request()->ip()], true);
         $partecipant->save();
         $partecipant = $partecipant->fresh();
-        
+
         // Get the course
         $course_id = $request->course_id;
         $partecipant->courses()->sync($course_id);
@@ -206,22 +205,22 @@ class PartecipantsController extends Controller
         $disableNotification = ($request->disableNotification) ?? false;
         TelegramAlert::dispatch($text, $disableNotification, $request->toArray());
 
-        if(isset($request->create_coupon)){
+        if (isset($request->create_coupon)) {
             // Create a personal coupon for the partecipant
             $couponValue = $this->generateValue($partecipant, $course);
-            
+
             $personalCoupon = new Coupon(['value' => $couponValue]);
             $partecipant->personalCoupon()->save($personalCoupon);
-            
+
             // Associate the coupon with the course
             $course->coupons()->save($personalCoupon);
         }
-        
+
         // Empty the session and show the confirmation alert
         session()->forget('coupon');
         session()->forget('course_id');
         session()->flash('status', 'Iscrizione al corso avvenuta con successo!');
-        
+
         return redirect()->route('partecipant.show', ['slug' => $partecipant->slug]);
     }
 
@@ -235,7 +234,6 @@ class PartecipantsController extends Controller
     {
         $partecipant = Partecipant::withTrashed()->where('slug', $slug)->first();
         if ($partecipant) {
-            $courses = $partecipant->courses;
             return view('partecipants.show')->with(['partecipant' => $partecipant]);
         }
         abort(404);
@@ -303,6 +301,6 @@ class PartecipantsController extends Controller
     public function deleted()
     {
         $partecipants = Partecipant::withTrashed()->whereNotNull('deleted_at')->get();
-        return view('partecipants.deleted')->with(['partecipants' => $partecipants]);   
+        return view('partecipants.deleted')->with(['partecipants' => $partecipants]);
     }
 }
