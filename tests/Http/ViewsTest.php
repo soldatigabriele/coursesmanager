@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Http;
 
 use App\Course;
 use Carbon\Carbon;
@@ -14,7 +14,7 @@ class ViewsTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = factory('App\User')->create();

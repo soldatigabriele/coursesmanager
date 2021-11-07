@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Http;
 
-use App\Newsletter;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Newsletter;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class NewslettersTest extends TestCase
 {

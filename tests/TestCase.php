@@ -8,9 +8,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    // protected $afterApplicationCreatedCallbacks;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('db:seed', ['--class' => 'RegionsTableSeeder']);

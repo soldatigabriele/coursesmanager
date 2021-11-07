@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Http;
 
 use App\User;
 use App\Course;

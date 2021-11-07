@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Http;
 
 use App\Course;
 use App\Region;
@@ -16,7 +16,7 @@ class LoggingTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->faker = Factory::create('it_IT');

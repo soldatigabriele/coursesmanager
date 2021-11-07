@@ -18,7 +18,7 @@ class TelegramIntegrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->user = factory('App\User')->create();

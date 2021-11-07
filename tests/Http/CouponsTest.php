@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Http;
 
 use App\Coupon;
 use App\Course;
@@ -18,7 +18,7 @@ class CouponsTest extends TestCase
     protected $validCoupon;
     protected $inactiveCoupon;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Queue::fake();
