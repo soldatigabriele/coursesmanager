@@ -9,15 +9,16 @@
         "anhskohbo/no-captcha": "^3.0",
         "doctrine/dbal": "^2.7",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "laravel/framework": "^6.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/framework": "^8.0",
         "laravel/helpers": "^1.4",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
+        "laravel/legacy-factories": "^1.1",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "classmap": [

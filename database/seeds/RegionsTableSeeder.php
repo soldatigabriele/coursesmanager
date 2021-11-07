@@ -1,6 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RegionsTableSeeder extends Seeder
 {
@@ -11,8 +14,8 @@ class RegionsTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('regions')->delete();
-        \DB::table('regions')->insert(array(
+        DB::table('regions')->delete();
+        DB::table('regions')->insert(array(
 
             0 => ["id" => 1,
                 "name" => "Abruzzo",

@@ -1,7 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,8 +15,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('users')->delete();
-        \DB::table('users')->insert(array (
+        DB::table('users')->delete();
+        DB::table('users')->insert(array (
             0 =>
             array (
                 'id' => 1,
