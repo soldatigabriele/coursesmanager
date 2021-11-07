@@ -13,3 +13,5 @@ yarn-error.log
 .env
 resources/.DS_Store
 resources/views/.DS_Store
+
+.phpunit.result.cache
