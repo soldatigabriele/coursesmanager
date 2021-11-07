@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "axios": "^0.23.0",
-        "bootstrap": "^4.6.0",
+        "bootstrap": "^4.6.1",
         "cross-env": "^5.2.1",
         "jquery": "^3.6.0",
         "jquery-ui": "^1.13.0",
@@ -25,6 +25,6 @@
     "dependencies": {
         "gijgo": "^1.9.13",
         "sweetalert": "^2.1.2",
-        "yarn": "^1.22.15"
+        "yarn": "^1.22.17"
     }
 }
