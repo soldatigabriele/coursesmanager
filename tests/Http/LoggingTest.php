@@ -62,7 +62,7 @@ class LoggingTest extends TestCase
 
         $this->assertEquals(1, $log->status);
         $this->assertEquals($log->description, 'Partecipant Subscription Success');
-        $this->assertContains((string) $course->id, $log->value);
+        $this->assertContains($course->id, $log->value);
         $this->assertContains($this->newPartecipantData['slug'], $log->value);
         $this->assertContains($this->newPartecipantData['job'], $log->value);
         $this->assertContains($this->newPartecipantData['surname'], $log->value);

@@ -163,7 +163,7 @@ class CouponsTest extends TestCase
 
         // Check that the used coupon is in the summary page
         $res = $this->get(route('partecipant.show', ['slug' => $partecipant->slug]));
-        $this->assertContains($this->coupon->value, $res->getContent());
+        $this->assertStringContainsString($this->coupon->value, $res->getContent());
     }
 
     /**
@@ -186,7 +186,7 @@ class CouponsTest extends TestCase
         // Check that the coupon is associated with the right course
         $this->assertEquals($coupon->course->id, $courseId);
         $res = $this->get(route('partecipant.show', ['slug' => $partecipant->slug]));
-        $this->assertContains($coupon->value, $res->getContent());
+        $this->assertStringContainsString($coupon->value, $res->getContent());
     }
 
     /**

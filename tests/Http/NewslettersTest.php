@@ -19,7 +19,7 @@ class NewslettersTest extends TestCase
         // Queue::assertPushed(TelegramAlert::class, 1);
         $newsletter = Newsletter::where('email', $n->email)->first();
         $this->assertInstanceOf(Newsletter::class, $newsletter);
-        $this->assertContains($newsletter->slug, $res->getContent());
+        $this->assertStringContainsString($newsletter->slug, $res->getContent());
     }
 
     public function test_newsletter_show()
@@ -27,9 +27,9 @@ class NewslettersTest extends TestCase
         $news = factory(Newsletter::class, 10)->create();
         foreach ($news as $n) {
             $res = $this->get(route('newsletter.show', $n->slug));
-            $this->assertContains($n->email, $res->getContent());
-            $this->assertContains(htmlspecialchars($n->name, ENT_QUOTES), $res->getContent());
-            $this->assertContains(htmlspecialchars($n->surname, ENT_QUOTES), $res->getContent());
+            $this->assertStringContainsString($n->email, $res->getContent());
+            $this->assertStringContainsString(htmlspecialchars($n->name, ENT_QUOTES), $res->getContent());
+            $this->assertStringContainsString(htmlspecialchars($n->surname, ENT_QUOTES), $res->getContent());
         }
     }
 
@@ -38,8 +38,8 @@ class NewslettersTest extends TestCase
         $n = factory(Newsletter::class)->create(['name' => 'gabriele', 'surname' => 'soldati', 'email' => 'solDati@tEst.com']);
         $user = factory('App\User')->create();
         $res = $this->actingAs($user)->get(route('newsletter.index', $n->slug));
-        $this->assertContains('soldati@test.com', $res->getContent());
-        $this->assertContains('Gabriele', $res->getContent());
-        $this->assertContains('Soldati', $res->getContent());
+        $this->assertStringContainsString('soldati@test.com', $res->getContent());
+        $this->assertStringContainsString('Gabriele', $res->getContent());
+        $this->assertStringContainsString('Soldati', $res->getContent());
     }
 }

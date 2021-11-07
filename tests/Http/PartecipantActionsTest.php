@@ -85,11 +85,11 @@ class PartecipantActionsTest extends TestCase
         $partecipant = factory(Partecipant::class)->create();
         $res = $this->get(route('partecipant.show', $partecipant->slug));
 
-        $this->assertNotContains($message = 'iscrizione avvenuta con successo' ,$res->getContent());
+        $this->assertStringNotContainsString($message = 'iscrizione avvenuta con successo' ,$res->getContent());
         // Reach the same page with the message in the session
         $res = $this->withSession(['status'=> $message])
             ->get(route('partecipant.show', $partecipant->slug));
 
-        $this->assertContains($message ,$res->getContent());
+        $this->assertStringContainsString($message ,$res->getContent());
     }
 }

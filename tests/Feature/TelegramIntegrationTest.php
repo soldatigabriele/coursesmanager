@@ -119,7 +119,7 @@ class TelegramIntegrationTest extends TestCase
         $client = new \GuzzleHttp\Client();
         $telegram = new Telegram($client);
         $response = $telegram->alert('text', true);
-        $this->assertContains('no chat id selected', $response);
+        $this->assertStringContainsString('no chat id selected', json_encode($response));
     }
 
     public function test_telegram_integration()
