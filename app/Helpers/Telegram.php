@@ -9,9 +9,9 @@ class Telegram
 
     protected $client;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client = null)
     {
-        $this->client = $client;
+        $this->client = $client ?? new Client;
     }
 
     /**
@@ -24,15 +24,18 @@ class Telegram
      * @param string $disable_notification
      * @return void
      */
-    public function alert($text, $disable_notification = 'false')
+    public function alert(string $text, $disable_notification = 'false')
     {
-        $chat_id = app('config')->get('app.telegram.chat_id');
+        $chatId = app('config')->get('app.telegram.chat_id');
         $disable_notification = (env('APP_ENV') === 'testing') ? 'true' : 'false';
 
-        if ($chat_id == null) {
+        if ($chatId == null) {
             return json_encode(['error' => 'no chat id selected']);
         }
-        $url = env('TELEGRAM_URI') . env('TELEGRAM_TOKEN') . '/sendMessage?&disable_notification=' . $disable_notification . '&parse_mode=markdown&&chat_id=' . $chat_id . '&text=' . urlencode($text);
+        $uri = app('config')->get('app.telegram.uri');
+        $token = app('config')->get('app.telegram.token');
+        // https://api.telegram.org/bot{token}/sendMessage?&disable_notification=false&parse_mode=markdown&&chat_id={chat_id}&text=message
+        $url = $uri . 'bot' . $token . '/sendMessage?&disable_notification=' . $disable_notification . '&parse_mode=markdown&&chat_id=' . $chatId . '&text=' . urlencode($text);
         $response = $this->client->request('GET', $url, ['Accept' => 'application/json']);
         return $response->getBody();
     }

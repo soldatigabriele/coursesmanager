@@ -5,6 +5,8 @@ return [
     'telegram' => [
         // la mia chat id di default
         'chat_id' => env('TELEGRAM_CHAT', null),
+        'uri' => env('TELEGRAM_URI', 'https://api.telegram.org/'),
+        'token' => env('TELEGRAM_TOKEN', ''),
     ],
 
     /*

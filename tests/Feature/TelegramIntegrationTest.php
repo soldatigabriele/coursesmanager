@@ -7,8 +7,6 @@ use App\Course;
 use App\Region;
 use Faker\Factory;
 use Tests\TestCase;
-use App\Partecipant;
-use GuzzleHttp\Client;
 use App\ApplicationLog;
 use App\Helpers\Telegram;
 use App\Jobs\TelegramAlert;
@@ -128,13 +126,14 @@ class TelegramIntegrationTest extends TestCase
     {
         $guzzle = Mockery::mock(\GuzzleHttp\Client::class);
         $chatId = app('config')->get('app.telegram.chat_id');
-        $url = env('TELEGRAM_URI') . env('TELEGRAM_TOKEN') . '/sendMessage?&disable_notification=true&parse_mode=markdown&&chat_id=' . $chatId . '&text=text';
+
+        $url = env('TELEGRAM_URI') . 'bot' . env('TELEGRAM_TOKEN') . '/sendMessage?&disable_notification=true&parse_mode=markdown&&chat_id=' . $chatId . '&text=text';
 
         $guzzle->shouldReceive('request')
             ->with('GET', $url, ['Accept' => 'application/json'])
-            ->once()->andReturn(new Response);
+            ->andReturn(new Response);
 
         $telegram = new Telegram($guzzle);
-        $response = $telegram->alert('text', true);
+        $telegram->alert('text', true);
     }
 }

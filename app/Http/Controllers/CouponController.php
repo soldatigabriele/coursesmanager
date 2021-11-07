@@ -18,7 +18,7 @@ class CouponController extends Controller
         // TODO Set some anti-bruteforce system here
 
         // Get the values of the active coupons related to the course
-        $validCoupons = Course::find($request->course_id)
+        $validCoupons = Course::findOrFail($request->course_id)
             ->coupons
             ->where('active', true)
             ->pluck('value')->toArray();
