@@ -35,8 +35,6 @@
     
 </head>
 <body>
-    {{-- Show a banner if the env debug is true --}}
-    @include('partials.test-banner')
 
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
@@ -88,8 +86,6 @@
         </main>
     </div>
     
-    @include('partials.test-banner')
-
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('scripts')
