@@ -36,14 +36,6 @@
             </ul>
           </div>
           @endif
-          @php
-          if(env('APP_ENV')==='local')
-          {
-              $name = 'Test';
-              $surname = 'User';
-              $email = 'test@gmail.com';
-          }
-          @endphp
           <form action="{{ route('newsletter.store') }}" method="post">
                 {{ csrf_field() }}
             <div class="row">
