@@ -120,7 +120,7 @@
               <select name="food" class="form-control" >
                 <option value="Onnivoro"  @if(old('source') == 'Onnivoro')selected @endif>Onnivoro</option>
                 <option value="Vegetariano"  @if(old('source') == 'Vegetariano')selected @endif>Vegetariano</option>
-                <option value="Vegano"  @if(old('source') == 'Vegano')selected @endif>Vegano</option>
+                <!-- <option value="Vegano"  @if(old('source') == 'Vegano')selected @endif>Vegano</option> -->
               </select>
             </div>
           </div>
