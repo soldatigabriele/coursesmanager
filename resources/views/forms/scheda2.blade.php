@@ -138,7 +138,7 @@
        </div>
         <div class="row">
           <div class="col-xs-8 col-sm-9 col-md-9">
-           Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti i <a href="#" data-toggle="modal" data-target="#t_and_c_m">Termini e le condizioni</a>, compresi l'utilizzo dei cookie.
+           Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti l'utilizzo dei cookie.
          </div>
        </div>
 

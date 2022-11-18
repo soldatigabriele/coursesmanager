@@ -145,12 +145,12 @@ if(session()->has('coupon')){
         <input type="hidden" id="course-copy" name="course_id" value="{{ session()->get('course_id') }}">
         <input type="hidden" name="create_coupon" value="true">
         <div class="row">
-            <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display or 'display:none;' }}">
+            <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display ?? 'display:none;' }}">
                 <label for="coupons-checkbox">
                     Sono in possesso di un <strong class="label label-primary">Codice Sconto</strong>
                 </label>
                 <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }}/>
-                <div class="row" id="coupon-container" style="{{ $display or 'display:none;' }}">
+                <div class="row" id="coupon-container" style="{{ $display ?? 'display:none;' }}">
                     <div class="col-md-6 col-xs-6 col-sm-6">
                         <input id="coupon-field" class="form-control" value="{{ session()->get('coupon') }}" maxlength="10" {{ $readonly}}>
                     </div>
