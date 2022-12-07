@@ -59,7 +59,7 @@ class PartecipantsController extends Controller
     public function scheda1()
     {
         // return the course creation form
-        return view('forms.scheda1')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+        return view('forms.scheda1')->with(['regions' => Region::all(), 'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get()]);
     }
 
     /**
@@ -71,7 +71,7 @@ class PartecipantsController extends Controller
     public function scheda2()
     {
         // return the course creation form
-        return view('forms.scheda2')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+        return view('forms.scheda2')->with(['regions' => Region::all(), 'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get()]);
     }
 
     /**
@@ -83,7 +83,7 @@ class PartecipantsController extends Controller
     public function scheda3()
     {
         // return the course creation form
-        return view('forms.scheda3')->with(['regions' => Region::all(), 'courses' => Course::where('end_date', '>', Carbon::today())->get()]);
+        return view('forms.scheda3')->with(['regions' => Region::all(), 'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get()]);
     }
 
     /**
@@ -98,7 +98,7 @@ class PartecipantsController extends Controller
         return view('forms.scheda4')
             ->with([
                 'regions' => Region::all(),
-                'courses' => Course::where('end_date', '>', Carbon::today())->get(),
+                'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get(),
                 'mele' => $request->m, // If m is set, show the "mele" field
             ]);
     }
