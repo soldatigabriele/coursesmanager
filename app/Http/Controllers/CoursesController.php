@@ -27,6 +27,12 @@ class CoursesController extends Controller
         $courses = Course::where('end_date', '>', Carbon::today()->subDays(7))->orderBy('start_date')->paginate(10);
         return view('courses.index')->with(['courses' => $courses]);
     }
+   
+    public function all()
+    {
+        $courses = Course::orderByDesc('start_date')->paginate(20);
+        return view('courses.index')->with(['courses' => $courses]);
+    }
 
     /**
      * Store a newly created resource in storage.

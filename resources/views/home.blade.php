@@ -55,8 +55,11 @@
                             <div class="col-md-6">
                                 <h5>Controlla le Tabelle esistenti</h5>
                             </div>
-                            <div class="col-md-4 main-buttons">
-                                <a role="button" href="courses" class="btn btn-outline-success">Tabelle</a>
+                            <div class="col-auto main-buttons">
+                                <a role="button" href="allcourses" class="btn btn-outline-success">Mostra tutte le tabelle</a>
+                            </div>
+                            <div class="col-auto main-buttons">
+                                <a role="button" href="courses" class="btn btn-outline-success">Tabelle future</a>
                             </div>
                         </div>
 

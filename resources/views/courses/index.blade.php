@@ -33,6 +33,9 @@
         font-weight:600;
         text-decoration:underline;
     }
+   .hidden{
+        display:none;
+   } 
 </style>
 @endsection
 
@@ -177,7 +180,13 @@
                         @endforeach
                     </div>
                 </div>
-                {!! $courses->render() !!}
+            </div>
+            
+            <div class="clearfix"></div><br>
+            <div class="row">
+                <div class="col">
+                    {!! $courses->render() !!}
+                </div>
             </div>
         </div>
 @endsection

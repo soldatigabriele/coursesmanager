@@ -14,6 +14,8 @@ Route::resource('courses', 'CoursesController', ['names' => [
     'edit' => 'courses.edit',
     'update' => 'courses.update',
 ]]);
+Route::get('allcourses', 'CoursesController@all');
+
 Route::get('courses/{course}/export')
     ->name('courses.export')
     ->uses('CoursesController@export')
