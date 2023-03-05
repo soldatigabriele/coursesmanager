@@ -12,6 +12,10 @@ class Course extends Model
     protected $excludedKeys = [];
 
     protected $fillable = ['long_id', 'date', 'limit', 'description', 'start_date', 'end_date'];
+    protected $casts = [
+        'start_date'=> 'datetime',
+        'end_date'=> 'datetime',
+    ];
 
     // Base table headers: we will add the extra field
     protected $headers = ['nome', 'cognome', 'email', 'telefono', 'regione'];

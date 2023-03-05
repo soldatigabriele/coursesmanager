@@ -66,7 +66,7 @@ class CoursesTest extends TestCase
         $end = (Carbon::parse($courseData['end_date'])->format('d/m/Y'));
         $courseData['start_date'] = $start;
         $courseData['end_date'] = $end;
-        $res = $this->put(route('courses.update', $course->id), $courseData);
+        $this->json('PUT', route('courses.update', $course->id), $courseData);
 
         $this->assertEquals($courseData['description'], $course->fresh()->description);
     }

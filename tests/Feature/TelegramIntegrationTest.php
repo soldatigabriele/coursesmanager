@@ -135,5 +135,7 @@ class TelegramIntegrationTest extends TestCase
 
         $telegram = new Telegram($guzzle);
         $telegram->alert('text', true);
+
+        $this->addToAssertionCount(1);
     }
 }

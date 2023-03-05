@@ -16,7 +16,19 @@ class QuestionsController extends Controller
 {
     public function index(Request $request)
     {
-        $courses = Course::where('end_date', '>', Carbon::today()->subDays(30))->orderByDesc('start_date')->get();
+        // Include the future courses
+        $query = Course::query();
+        if (!$request->has('future') || !$request->input('future') == true) {
+            $query->where('end_date', '<', Carbon::today());
+        }
+        // Include courses ended X days ago. Default to 90 days.
+        $days = 90;
+        if ($request->has('end')) {
+            $days = $request->input('end');
+        }
+        $query->where('end_date', '>', Carbon::today()->subDays($days));
+        $courses = $query->orderByDesc('start_date')->get();
+
         return view('questions.index')->with(['courses' => $courses]);
     }
 
@@ -68,7 +80,11 @@ class QuestionsController extends Controller
         $course = Course::findOrFail($request->courseId);
         $course->questions()->save($question);
 
-        TelegramAlert::dispatch('nuova domanda da ' . $request->name . ' per il corso ' . $course->id, false, $request->toArray());
+        TelegramAlert::dispatch(
+            'nuova domanda da ' . $request->name . ' per il corso ' . $course->id . '. https://laboa.ml/questions#course-'.$course->id,
+            false,
+            $request->toArray()
+        );
 
         return Response('Grazie per aver inviato le domande. <a href="https://laboa.org">clicca qui</a> per tornare al sito');
     }

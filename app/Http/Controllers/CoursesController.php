@@ -143,14 +143,11 @@ class CoursesController extends Controller
 
         (new Logger)->log('1', 'Course Update Success', $request->all(), $request);
 
-        $course->fill($request->all());
+        $data = $request->all();
+        $data['start_date'] = Carbon::createFromFormat('d/m/yy', $request->start_date);
+        $data['end_date'] = Carbon::createFromFormat('d/m/yy', $request->end_date);
 
-        $start_date = Carbon::createFromFormat('d/m/yy', $request->start_date);
-        $end_date = Carbon::createFromFormat('d/m/yy', $request->end_date);
-
-        $course->start_date = $start_date;
-        $course->end_date = $end_date;
-        $course->save();
+        $course->update($data);
 
         return back()->with('edited', 'Corso ' . $course->long_id . ' aggiornato correttamente');
 
