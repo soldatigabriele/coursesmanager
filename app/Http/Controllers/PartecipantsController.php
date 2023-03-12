@@ -53,7 +53,6 @@ class PartecipantsController extends Controller
     /**
      * Show the scheda 1 form.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function scheda1()
@@ -65,7 +64,6 @@ class PartecipantsController extends Controller
     /**
      * Show the scheda 2 form.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function scheda2()
@@ -77,7 +75,6 @@ class PartecipantsController extends Controller
     /**
      * Show the scheda 3 form.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function scheda3()
@@ -89,7 +86,6 @@ class PartecipantsController extends Controller
     /**
      * Show the scheda 4 form.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function scheda4(Request $request)
@@ -100,6 +96,21 @@ class PartecipantsController extends Controller
                 'regions' => Region::all(),
                 'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get(),
                 'mele' => $request->m, // If m is set, show the "mele" field
+            ]);
+    }
+
+    /**
+     * Show the scheda 4 form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function scheda5()
+    {
+        // return the course creation form
+        return view('forms.scheda5')
+            ->with([
+                'regions' => Region::all(),
+                'courses' => Course::whereNotIn('id', [84,85])->where('end_date', '>', Carbon::today())->get(),
             ]);
     }
 

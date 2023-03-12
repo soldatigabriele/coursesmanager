@@ -56,6 +56,7 @@ Route::get('corsi/scheda/1', 'PartecipantsController@scheda1')->name('scheda-1')
 Route::get('corsi/scheda/2', 'PartecipantsController@scheda2')->name('scheda-2');
 Route::get('corsi/scheda/3', 'PartecipantsController@scheda3')->name('scheda-3');
 Route::get('corsi/scheda/4', 'PartecipantsController@scheda4')->name('scheda-4');
+Route::get('corsi/scheda/5', 'PartecipantsController@scheda5')->name('scheda-5');
 
 Route::get('questions/create', 'QuestionsController@create')->name('questions-create');
 Route::get('questions', 'QuestionsController@index')->name('questions-index')->middleware('auth');
