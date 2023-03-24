@@ -106,7 +106,7 @@
                             $collapse = ( app('request')->input('course_id') == $course->id )? null : 'collapse';
                         @endphp
                         <div class="col-md-12 tabella">
-                            <div class="{{ $collapse }} table" id="partecipants-{{$course->id}}">
+                            <div class="{{ $collapse }} table" style="overflow-x:scroll;" id="partecipants-{{$course->id}}">
                                 <table id="dir_table" class="table table-bordered table-striped dataTable tabella" aria-describedby="example1_info">
                                     <tr class="subtitle tabelle">
                                         <td>

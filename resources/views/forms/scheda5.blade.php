@@ -30,18 +30,24 @@ if(session()->has('coupon')){
 
 @section('formcontent')
 
+<div class="row mb-3">
+  <div class="col-12">
+    I campi contrassegnati dall'* sono obbligatori
+  </div>
+</div>
+
 <div class="row">
   <div class="col-xs-12 col-sm-12 col-md-12 col-sm-offset-2 col-md-offset-3">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
           <div class="form-group">
-            <label>Nome:</label>
+            <label>Nome *</label>
             <input type="text" name="name" autocomplete="name" id="name" class="form-control input-lg" placeholder="" value="{{ old('name') }}" required>
           </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
           <div class="form-group">
-            <label>Cognome:</label>
+            <label>Cognome *</label>
             <input type="text" name="surname" autocomplete="surname" id="surname" class="form-control input-lg" placeholder="" value="{{ old('surname') }}" required>
           </div>
         </div>
@@ -49,13 +55,13 @@ if(session()->has('coupon')){
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6">
           <div class="form-group">
-            <label>Professione:</label>
+            <label>Professione *</label>
             <input type="text" class="form-control" name="job" value="{{ old('job') }}" required>
           </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
           <div class="form-group">
-            <label>Arrivo da:</label>
+            <label>Arrivo da *</label>
             <input type="text" name="city" id="city" class="form-control input-lg" placeholder="città" value="{{ old('city') }}" required>
           </div>
         </div>
@@ -94,15 +100,6 @@ if(session()->has('coupon')){
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6">
-            <div class="form-group">
-              <label>Corso:</label>
-              <select id="course" class="form-control" {{ $disabled }}>
-                <option value="empty" disabled selected> Seleziona un corso </option>
-                @foreach($courses as $c)
-                <option value="{{$c->id}}" @if(old('course_id') == $c->id || session()->get('course_id') == $c->id) selected @endif>{{$c->long_id}} - {{$c->description}} - {{$c->date}}</option>
-                @endforeach
-              </select>
-            </div>
           </div> 
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
@@ -122,7 +119,7 @@ if(session()->has('coupon')){
               <select name="food" class="form-control" >
                 <option value="Onnivoro"  @if(old('source') == 'Onnivoro')selected @endif>Onnivoro</option>
                 <option value="Vegetariano"  @if(old('source') == 'Vegetariano')selected @endif>Vegetariano</option>
-                <!-- <option value="Vegano"  @if(old('source') == 'Vegano')selected @endif>Vegano</option> -->
+                <option value="Vegano"  @if(old('source') == 'Vegano')selected @endif>Vegano</option>
               </select>
             </div>
           </div>
@@ -133,13 +130,13 @@ if(session()->has('coupon')){
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
-              <label>Email:</label>
+              <label>Email *</label>
               <input type="text" class="form-control" name="email" value="{{ old('email') }}" required>
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
-              <label>Ripeti email:</label>
+              <label>Ripeti email *</label>
               <input type="text" class="form-control" name="email_again" id="email_again" value="{{ old('email_again') }}" required>
             </div>
           </div>
@@ -148,21 +145,21 @@ if(session()->has('coupon')){
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
-              <label>Recapito telefonico:</label>
+              <label>Recapito telefonico *</label>
               <input type="text" class="form-control decimals" name="phone" value="{{ old('phone') }}" required>
             </div>
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-6">
             <div class="form-group">
-              <label>Indirizzo di fatturazione:</label>
-              <input type="text" name="billing_address" id="billing_address" class="form-control input-lg" placeholder="" value="{{ old('billing_address') }}">
+              <label>Indirizzo di fatturazione *</label>
+              <input type="text" name="billing_address" id="billing_address" class="form-control input-lg" placeholder="" value="{{ old('billing_address') }}" required>
             </div>
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-4">
             <div class="form-group">
-              <label>Codice Fiscale:</label>
+              <label>Codice Fiscale *</label>
               <input type="text" class="form-control" name="codice_fiscale" value="{{ old('codice_fiscale') }}" maxlength="16" required>
             </div>
           </div>
@@ -190,7 +187,7 @@ if(session()->has('coupon')){
           </div>
 
         </div>
-        <input type="hidden" id="course-copy" name="course_id" value="{{ session()->get('course_id') }}">
+        <input type="hidden" id="course-copy" name="course_id" value="103">
         <input type="hidden" name="create_coupon" value="true">
         <div class="row">
           <div class="col-xs-8 col-sm-9 col-md-9" id="coupon-outer-container" style="{{ $display ?? 'display:none;' }}">
@@ -229,12 +226,14 @@ if(session()->has('coupon')){
               {!! NoCaptcha::display() !!}
             </div>
           </div>
-       </div>
+        </div>
         <div class="row">
           <div class="col-xs-8 col-sm-9 col-md-9">
-           Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti l'utilizzo dei cookie.
+           Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti l'utilizzo dei 
+           <a href="https://www.laboa.org/condizioni-generali-pdc-malarbe">Termini e condizioni</a>, compresi l'utilizzo dei cookie. 
+          </div>
          </div>
-       </div> 
+       </div>
 
        <hr class="colorgraph">
        <div class="row">
