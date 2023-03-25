@@ -1,18 +1,5 @@
 @extends('forms.create')
 
-@php
-    $coupon = session()->get('coupon');
-    $disabled = '';
-    $readonly = '';
-    if (session()->has('coupon')) {
-        $couponApplied = true;
-        $readonly = 'readonly';
-        $disabled = 'disabled';
-        $display = 'display:true;';
-    }
-    
-@endphp
-
 @section('style')
     <style type="text/css" media="screen">
         .subtitle {
@@ -30,10 +17,10 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 mb-2">
                     I campi contrassegnati dall'* sono obbligatori
                 </div>
-                <div class="col-12 col-md-6 mt-3">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label>Nome *</label>
                         <input type="text" name="name" autocomplete="name" id="name" class="form-control input-lg"
@@ -102,7 +89,7 @@
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label>Scelgo l’opzione:</label>
-                        <select name="formula" class="form-control" {{ $disabled }}>
+                        <select name="formula" class="form-control" >
                             <option value="1 corso" selected>corso + pranzi 550€</option>
                             <option value="2 cene">corso + pranzi + cene 750€</option>
                             <option value="3 tenda">corso + vitto + alloggio in tenda 850€</option>
@@ -196,30 +183,6 @@
             </div>
 
             <input type="hidden" id="course-copy" name="course_id" value="103">
-            <input type="hidden" name="create_coupon" value="true">
-            <div class="row">
-                <div class="col-8 col-md-9" id="coupon-outer-container" style="{{ $display ?? 'display:none;' }}">
-                    <label for="coupons-checkbox">
-                        Sono in possesso di un <strong class="label label-primary">Codice Sconto</strong>
-                    </label>
-                    <input type="checkbox" id="coupons-checkbox" {{ $disabled ? 'checked disabled' : '' }} />
-                    <div class="row" id="coupon-container" style="{{ $display ?? 'display:none;' }}">
-                        <div class="col-6">
-                            <input id="coupon-field" class="form-control" value="{{ session()->get('coupon') }}"
-                                maxlength="10" {{ $readonly }}>
-                        </div>
-                        <div class="col-4">
-                            <input type="button" id="apply-coupon"
-                                class="btn btn-md btn-{{ $disabled ? 'success' : 'primary' }}"
-                                value="{{ $disabled ? 'Applicato' : 'Applica Codice' }}" {{ $disabled }}>
-                        </div>
-                        <div class="col-2">
-                            <input type="button" id="unset-coupon" class="btn btn-md btn-outline-dark" value="Rimuovi"
-                                {{ $disabled ? '' : 'hidden' }}>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-10">
@@ -261,35 +224,6 @@
                 inputElement.value = inputElement.value.toUpperCase();
             });
 
-            /**
-             * Unset the coupon in session
-             *
-             * @return void
-             */
-            function unsetCoupon() {
-                $.ajax({
-                    url: "{{ route('coupon.unset') }}",
-                }).done(function(response) {
-                    if (response.status == 'ok') {
-                        $("#apply-coupon").attr('class', 'btn btn-md btn-warning');
-                        $("#apply-coupon").val('Coupon rimosso');
-                        $("#coupon-field").removeAttr('readonly');
-                        $('#coupons-checkbox').removeAttr('disabled');
-                        $('#course').removeAttr('disabled');
-                        $('#unset-coupon').hide();
-                        $('#coupon-field').val('');
-                        $('#course').val('empty');
-
-                        function reset() {
-                            $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
-                            $("#apply-coupon").val('Applica Coupon');
-                            $("#apply-coupon").removeAttr('disabled');
-                        }
-                        setTimeout(reset, 2000);
-                    }
-                });
-            }
-
             $(".decimals").keydown(function(event) {
                 if (event.shiftKey === true) {
                     event.preventDefault();
@@ -304,69 +238,6 @@
                     event.preventDefault();
                 }
 
-            });
-
-            $('#coupons-checkbox').click(function() {
-                $('#coupon-container').toggle();
-            });
-
-            // Upper case
-            $('#coupon-field').keyup(function(e) {
-                $('#coupon-field').val(function() {
-                    return this.value.toUpperCase();
-                })
-            });
-
-            let course = null;
-
-            $('#course').change(function() {
-                if ($(this).val() !== "empty") {
-                    $('#coupon-outer-container').show();
-                    course = $(this).val();
-                    $('#course-copy').val(course)
-                } else {
-                    $('#coupon-outer-container').hide();
-                    course = null;
-                }
-            });
-
-            $('#apply-coupon').click(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('coupon.check') }}",
-                    data: {
-                        'coupon': $('#coupon-field').val(),
-                        'course_id': course
-                    },
-                }).done(function(response) {
-                    if (response.status == 'ok') {
-                        $("#apply-coupon").attr('class', 'btn btn-md btn-success');
-                        $("#apply-coupon").val('Coupon applicato');
-                        $("#apply-coupon").attr('disabled', 'disabled');
-                        $("#coupon-field").attr('readonly', 'readonly');
-                        $('#coupons-checkbox').attr('disabled', 'disabled');
-                        $('#course').attr('disabled', 'disabled');
-                        $('#unset-coupon').removeAttr('hidden');
-                    }
-                    if (response.status == 'ko') {
-                        $("#apply-coupon").attr('class', 'btn btn-md btn-danger');
-                        $("#apply-coupon").val('Coupon errato');
-                        $("#apply-coupon").attr('disabled', 'disabled');
-
-                        function reset() {
-                            $("#apply-coupon").attr('class', 'btn btn-md btn-outline-primary');
-                            $("#apply-coupon").val('Applica Coupon');
-                            $("#apply-coupon").removeAttr('disabled');
-                        }
-                        setTimeout(reset, 2000);
-                    }
-                });
-            });
-
-            $('#unset-coupon').click(function(e) {
-                e.preventDefault();
-                // Delete the coupon from the session
-                unsetCoupon();
             });
         });
     </script>
