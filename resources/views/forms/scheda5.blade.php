@@ -204,7 +204,7 @@
             <div class="row mt-3">
                 <div class="col-12">
                     Cliccando su <strong class="label label-primary">Completa Iscrizione</strong>, accetti l'utilizzo dei
-                    <a href="https://www.laboa.org/condizioni-generali-pdc-malarbe">Termini e condizioni</a>, compresi
+                    <a href="https://www.laboa.org/condizioni-generali-pdc-malarbe" target="_blank">Termini e condizioni</a>, compresi
                     l'utilizzo dei cookie.
                 </div>
                 <div class="col-12 mt-3">
